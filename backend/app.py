@@ -3,12 +3,10 @@ from flask.json import jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from environment.config import db_URI
-
+from flask_cors import CORS
 
 app = Flask(__name__)
-
-#TODO config file
-
+CORS(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = db_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
