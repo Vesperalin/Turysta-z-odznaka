@@ -1,0 +1,20 @@
+.link {
+    display: flex;
+    padding: 20px;
+    align-items: center;
+}
+
+.link:hover {
+    background-color: #71A368;
+}
+
+.link img {
+    display: inline-block;
+    width: 16px;
+    height: 17px;
+}
+
+.link p {
+    display: inline-block;
+    padding-left: 10px;
+}
