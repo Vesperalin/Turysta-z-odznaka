@@ -1,0 +1,23 @@
+.searchBarWrapper {
+  display: flex;
+  align-items: center;
+  flex-grow: 30;
+}
+
+.searchBarWrapper img {
+  display: inline-block;
+  width: 12px;
+  height: 13px;
+  margin-left: 20px;
+  margin-right: 10px;
+}
+
+.searchBarWrapper form input {
+  background-color: transparent;
+  border-style: none;
+  color: rgb(65, 65, 65);
+}
+
+.searchBarWrapper form input:focus {
+  outline: none;
+}
