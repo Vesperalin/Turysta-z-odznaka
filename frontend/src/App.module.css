@@ -1,16 +1,16 @@
 .contentWrapper {
-    min-height: 100vh;
-    display: flex;
+  min-height: 100vh;
+  display: flex;
 }
 
 .mainPanelWrapper {
-    min-height: 100vh;
-    background-color: #f9f9f9;
-    flex-grow: 1;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+  flex-grow: 1;
 }
 
 @media screen and (max-width: 900px) {
-    .contentWrapper {
-        display: block;
-    }
+  .contentWrapper {
+    display: block;
+  }
 }
