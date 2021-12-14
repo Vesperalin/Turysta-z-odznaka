@@ -1,6 +1,7 @@
 .menuWrapper {
   background-color: #82B479;
   min-height: 100vh;
+  min-width: 310px;
 }
 
 .menuWrapper h2 {
