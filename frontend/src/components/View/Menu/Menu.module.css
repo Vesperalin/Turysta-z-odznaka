@@ -11,8 +11,9 @@
   font-size: 21px;
   letter-spacing: 3px;
   text-align: center;
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding-top: 13px;
+  padding-bottom: 13px;
+  min-height: 55px;
   -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
   -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
