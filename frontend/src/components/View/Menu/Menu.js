@@ -11,11 +11,11 @@ const Menu = () => {
   return (
     <nav className={styles.menuWrapper}>
       <h2>TURYSTA Z ODZNAKĄ</h2>
-      <MenuOption imagePath={homeImage}>Strona główna</MenuOption>
-      <MenuOption imagePath={labeledPointImage}>Zarządzanie punktem opisanym</MenuOption>
-      <MenuOption imagePath={labeledPointImage}>Zarządzanie punktem własnym</MenuOption>
-      <MenuOption imagePath={tourImage}>Tworzenie trasy</MenuOption>
-      <MenuOption imagePath={confirmImage}>Zgłaszanie do weryfikacji</MenuOption>
+      <MenuOption imagePath={homeImage} path='/'>Strona główna</MenuOption>
+      <MenuOption imagePath={labeledPointImage} path='/punkt-opisany'>Zarządzanie punktem opisanym</MenuOption>
+      <MenuOption imagePath={labeledPointImage} path='/punkt-wlasny'>Zarządzanie punktem własnym</MenuOption>
+      <MenuOption imagePath={tourImage} path='/tworzenie-trasy'>Tworzenie trasy</MenuOption>
+      <MenuOption imagePath={confirmImage} path='/zglaszanie-dowodow'>Zgłaszanie do weryfikacji</MenuOption>
     </nav>
   );
 };

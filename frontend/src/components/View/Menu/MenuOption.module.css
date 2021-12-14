@@ -8,6 +8,10 @@
   background-color: #71A368;
 }
 
+.linkActive, .linkActive:hover {
+  background-color: #609257;
+}
+
 .link img {
   display: inline-block;
   width: 16px;
