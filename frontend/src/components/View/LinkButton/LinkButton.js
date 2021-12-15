@@ -5,9 +5,9 @@ import styles from "./LinkButton.module.css";
 
 const LinkButton = props => {
   return (
-    <div className={styles.link}>
-      <Link to={props.path} >
-        <p>{props.children}</p>
+    <div className={styles.linkWrapper}>
+      <Link to={props.path}>
+        <p className={styles.linkText}>{props.children}</p>
       </Link >
     </div>
   );
