@@ -15,16 +15,23 @@ function App() {
     <div className={styles.contentWrapper}>
       <Menu />
       <div className={styles.mainPanelWrapper}>
-        <TopBar />
-        <main>
-          <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/punkt-opisany' element={<LabeledPointManagement />} />
-            <Route path='/punkt-wlasny' element={<OwnPointManagement />} />
-            <Route path='/tworzenie-trasy' element={<TourCreation />} />
-            <Route path='/zglaszanie-dowodow' element={<EvidenceConfirmation />} />
-          </Routes>
-        </main>
+        <div className={styles.content}>
+          <TopBar />
+          <main>
+            <Routes>
+              <Route path='/' element={<Home />} />
+              <Route path='/punkt-opisany' element={<LabeledPointManagement />} />
+              {/*Miejsce na 4 ścieżki do CRUDA punktu opisanego*/}
+              <Route path='/punkt-wlasny' element={<OwnPointManagement />} />
+              {/*Miejsce na 4 ścieżki do CRUDA punktu własnego*/}
+              <Route path='/tworzenie-trasy' element={<TourCreation />} />
+              <Route path='/zglaszanie-dowodow' element={<EvidenceConfirmation />} />
+            </Routes>
+          </main>
+        </div>
+        <footer>
+          Designed and implemented by <a href="https://github.com/Vesperalin">Klaudia Błażyczek</a> and <a href="https://github.com/justyna-maluszynska">Justyna Małuszyńska</a>
+        </footer>
       </div>
     </div>
   );
