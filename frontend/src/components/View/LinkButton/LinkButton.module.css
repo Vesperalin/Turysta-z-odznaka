@@ -1,0 +1,19 @@
+.link {
+  background-color: white;
+  color: #DD9549;
+  border: 3px solid #DD9549;
+  display: inline-block;
+  border-radius: 10px;
+  text-align: center;
+  max-height: 45px;
+  max-width: 240px;
+  margin: 20px;
+}
+
+.link p {
+  color: #DD9549;
+  display: inline-block;
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 9px;
+}
