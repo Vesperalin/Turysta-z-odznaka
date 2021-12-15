@@ -6,10 +6,6 @@ class Labeled_point(db.Model, BaseModel):
     __tablename__ = 'punktyopisane'
 
 
-    id_punktu = db.Column(db.Integer, primary_key = True)
-    nazwa = db.Column(db.String, nullable=False, unique=True)
-    wysokosc = db.Column(db.Float, nullable=True)
-
-    def __init__(self, nazwa, wysokosc):
-        self.nazwa = nazwa
-        self.wysokosc = wysokosc
+    id = db.Column('id_punktu', db.Integer, primary_key=True)
+    name = db.Column('nazwa', db.String(45), nullable=False, unique=True)
+    height = db.Column('wysokosc', db.Float, nullable=True)
