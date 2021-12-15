@@ -1,4 +1,5 @@
 from marshmallow_sqlalchemy.schema import auto_field
+from marshmallow import fields
 from app import ma
 from models.tourist import Tourist
 
@@ -14,4 +15,4 @@ class TouristSchema(ma.SQLAlchemyAutoSchema):
     email = auto_field()
     birth_date = auto_field()
     is_invalid = auto_field()
-    own_points = auto_field()
+    own_points = fields.Nested('Own_pointSchema', many=True, exclude={'tourist_username'})

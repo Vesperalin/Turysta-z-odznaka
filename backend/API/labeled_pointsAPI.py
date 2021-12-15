@@ -22,15 +22,14 @@ def get_labeled_point(id):
     if not labeled_point:
         return {'message': 'Labeled point not available'}, 404
 
-    return labeled_point_schema.jsonify(labeled_point)
+    return labeled_point_schema.jsonify(labeled_point), 200
 
 
 @router.route('', methods=['POST'])
 def add_labeled_point():
-    name = request.json['name']
-    height = request.json['height']
+    labeled_point_dictionary = request.get_json()
 
-    labeled_point = Labeled_point(name, height)
+    labeled_point = labeled_point_schema.load(labeled_point_dictionary)
     labeled_point.save()
 
     return labeled_point_schema.jsonify(labeled_point)
@@ -38,15 +37,13 @@ def add_labeled_point():
 
 @router.route('/<int:id>', methods=['PUT'])
 def update_labeled_point(id):
-    labeled_point = Labeled_point.query.get(id)
-    name = request.json['name']
-    height = request.json['height']
+    existing_labeled_point = Labeled_point.query.get(id)
 
-    labeled_point.name = name
-    labeled_point.height = height
+    labeled_point = labeled_point_schema.load(
+        request.get_json(), instance=existing_labeled_point, partial=True)
 
     labeled_point.save()
-    return labeled_point_schema.jsonify(labeled_point)
+    return labeled_point_schema.jsonify(labeled_point), 200
 
 
 @router.route('/<int:id>', methods=['DELETE'])
