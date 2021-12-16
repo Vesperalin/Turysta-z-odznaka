@@ -2,10 +2,9 @@ from flask import Flask, request
 from flask.json import jsonify
 from flask.blueprints import Blueprint
 from models.own_point import Own_point
-from backend.models.tourist import Tourist
-from backend.serializers.own_point import Own_pointSchema
-from backend.serializers.tourist import TouristSchema
-
+from models.tourist import Tourist
+from serializers.own_point import Own_pointSchema
+from serializers.tourist import TouristSchema
 
 
 own_point_schema = Own_pointSchema()
