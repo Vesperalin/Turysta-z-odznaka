@@ -1,8 +1,10 @@
 from flask import Flask, request
 from flask.json import jsonify
 from flask.blueprints import Blueprint
-from backend.models.labeled_point import Labeled_point
-from backend.serializers.labeled_point import Labeled_pointSchema
+from models.labeled_point import Labeled_point
+from serializers.labeled_point import Labeled_pointSchema
+from models.labeled_segment import Labeled_segment
+from serializers.labeled_segment import Labeled_segmentSchema
 
 labeled_point_schema = Labeled_pointSchema()
 
