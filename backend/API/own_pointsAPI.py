@@ -11,7 +11,7 @@ own_point_schema = Own_pointSchema()
 tourist_schema = TouristSchema()
 
 # Simplification
-username = "maniek"
+username = "turysta123"
 
 router = Blueprint('own-points', __name__)
 
@@ -40,6 +40,9 @@ def get_own_point(id):
 
     if not own_point:
         return {'message': 'Requested own point not available'}, 404
+
+    if own_point.tourist_username != username:
+        return {'message': 'Requested own point do not belongs to current user'}, 404
 
     return own_point_schema.jsonify(own_point), 200
 
