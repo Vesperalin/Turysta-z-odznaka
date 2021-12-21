@@ -8,7 +8,6 @@ from serializers.tourist import TouristSchema
 
 
 own_point_schema = Own_pointSchema()
-tourist_schema = TouristSchema()
 
 # Simplification
 username = "jankowalski"
