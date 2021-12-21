@@ -11,7 +11,7 @@ own_point_schema = Own_pointSchema()
 tourist_schema = TouristSchema()
 
 # Simplification
-username = "maniek"
+username = "jankowalski"
 
 router = Blueprint('own-points', __name__)
 
@@ -68,8 +68,7 @@ def add_own_point():
         return {'message': 'Coordinates are not correct datatypes'}, 404
 
     if(is_name_unique(own_point_dictionary['name'])):
-        if(are_coordinates_unique(
-                own_point_dictionary['latitude'], own_point_dictionary['longitude'])):
+        if(are_coordinates_unique(own_point_dictionary['latitude'], own_point_dictionary['longitude'])):
             own_point = own_point_schema.load(own_point_dictionary)
             own_point.save()
             return own_point_schema.jsonify(own_point), 200
@@ -138,6 +137,9 @@ def delete_own_point(id):
     if is_in_usage(own_point):
         return {'message': 'Requested own point is in usage and cannot be deleted'}, 404
 
+    if own_point.tourist_username != username:
+        return {'message': 'Requested own point do not belongs to current user'}, 404
+
     own_point.remove()
     return {'message': 'Own point successfully deleted'}, 200
 
@@ -177,17 +179,17 @@ def verify_new_data(existing_point: Own_point, data):
         if not is_name_unique(data['name']):
             return {'message': 'New name of point must be unique'}, 404
 
-    new_latitude = existing_point.latitude != data['latitude']
-    if new_latitude:
-        if(not isinstance(data['latitude'], float)):
+    is_new_latitude = existing_point.latitude != data['latitude']
+    if is_new_latitude:
+        if not isinstance(data['latitude'], float):
             return {'message': 'Latitude is not correct datatype'}, 404
 
-    new_longitude = existing_point.longitude != data['longitude']
-    if new_longitude:
-        if(not isinstance(data['longitude'], float)):
+    is_new_longitude = existing_point.longitude != data['longitude']
+    if is_new_longitude:
+        if not isinstance(data['longitude'], float):
             return {'message': 'Longitude is not correct datatype'}, 404
 
-    if new_latitude or new_longitude:
+    if is_new_latitude or is_new_longitude:
         if not are_coordinates_unique(data['latitude'], data['longitude']):
             return {'message': 'New coordinates of point must be unique'}, 404
 
