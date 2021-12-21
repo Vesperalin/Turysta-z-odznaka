@@ -2,6 +2,7 @@ from marshmallow_sqlalchemy.schema import auto_field
 from app import ma
 from marshmallow import fields
 from models.labeled_point import Labeled_point
+from serializers.labeled_segment import Labeled_segmentSchema
 
 class Labeled_pointSchema(ma.SQLAlchemyAutoSchema):
     class Meta:

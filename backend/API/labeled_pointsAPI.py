@@ -38,9 +38,10 @@ def add_labeled_point():
     labeled_point_dictionary = request.get_json()
 
     if(is_name_unique(labeled_point_dictionary['name'])):
-        own_point = labeled_point_schema.load(labeled_point_dictionary)
-        own_point.save()
-        return labeled_point_schema.jsonify(own_point), 200
+        if is_height_correct(labeled_point_dictionary['height']):
+            own_point = labeled_point_schema.load(labeled_point_dictionary)
+            own_point.save()
+            return labeled_point_schema.jsonify(own_point), 200
     else:
         return {'message': 'Name of point is not unique'}, 404
 
@@ -59,7 +60,7 @@ def update_labeled_point(id):
 
     message, code = verify_new_data(existing_labeled_point, new_point_data)
 
-    if code == 400:
+    if code == 404:
         return message, code
 
     labeled_point = labeled_point_schema.load(
@@ -84,8 +85,7 @@ def delete_labeled_point(id):
 
 
 def is_name_unique(name: str):
-    labeled_point = Labeled_point.query.filter(Labeled_point.tourist_username.like(
-        username), Labeled_point.name.like(name)).first()
+    labeled_point = Labeled_point.query.filter(Labeled_point.name.like(name)).first()
 
     if not labeled_point:
         return True
@@ -114,7 +114,11 @@ def verify_new_data(existing_point: Labeled_point, data):
 
     is_new_height = existing_point.height != data['height']
     if is_new_height:
-        if data['height'] < 0 or not isinstance(data['height'], int):
+        if not is_height_correct(data['height']):
             return {'message': 'Incorrect new height of point'}, 404
 
     return None, 200
+
+
+def is_height_correct(height):
+    return True if height is None else (height >= 0 and isinstance(height, int))
