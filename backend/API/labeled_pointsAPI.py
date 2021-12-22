@@ -23,6 +23,12 @@ def get_labeled_points_like(like):
     return labeled_point_schema.jsonify(Labeled_point.query.filter(Labeled_point.name.like("%{}%".format(like))), many=True), 200
 
 
+"""
+Needs to be checked (based on mockups):
+- if requested point exist (DONE)
+"""
+
+
 @router.route('/<int:id>', methods=['GET'])
 def get_labeled_point(id):
     labeled_point = Labeled_point.query.get(id)
@@ -31,6 +37,17 @@ def get_labeled_point(id):
         return {'message': 'Labeled point not available'}, 404
 
     return labeled_point_schema.jsonify(labeled_point), 200
+
+
+"""
+Needs to be checked (based on mockups):
+- if name is unique (done)
+- if height is correct (>=0 or None)
+
+Required JSON:
+"name":
+"height":
+"""
 
 
 @router.route('', methods=['POST'])
@@ -44,6 +61,19 @@ def add_labeled_point():
             return labeled_point_schema.jsonify(own_point), 200
     else:
         return {'message': 'Name of point is not unique'}, 404
+
+
+"""
+Needs to be checked (based on mockups):
+- if requested point exist (done)
+- if requested point is in usage (done)
+- if new name is unique (done)
+- if new height is correct (>=0 or None)
+
+Required JSON:
+"name":
+"height":
+"""
 
 
 @router.route('/<int:id>', methods=['PUT'])
@@ -70,6 +100,13 @@ def update_labeled_point(id):
     return labeled_point_schema.jsonify(labeled_point), 200
 
 
+"""
+Needs to be checked (based on mockups):
+- if requested point exist (done)
+- if requested point is in usage (done)
+"""
+
+
 @router.route('/<int:id>', methods=['DELETE'])
 def delete_labeled_point(id):
     labeled_point = Labeled_point.query.get(id)
@@ -79,13 +116,14 @@ def delete_labeled_point(id):
 
     if is_in_usage(labeled_point):
         return {'message': 'Requested own point is in usage and cannot be deleted'}, 404
-    
+
     labeled_point.remove()
     return {'message': 'Own point successfully deleted'}, 200
 
 
 def is_name_unique(name: str):
-    labeled_point = Labeled_point.query.filter(Labeled_point.name.like(name)).first()
+    labeled_point = Labeled_point.query.filter(
+        Labeled_point.name.like(name)).first()
 
     if not labeled_point:
         return True
