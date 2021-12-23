@@ -10,7 +10,7 @@ const LabeledPointManagement = () => {
       <div>
         <LinkButton path='/punkt-opisany/dodaj'>Dodaj punkt opisany</LinkButton>
         <LinkButton path='/punkt-opisany/edytuj'>Edytuj punkt opisany</LinkButton>
-        <LinkButton path='/punkt-opisany/usun'>Usun punkt opisany</LinkButton>
+        <LinkButton path='/punkt-opisany/usun'>Usuń punkt opisany</LinkButton>
         <LinkButton path='/punkt-opisany/szukaj'>Szukaj punktów opisanych</LinkButton>
       </div>
     </div>
