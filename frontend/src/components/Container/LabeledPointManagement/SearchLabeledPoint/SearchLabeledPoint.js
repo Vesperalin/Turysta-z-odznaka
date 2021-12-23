@@ -13,7 +13,6 @@ const SearchLabeledPoint = () => {
 
   return (
     <div className={styles.wrapper}>
-      <h2>Szukaj punktu opisanego</h2>
       {formIsShown && <SearchForm />}
     </div>
   );
