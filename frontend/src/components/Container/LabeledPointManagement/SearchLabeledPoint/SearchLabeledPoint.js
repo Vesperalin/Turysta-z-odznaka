@@ -3,6 +3,7 @@ import axios from "axios";
 
 import SearchForm from "./SearchForm";
 import styles from "./SearchLabeledPoint.module.css";
+import LabeledPointsSearchResultTable from "../../../View/LabeledPointsSearchResultTable/LabeledPointsSearchResultTable";
 
 const baseURL = "http://127.0.0.1:5000/labeled-points/like/";
 
@@ -28,17 +29,16 @@ const SearchLabeledPoint = () => {
           term={term}
           setTerm={setTerm}
           onSubmit={onSubmit}
-        />}
+        />
+      }
       {(matchedLabeledPoints.length !== 0 && !formIsShown) &&
-        matchedLabeledPoints.map((labeledPoint) => {
-          return (
-            <div key={labeledPoint.id}>
-              <p>{labeledPoint.name} {labeledPoint.height ? labeledPoint.height + ' m n.p.m.' : ''} </p>
-            </div>
-          );
-        })}
+        <>
+          <p className={styles.info}>Wyniki szukania punktu opisanego dla: {term}</p>
+          <LabeledPointsSearchResultTable matchedElements={matchedLabeledPoints}/>
+        </>
+      }
       {(matchedLabeledPoints.length === 0 && !formIsShown) &&
-        <p className={styles.info}>Brak dopasowań dla: {term}</p>
+        <p className={styles.noResultsInfo}>Brak dopasowań dla: {term}</p>
       }
     </div>
   );

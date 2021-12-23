@@ -10,6 +10,11 @@
 }
 
 .info {
+  padding: 40px 0 0 0;
+  font-size: 1.2rem;
+}
+
+.noResultsInfo {
   padding: 40px 0 30px 0;
   font-size: 1.5rem;
   color: #DD9549;
