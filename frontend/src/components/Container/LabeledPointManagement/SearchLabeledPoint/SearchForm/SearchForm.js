@@ -4,6 +4,7 @@ import { matchSorter } from 'match-sorter'
 
 import ComboboxInputField from "../../../../View/ComboboxInputField/ComboboxInputField";
 import Button from "../../../../View/Button/Button";
+import styles from "./SearchForm.module.css";
 
 const baseURL = "http://127.0.0.1:5000/labeled-points";
 
@@ -35,7 +36,7 @@ const SearchForm = () => {
   };
 
   return (
-    <div>
+    <div className={styles.formWrapper}>
       <h2>Szukanie punktu opisanego</h2>
       {/*<p>{errorMessage}</p> -- for tests*/}
       <ComboboxInputField 

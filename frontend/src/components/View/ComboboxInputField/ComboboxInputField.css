@@ -1,0 +1,7 @@
+[data-reach-combobox-input] {
+  min-width: 35%;
+  width: 40%;
+  font-size: 1.05rem;
+  padding: 5px 10px;
+  font-family: inherit;
+}
