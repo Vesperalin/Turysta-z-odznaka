@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { matchSorter } from 'match-sorter'
-import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption } from "@reach/combobox";
-import "@reach/combobox/styles.css";
+
+import ComboboxInputField from "../../../../View/ComboboxInputField/ComboboxInputField";
 
 const baseURL = "http://127.0.0.1:5000/labeled-points";
 
@@ -10,9 +10,7 @@ const SearchForm = () => {
   const [labeledPoints, setLabeledPoints] = useState([]);
   //const [errorMessage, setErrorMessage] = useState("");
   const [term, setTerm] = React.useState("");
-  const matchedPoints = useNameMatch(term);
-
-  const handleInputChange = event => setTerm((event.target.value).trim());
+  const matchedPoints = nameMatch(term);
 
   useEffect(() => {
     axios.get(baseURL)
@@ -23,7 +21,7 @@ const SearchForm = () => {
       .catch(error => console.log(error.response.data))
   }, [])
 
-  function useNameMatch(term) {
+  function nameMatch(term) {
     return (
       term.trim() === ""
         ? null
@@ -32,40 +30,20 @@ const SearchForm = () => {
   }
 
   const onSubmit = () => {
-    console.log("Wybrano: " + term );
+    console.log("Wybrano: " + term);
   };
 
   return (
     <div>
       <h2>Szukanie punktu opisanego</h2>
       {/*<p>{errorMessage}</p> -- for tests*/}
-      <Combobox
-        aria-label="LabeledPoints"
-        onSelect={selectedPointName => setTerm(selectedPointName.trim())}>
-        <ComboboxInput
-          className="city-search-input"
-          placeholder="Nazwa szukanego punktu"
-          onChange={handleInputChange}
-        />
-        {matchedPoints && (
-          <ComboboxPopover className="shadow-popup">
-            {matchedPoints.length > 0 ? (
-              <ComboboxList>
-                {matchedPoints.slice(0, 5).map((result, index) => (
-                  <ComboboxOption
-                    key={index}
-                    value={`${result.name}`}
-                  />
-                ))}
-              </ComboboxList>
-            ) : (
-              <span style={{ display: "block", margin: 8 }}>
-                Nie znaleziono dopasowania
-              </span>
-            )}
-          </ComboboxPopover>
-        )}
-      </Combobox>
+      <ComboboxInputField 
+        comboboxLabel="LabeledPoints"
+        setTerm={setTerm}
+        listElements={matchedPoints}
+        inputPlaceholder="Nazwa szukanego punktu"
+        noMatchInfo="Nie znaleziono dopasowania"
+      />
       <button onClick={onSubmit}>Submit</button>
     </div>
   );
