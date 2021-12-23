@@ -34,14 +34,14 @@ const SearchForm = props => {
     <div className={styles.formWrapper}>
       <h2>Szukanie punktu opisanego</h2>
       {/*<p>{errorMessage}</p> -- for tests*/}
-      <ComboboxInputField 
+      <ComboboxInputField
         comboboxLabel="LabeledPoints"
         setTerm={props.setTerm}
         listElements={matchedPoints}
         inputPlaceholder="Nazwa szukanego punktu"
         noMatchInfo="Nie znaleziono dopasowania"
       />
-      <Button 
+      <Button
         text="Szukaj punktu opisanego"
         onClick={props.onSubmit}
       />

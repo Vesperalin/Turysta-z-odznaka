@@ -34,7 +34,7 @@ const SearchLabeledPoint = () => {
       {(matchedLabeledPoints.length !== 0 && !formIsShown) &&
         <>
           <p className={styles.info}>Wyniki szukania punktu opisanego dla: {term}</p>
-          <LabeledPointsSearchResultTable matchedElements={matchedLabeledPoints}/>
+          <LabeledPointsSearchResultTable matchedElements={matchedLabeledPoints} />
         </>
       }
       {(matchedLabeledPoints.length === 0 && !formIsShown) &&
