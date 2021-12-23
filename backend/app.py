@@ -13,6 +13,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
+# Simplification
+username = "jankowalski"
+
 from API import labeled_pointsAPI, own_pointsAPI
 
 app.register_blueprint(labeled_pointsAPI.router,

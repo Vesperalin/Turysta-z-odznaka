@@ -3,11 +3,9 @@ from flask.json import jsonify
 from flask.blueprints import Blueprint
 from models.labeled_point import Labeled_point
 from serializers.labeled_point import Labeled_pointSchema
+from .utils import capitalize
 
 labeled_point_schema = Labeled_pointSchema()
-
-# Simplification
-username = "jankowalski"
 
 router = Blueprint('labeled-points', __name__)
 
@@ -42,23 +40,28 @@ def get_labeled_point(id):
 """
 Needs to be checked (based on mockups):
 - if name is unique (done)
-- if height is correct (>=0 or None)
+- if height is correct (>=0 or None) (DONE)
+
+#TODO Nazwa to lowerCase z wyjątkiem pierwszego znaku (Wielka litera)
 
 Required JSON:
 "name":
-"height":
+"height": (value or null)
 """
 
 
 @router.route('', methods=['POST'])
 def add_labeled_point():
     labeled_point_dictionary = request.get_json()
+    capitalize(labeled_point_dictionary)
 
     if(is_name_unique(labeled_point_dictionary['name'])):
         if is_height_correct(labeled_point_dictionary['height']):
             own_point = labeled_point_schema.load(labeled_point_dictionary)
             own_point.save()
             return labeled_point_schema.jsonify(own_point), 200
+        else:
+            return {'message': 'Incorrect height value'}, 404
     else:
         return {'message': 'Name of point is not unique'}, 404
 
@@ -72,7 +75,7 @@ Needs to be checked (based on mockups):
 
 Required JSON:
 "name":
-"height":
+"height": (value or null)
 """
 
 
@@ -94,7 +97,7 @@ def update_labeled_point(id):
         return message, code
 
     labeled_point = labeled_point_schema.load(
-        request.get_json(), instance=existing_labeled_point, partial=True)
+        new_point_data, instance=existing_labeled_point, partial=True)
 
     labeled_point.save()
     return labeled_point_schema.jsonify(labeled_point), 200
@@ -112,13 +115,13 @@ def delete_labeled_point(id):
     labeled_point = Labeled_point.query.get(id)
 
     if not labeled_point:
-        return {'message': 'Requested own point not available'}, 404
+        return {'message': 'Requested labeled point not available'}, 404
 
     if is_in_usage(labeled_point):
-        return {'message': 'Requested own point is in usage and cannot be deleted'}, 404
+        return {'message': 'Requested labeled point is in usage and cannot be deleted'}, 404
 
     labeled_point.remove()
-    return {'message': 'Own point successfully deleted'}, 200
+    return {'message': 'Labeled point successfully deleted'}, 200
 
 
 def is_name_unique(name: str):

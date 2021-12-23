@@ -5,12 +5,9 @@ from models.own_point import Own_point
 from models.tourist import Tourist
 from serializers.own_point import Own_pointSchema
 from serializers.tourist import TouristSchema
-
+from app import username
 
 own_point_schema = Own_pointSchema()
-
-# Simplification
-username = "jankowalski"
 
 router = Blueprint('own-points', __name__)
 
@@ -21,6 +18,7 @@ def get_own_points():
     return own_point_schema.jsonify(all_own_points, many=True), 200
 
 
+# TODO another error codes
 @router.route('/like/<string:like>', methods=['GET'])
 def get_own_points_like(like):
     return own_point_schema.jsonify(Own_point.query.filter(Own_point.name.like("%{}%".format(like)), Own_point.tourist_username.like(username)), many=True), 200
