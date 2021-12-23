@@ -3,6 +3,7 @@ import axios from "axios";
 import { matchSorter } from 'match-sorter'
 
 import ComboboxInputField from "../../../../View/ComboboxInputField/ComboboxInputField";
+import Button from "../../../../View/Button/Button";
 
 const baseURL = "http://127.0.0.1:5000/labeled-points";
 
@@ -44,7 +45,10 @@ const SearchForm = () => {
         inputPlaceholder="Nazwa szukanego punktu"
         noMatchInfo="Nie znaleziono dopasowania"
       />
-      <button onClick={onSubmit}>Submit</button>
+      <Button 
+        text="Szukaj punktu opisanego"
+        onClick={onSubmit}
+      />
     </div>
   );
 };
