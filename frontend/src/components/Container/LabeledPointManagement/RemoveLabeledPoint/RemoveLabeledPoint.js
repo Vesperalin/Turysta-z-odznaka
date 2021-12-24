@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { matchSorter } from 'match-sorter'
 
 import styles from "./RemoveLabeledPoint.module.css";
+import SearchForm from "../SearchForm";
+
+const baseURL = "http://127.0.0.1:5000/labeled-points/"
 
 const RemoveLabeledPoint = () => {
-  const [formIsShown, setFormIsShown] = useState(true);
-  const [term, setTerm] = React.useState("");
-  const [matchedLabeledPoints, setMatchedLabeledPoints] = useState([]);
+
 
   return (
     <div className={styles.wrapper}>
-
+      
     </div>
   );
 };

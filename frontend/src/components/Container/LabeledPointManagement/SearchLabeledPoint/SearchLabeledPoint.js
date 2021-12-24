@@ -1,29 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import SearchForm from "../SearchForm";
 import styles from "./SearchLabeledPoint.module.css";
 import LabeledPointsSearchResultTable from "../../../View/LabeledPointsSearchResultTable/LabeledPointsSearchResultTable";
 
-const baseURL = "http://127.0.0.1:5000/labeled-points/like/";
+const likeBaseURL = "http://127.0.0.1:5000/labeled-points/like/";
+const labeledPointsBaseURL = "http://127.0.0.1:5000/labeled-points";
 
 const SearchLabeledPoint = () => {
   const [formIsShown, setFormIsShown] = useState(true);
   const [term, setTerm] = React.useState("");
+  const [labeledPoints, setLabeledPoints] = useState([]);
   const [matchedLabeledPoints, setMatchedLabeledPoints] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    axios.get(labeledPointsBaseURL)
+      .then(response => {
+        setLabeledPoints(response.data);
+      })
+      .catch(error => console.log(error.response.data))
+  }, [])
 
   const onSubmit = () => {
-    axios.get(`${baseURL}${term}`)
+    axios.get(`${likeBaseURL}${term}`)
       .then(response => {
         setMatchedLabeledPoints(response.data);
         setFormIsShown(false);
       })
-      //.catch(error => setErrorMessage(error.response.data)) -- not working on backend
       .catch(error => console.log(error.response.data))
   };
 
   return (
     <div className={styles.wrapper}>
+      {/*<p>{errorMessage}</p> -- for tests*/}
       {formIsShown &&
         <SearchForm
           title="Szukanie punktu opisanego"
@@ -33,6 +44,7 @@ const SearchLabeledPoint = () => {
           term={term}
           setTerm={setTerm}
           onSubmit={onSubmit}
+          labeledPoints={labeledPoints}
         />
       }
       {(matchedLabeledPoints.length !== 0 && !formIsShown) &&
