@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import { matchSorter } from 'match-sorter'
+
+import styles from "./RemoveLabeledPoint.module.css";
 
 const RemoveLabeledPoint = () => {
+  const [formIsShown, setFormIsShown] = useState(true);
+  const [term, setTerm] = React.useState("");
+  const [matchedLabeledPoints, setMatchedLabeledPoints] = useState([]);
+
   return (
-    <div>
-      <h2>Usuń punkt</h2>
+    <div className={styles.wrapper}>
+
     </div>
   );
 };

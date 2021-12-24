@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { matchSorter } from 'match-sorter'
 
-import ComboboxInputField from "../../../View/ComboboxInputField/ComboboxInputField";
-import Button from "../../../View/Button/Button";
+import ComboboxInputField from "../../View/ComboboxInputField/ComboboxInputField";
+import Button from "../../View/Button/Button";
 import styles from "./SearchForm.module.css";
 
 const baseURL = "http://127.0.0.1:5000/labeled-points";
@@ -32,17 +32,17 @@ const SearchForm = props => {
 
   return (
     <div className={styles.formWrapper}>
-      <h2>Szukanie punktu opisanego</h2>
+      <h2>{props.title}</h2>
       {/*<p>{errorMessage}</p> -- for tests*/}
       <ComboboxInputField
         comboboxLabel="LabeledPoints"
         setTerm={props.setTerm}
         listElements={matchedPoints}
-        inputPlaceholder="Nazwa szukanego punktu"
-        noMatchInfo="Nie znaleziono dopasowania"
+        inputPlaceholder={props.inputPlaceholder}
+        noMatchInfo={props.noMatchInfo}
       />
       <Button
-        text="Szukaj punktu opisanego"
+        text={props.buttonText}
         onClick={props.onSubmit}
       />
     </div>

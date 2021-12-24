@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-import SearchForm from "./SearchForm";
+import SearchForm from "../SearchForm";
 import styles from "./SearchLabeledPoint.module.css";
 import LabeledPointsSearchResultTable from "../../../View/LabeledPointsSearchResultTable/LabeledPointsSearchResultTable";
 
@@ -26,6 +26,10 @@ const SearchLabeledPoint = () => {
     <div className={styles.wrapper}>
       {formIsShown &&
         <SearchForm
+          title="Szukanie punktu opisanego"
+          inputPlaceholder="Nazwa szukanego punktu"
+          noMatchInfo="Nie znaleziono dopasowania"
+          buttonText="Szukaj punktu opisanego"
           term={term}
           setTerm={setTerm}
           onSubmit={onSubmit}
