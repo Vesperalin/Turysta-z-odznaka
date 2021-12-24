@@ -10,10 +10,10 @@ const labeledPointsBaseURL = "http://127.0.0.1:5000/labeled-points";
 
 const SearchLabeledPoint = () => {
   const [formIsShown, setFormIsShown] = useState(true);
-  const [term, setTerm] = React.useState("");
+  const [term, setTerm] = useState("");
   const [labeledPoints, setLabeledPoints] = useState([]);
   const [matchedLabeledPoints, setMatchedLabeledPoints] = useState([]);
-  const [errorMessage, setErrorMessage] = useState("");
+  //const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     axios.get(labeledPointsBaseURL)
