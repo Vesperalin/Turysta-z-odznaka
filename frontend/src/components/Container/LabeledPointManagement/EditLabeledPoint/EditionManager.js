@@ -36,7 +36,7 @@ const EditionManager = props => {
       const newLabeledPoint = { name: newPointName.trim(), height: newHeight };
 
       axios.put(`${labeledPointsBaseURL}/${point.id}`, newLabeledPoint)
-        .then(response => console.log(response.data))
+        .then(response => setMessage("Punkt został pomyślnie edytowany"))
         .catch(error => setMessage(error.response.data['message']));
     }
   };
@@ -57,12 +57,11 @@ const EditionManager = props => {
       }
       {!formIsShown &&
         <>
-          <p className={styles.info}>{message === '' ? "Punkt został pomyślnie edytowany" : message}</p>
+          <p className={styles.info}>{message}</p>
           <LinkButton path='/'>Zakończ</LinkButton>
         </>
       }
     </>
-
   );
 };
 
