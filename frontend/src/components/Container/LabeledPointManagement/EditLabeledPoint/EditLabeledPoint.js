@@ -66,6 +66,7 @@ const EditLabeledPoint = () => {
       {(!formIsShown && message === "") &&
         <EditionManager
           pointName={term}
+          labeledPoints={labeledPoints}
         />
       }
     </div>

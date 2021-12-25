@@ -1,12 +1,19 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 import LabeledPointForm from "../../../View/LabeledPointForm/LabeledPointForm";
-//import styles from "./EditionManager.module.css";
+import LinkButton from "../../../View/LinkButton/LinkButton";
+import styles from "./EditionManager.module.css";
+
+const labeledPointsBaseURL = "http://127.0.0.1:5000/labeled-points";
 
 const EditionManager = props => {
   const [formIsShown, setFormIsShown] = useState(true);
   const [newPointName, setNewPointName] = useState("");
   const [newPointHeight, setNewPointHeight] = useState("");
+  const [formMessage, setFormMessage] = useState("");
+  const [message, setMessage] = useState("");
+  //const [errorMessage, setErrorMessage] = useState("");
 
   const handleNameChange = e => setNewPointName(e.target.value);
 
@@ -17,10 +24,21 @@ const EditionManager = props => {
     }
   };
 
-
   const onClick = () => {
-    console.log(newPointName);
-    console.log(newPointHeight);
+    if (newPointName.trim() === '') {
+      setFormMessage("Nie podano nowej nazwy punktu opisanego");
+    } else {
+      setFormMessage("");
+      setFormIsShown(false);
+
+      const point = props.labeledPoints.find(point => point.name === props.pointName);
+      const newHeight = newPointHeight === "" ? null : parseInt(newPointHeight);
+      const newLabeledPoint = { name: newPointName.trim(), height: newHeight };
+
+      axios.put(`${labeledPointsBaseURL}/${point.id}`, newLabeledPoint)
+        .then(response => console.log(response.data))
+        .catch(error => setMessage(error.response.data['message']));
+    }
   };
 
   return (
@@ -34,7 +52,14 @@ const EditionManager = props => {
           setHeight={handleHeightChange}
           buttonText='Edytuj punkt opisany'
           onSubmit={onClick}
+          message={formMessage}
         />
+      }
+      {!formIsShown &&
+        <>
+          <p className={styles.info}>{message === '' ? "Punkt został pomyślnie edytowany" : message}</p>
+          <LinkButton path='/'>Zakończ</LinkButton>
+        </>
       }
     </>
 

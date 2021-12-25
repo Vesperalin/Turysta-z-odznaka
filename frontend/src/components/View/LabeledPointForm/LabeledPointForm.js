@@ -25,6 +25,7 @@ const LabeledPointForm = props => {
           onChange={props.setHeight}
         />
       </div>
+      <p className={styles.errorInfo}>{props.message}</p>
       <Button
         text={props.buttonText}
         onClick={props.onSubmit}
