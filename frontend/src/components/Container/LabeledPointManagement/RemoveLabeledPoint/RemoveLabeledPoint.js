@@ -50,10 +50,10 @@ const RemoveLabeledPoint = () => {
         />
       }
       {!formIsShown &&
-        <div>
+        <>
           <p className={styles.info}>{message}</p>
           <LinkButton path='/'>Zakończ</LinkButton>
-        </div>
+        </>
       }
     </div>
   );
