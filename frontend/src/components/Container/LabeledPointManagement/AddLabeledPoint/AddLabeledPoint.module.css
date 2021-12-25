@@ -1,0 +1,16 @@
+.wrapper {
+  height: 100%;
+  width: 100%;
+  background-image: url('../../../../assets/LabeledPointManagement/background.png');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 95% 95%;
+  background-size: 45%;
+  text-align: center;
+}
+
+.info {
+  padding: 40px 0 40px 0;
+  font-size: 1.5rem;
+  color: #DD9549;
+}
