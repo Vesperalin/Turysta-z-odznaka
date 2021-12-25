@@ -4,6 +4,7 @@ import axios from "axios";
 import styles from "./EditLabeledPoint.module.css";
 import SearchForm from "../SearchForm";
 import LinkButton from "../../../View/LinkButton/LinkButton";
+import EditionManager from "./EditionManager";
 
 const labeledPointsBaseURL = "http://127.0.0.1:5000/labeled-points";
 
@@ -31,12 +32,12 @@ const EditLabeledPoint = () => {
     } else {
       axios.get(`${labeledPointsBaseURL}/${point.id}`)
         .then(response => {
-          if (response.data.end_of_labeled_segments.length !== 0 || 
-              response.data.end_of_own_segments.length !== 0 ||
-              response.data.start_of_labeled_segments.length !== 0 ||
-              response.data.start_of_own_segments.length !== 0) {
-                setMessage(`Punkt ${term} jest już używany i nie można go edytować`);
-              }
+          if (response.data.end_of_labeled_segments.length !== 0 ||
+            response.data.end_of_own_segments.length !== 0 ||
+            response.data.start_of_labeled_segments.length !== 0 ||
+            response.data.start_of_own_segments.length !== 0) {
+            setMessage(`Punkt ${term} jest już używany i nie można go edytować`);
+          }
         })
         .catch(error => setMessage(error.response.data['message']))
     }
@@ -63,9 +64,9 @@ const EditLabeledPoint = () => {
         </>
       }
       {(!formIsShown && message === "") &&
-        <div>
-          <p>Jazda</p>
-        </div>
+        <EditionManager
+          pointName={term}
+        />
       }
     </div>
   );
