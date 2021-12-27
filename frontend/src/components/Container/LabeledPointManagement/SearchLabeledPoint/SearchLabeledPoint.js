@@ -5,7 +5,7 @@ import SearchForm from "../SearchForm";
 import styles from "./SearchLabeledPoint.module.css";
 import LabeledPointsSearchResultTable from "../../../View/LabeledPointsSearchResultTable/LabeledPointsSearchResultTable";
 
-const likeBaseURL = "http://127.0.0.1:5000/labeled-points/like/";
+const likeBaseURL = "http://127.0.0.1:5000/labeled-points/like";
 const labeledPointsBaseURL = "http://127.0.0.1:5000/labeled-points";
 
 const SearchLabeledPoint = () => {
@@ -24,7 +24,7 @@ const SearchLabeledPoint = () => {
   }, [])
 
   const onSubmit = () => {
-    axios.get(`${likeBaseURL}${term}`)
+    axios.get(`${likeBaseURL}/${term}`)
       .then(response => {
         setMatchedLabeledPoints(response.data);
         setFormIsShown(false);

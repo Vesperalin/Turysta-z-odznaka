@@ -2,7 +2,7 @@ import React from "react";
 import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption } from "@reach/combobox";
 import "@reach/combobox/styles.css";
 
-import "./ComboboxInputField.css";
+import "./ComboboxInputField.module.css";
 
 const ComboboxInputField = props => {
   return (
@@ -12,6 +12,7 @@ const ComboboxInputField = props => {
       <ComboboxInput
         placeholder={props.inputPlaceholder}
         onChange={event => props.setTerm((event.target.value).trim())}
+        autoFocus
       />
       {props.listElements && (
         <ComboboxPopover>

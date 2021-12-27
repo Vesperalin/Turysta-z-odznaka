@@ -14,6 +14,7 @@ const LabeledPointForm = props => {
           placeholder="Nazwa punktu"
           value={props.name}
           onChange={props.setName}
+          autoFocus
         />
       </div>
       <div className={styles.input}>

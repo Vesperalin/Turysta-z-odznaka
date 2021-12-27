@@ -5,7 +5,7 @@ import styles from "./App.module.css";
 import Menu from "./components/View/Menu/Menu";
 import TopBar from "./components/View/TopBar/TopBar";
 import Home from "./components/View/Home/Home";
-import LabeledPointManagement from "./components/Container/LabeledPointManagement/LabeledPointManagement";
+import LabeledPointManagement from "./components/View/LabeledPointManagement/LabeledPointManagement";
 import OwnPointManagement from "./components/Container/OwnPointManagement/OwnPointManagement";
 import TourCreation from "./components/Container/TourCreation/TourCreation";
 import EvidenceConfirmation from "./components/Container/EvidenceConfirmation/EvidenceConfirmation";
