@@ -31,7 +31,7 @@ const EditionManager = props => {
       setFormMessage("");
       setFormIsShown(false);
 
-      const point = props.labeledPoints.find(point => point.name === props.pointName);
+      const point = props.labeledPoints.find(point => point.name === (props.pointName.charAt(0).toUpperCase() + props.pointName.slice(1).toLowerCase()));
       const newHeight = newPointHeight === "" ? null : parseInt(newPointHeight);
       const newLabeledPoint = { name: newPointName.trim(), height: newHeight };
 
