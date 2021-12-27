@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask.json import jsonify
 from flask.blueprints import Blueprint
+from backend.API.utils import *
 from models.own_point import Own_point
 from models.tourist import Tourist
 from serializers.own_point import Own_pointSchema
@@ -33,10 +34,10 @@ def get_own_point(id):
     own_point = Own_point.query.get(id)
 
     if not own_point:
-        return {'message': 'Requested own point not available'}, 404
+        return {'message': '{}'.format(POINT_NOT_AVAILABLE)}, 404
 
     if own_point.tourist_username != username:
-        return {'message': 'Requested own point do not belongs to current user'}, 404
+        return {'message': '{}'.format(POINT_DO_NOT_BELONGS_TO_USER)}, 404
 
     return own_point_schema.jsonify(own_point), 200
 
@@ -54,8 +55,10 @@ Required JSON:
 def add_own_point():
     own_point_dictionary = request.get_json()
 
-    if(not isinstance(own_point_dictionary['latitude'], float) or not isinstance(own_point_dictionary['longitude'], float)):
-        return {'message': 'Coordinates are not correct datatypes'}, 404
+    if not __is_latitude_correct(own_point_dictionary['latitude']):
+        return {'message': '{}'.format(LATITUDE_NOT_CORRECT)}, 404
+    if not __is_longitude_correct(own_point_dictionary['longitude']):
+        return {'message': '{}'.format(LONGITUDE_NOT_CORRECT)}, 404
 
     if(__is_name_unique(own_point_dictionary['name'])):
         if(__are_coordinates_unique(own_point_dictionary['latitude'], own_point_dictionary['longitude'])):
@@ -63,9 +66,9 @@ def add_own_point():
             own_point.save()
             return own_point_schema.jsonify(own_point), 200
         else:
-            return {'message': 'Coordinates of point are not unique'}, 404
+            return {'message': '{}'.format(COORDINATES_OF_POINT_NOT_UNIQUE)}, 404
     else:
-        return {'message': 'Name of point is not unique'}, 404
+        return {'message': '{}'.format(NAME_OF_POINT_ALREADY_EXIST)}, 404
 
 
 """
@@ -81,13 +84,13 @@ def update_own_point(id):
     existing_own_point = Own_point.query.get(id)
 
     if not existing_own_point:
-        return {'message': 'Requested own point not available'}, 404
+        return {'message': '{}'.format(POINT_NOT_AVAILABLE)}, 404
 
     if existing_own_point.tourist_username != username:
-        return {'message': 'Requested own point do not belongs to current user'}, 404
+        return {'message': '{}'.format(POINT_DO_NOT_BELONGS_TO_USER)}, 404
 
     if __is_in_usage(existing_own_point):
-        return {'message': 'Requested own point is already in usage and cannot be modified'}, 404
+        return {'message': '{}'.format(POINT_IN_USAGE_EDIT)}, 404
 
     new_point_data = request.get_json()
 
@@ -104,7 +107,6 @@ def update_own_point(id):
 
 
 """
-
 """
 
 
@@ -113,16 +115,16 @@ def delete_own_point(id):
     own_point = Own_point.query.get(id)
 
     if not own_point:
-        return {'message': 'Requested own point not available'}, 404
+        return {'message': '{}'.format(POINT_NOT_AVAILABLE)}, 404
 
     if __is_in_usage(own_point):
-        return {'message': 'Requested own point is in usage and cannot be deleted'}, 404
+        return {'message': '{}'.format(POINT_IN_USAGE_DELETE)}, 404
 
     if own_point.tourist_username != username:
-        return {'message': 'Requested own point do not belongs to current user'}, 404
+        return {'message': '{}'.format(POINT_DO_NOT_BELONGS_TO_USER)}, 404
 
     own_point.remove()
-    return {'message': 'Own point successfully deleted'}, 200
+    return {'message': '{}'.format(POINT_DELETED)}, 200
 
 
 def __is_name_unique(name: str):
@@ -158,20 +160,32 @@ def __verify_new_data(existing_point: Own_point, data):
     new_name = existing_point.name != data['name']
     if new_name:
         if not __is_name_unique(data['name']):
-            return {'message': 'New name of point must be unique'}, 404
+            return {'message': '{}'.format(NAME_OF_POINT_ALREADY_EXIST)}, 404
 
     is_new_latitude = existing_point.latitude != data['latitude']
     if is_new_latitude:
-        if not isinstance(data['latitude'], float):
-            return {'message': 'Latitude is not correct datatype'}, 404
+        if not __is_latitude_correct(data['latitude']):
+            return {'message': '{}'.format(LONGITUDE_NOT_CORRECT)}, 404
 
     is_new_longitude = existing_point.longitude != data['longitude']
     if is_new_longitude:
-        if not isinstance(data['longitude'], float):
-            return {'message': 'Longitude is not correct datatype'}, 404
+        if not __is_longitude_correct(data['longitude']):
+            return {'message': '{}'.format(LONGITUDE_NOT_CORRECT)}, 404
 
     if is_new_latitude or is_new_longitude:
         if not __are_coordinates_unique(data['latitude'], data['longitude']):
-            return {'message': 'New coordinates of point must be unique'}, 404
+            return {'message': '{}'.format(COORDINATES_OF_POINT_NOT_UNIQUE)}, 404
 
     return None, 200
+
+
+def __is_longitude_correct(longitude):
+    if isinstance(longitude, float):
+        return True
+    return False
+
+
+def __is_latitude_correct(latitude):
+    if isinstance(latitude, float):
+        return True
+    return False
