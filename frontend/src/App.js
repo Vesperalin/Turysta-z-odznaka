@@ -14,6 +14,7 @@ import EditLabeledPoint from "./components/Container/LabeledPointManagement/Edit
 import RemoveLabeledPoint from "./components/Container/LabeledPointManagement/RemoveLabeledPoint/RemoveLabeledPoint";
 import SearchLabeledPoint from "./components/Container/LabeledPointManagement/SearchLabeledPoint/SearchLabeledPoint";
 import NotFound from "./components/View/NotFound/NotFound";
+import SearchOwnPoint from "./components/Container/OwnPointManagement/SearchOwnPoint/SearchOwnPoint";
 
 function App() {
   return (
@@ -31,7 +32,8 @@ function App() {
               <Route path='/punkt-opisany/usun' element={<RemoveLabeledPoint />} />
               <Route path='/punkt-opisany/szukaj' element={<SearchLabeledPoint />} />
               <Route path='/punkt-wlasny' element={<OwnPointManagement />} />
-              {/*Miejsce na 4 ścieżki do CRUDA punktu własnego*/}
+              <Route path='/punkt-wlasny/szukaj' element={<SearchOwnPoint />} />
+              {/*Miejsce na 3 ścieżki do CRUDA punktu własnego*/}
               <Route path='/tworzenie-trasy' element={<TourCreation />} />
               <Route path='/zglaszanie-dowodow' element={<EvidenceConfirmation />} />
               <Route path='*' element={<NotFound />} />
