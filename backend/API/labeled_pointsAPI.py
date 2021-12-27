@@ -1,11 +1,13 @@
-from flask import Flask, request, Response
+from flask import Flask, request
 from flask.json import jsonify
 from flask.blueprints import Blueprint
 from models.labeled_point import Labeled_point
 from serializers.labeled_point import Labeled_pointSchema
-from .utils import capitalize
 
 labeled_point_schema = Labeled_pointSchema()
+
+# Simplification
+username = "jankowalski"
 
 router = Blueprint('labeled-points', __name__)
 
@@ -21,43 +23,44 @@ def get_labeled_points_like(like):
     return labeled_point_schema.jsonify(Labeled_point.query.filter(Labeled_point.name.like("%{}%".format(like))), many=True), 200
 
 
+"""
+"""
+
+
 @router.route('/<int:id>', methods=['GET'])
 def get_labeled_point(id):
     labeled_point = Labeled_point.query.get(id)
 
     if not labeled_point:
-        return Response("{'message':'Punkt o wybranej nazwie nie istnieje!'}", status=404, mimetype='application/json')
+        return {'message': 'Labeled point not available'}, 404
 
     return labeled_point_schema.jsonify(labeled_point), 200
 
 
 """
 Required JSON:
-"name": "nameValue"
-"height": (value or null)
+"name":
+"height":
 """
 
 
 @router.route('', methods=['POST'])
 def add_labeled_point():
     labeled_point_dictionary = request.get_json()
-    capitalize(labeled_point_dictionary)
 
-    if __is_name_unique(labeled_point_dictionary['name']):
+    if(__is_name_unique(labeled_point_dictionary['name'])):
         if __is_height_correct(labeled_point_dictionary['height']):
             own_point = labeled_point_schema.load(labeled_point_dictionary)
             own_point.save()
             return labeled_point_schema.jsonify(own_point), 200
-        else:
-            return Response("{'message':'Niepoprawna wysokość!'}", status=404, mimetype='application/json')
     else:
-        return Response("{'message':'Punkt o wybranej nazwie już istnieje!'}", status=404, mimetype='application/json')
+        return {'message': 'Name of point is not unique'}, 404
 
 
 """
 Required JSON:
-"name": "nameValue"
-"height": (value or null)
+"name":
+"height":
 """
 
 
@@ -66,27 +69,26 @@ def update_labeled_point(id):
     existing_labeled_point = Labeled_point.query.get(id)
 
     if not existing_labeled_point:
-        return Response("{'message':'Punkt o wybranej nazwie nie istnieje!'}", status=404, mimetype='application/json')
+        return {'message': 'Requested labeled point not available'}, 404
 
     if __is_in_usage(existing_labeled_point):
-        return Response("{'message':'Punkt jest już używany w odcinkach. Nie można go edytować!'}", status=404, mimetype='application/json')
+        return {'message': 'Requested labeled point is already in usage and cannot be modified'}, 404
 
     new_point_data = request.get_json()
 
     message, code = __verify_new_data(existing_labeled_point, new_point_data)
 
     if code == 404:
-        return Response("{'message':'{}}'}".format(message), status=code, mimetype='application/json')
+        return message, code
 
     labeled_point = labeled_point_schema.load(
-        new_point_data, instance=existing_labeled_point, partial=True)
+        request.get_json(), instance=existing_labeled_point, partial=True)
 
     labeled_point.save()
     return labeled_point_schema.jsonify(labeled_point), 200
 
 
 """
-
 """
 
 
@@ -95,13 +97,13 @@ def delete_labeled_point(id):
     labeled_point = Labeled_point.query.get(id)
 
     if not labeled_point:
-        return Response("{'message':'Punkt o wybranej nazwie nie istnieje!'}", status=404, mimetype='application/json')
+        return {'message': 'Requested own point not available'}, 404
 
     if __is_in_usage(labeled_point):
-        return Response("{'message':'Punkt jest już używany w odcinkach. Nie można go usunąć. Zamiast tego przenieś punkt do kategorii zlikwidowane.'}", status=404, mimetype='application/json')
+        return {'message': 'Requested own point is in usage and cannot be deleted'}, 404
 
     labeled_point.remove()
-    return {'message': 'Punkt został pomyślnie usunięty'}, 200
+    return {'message': 'Own point successfully deleted'}, 200
 
 
 def __is_name_unique(name: str):
