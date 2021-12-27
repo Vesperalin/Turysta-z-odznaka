@@ -7,35 +7,37 @@ from serializers.labeled_point import Labeled_pointSchema
 
 labeled_point_schema = Labeled_pointSchema()
 
-# Simplification
-username = "jankowalski"
-
 router = Blueprint('labeled-points', __name__)
 
 
 @router.route('', methods=['GET'])
 def get_labeled_points():
-    all_labeled_points = Labeled_point.query.all()
-    return labeled_point_schema.jsonify(all_labeled_points, many=True), 200
+    try:
+        all_labeled_points = Labeled_point.query.all()
+        return labeled_point_schema.jsonify(all_labeled_points, many=True), 200
+    except:
+        return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
 
 @router.route('/like/<string:like>', methods=['GET'])
 def get_labeled_points_like(like):
-    return labeled_point_schema.jsonify(Labeled_point.query.filter(Labeled_point.name.like("%{}%".format(like))), many=True), 200
-
-
-"""
-"""
+    try:
+        return labeled_point_schema.jsonify(Labeled_point.query.filter(Labeled_point.name.like("%{}%".format(like))), many=True), 200
+    except:
+        return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
 
 @router.route('/<int:id>', methods=['GET'])
 def get_labeled_point(id):
-    labeled_point = Labeled_point.query.get(id)
+    try:
+        labeled_point = Labeled_point.query.get(id)
 
-    if not labeled_point:
-        return {'message': '{}'.format(POINT_NOT_AVAILABLE)}, 404
+        if not labeled_point:
+            return {'message': '{}'.format(POINT_NOT_AVAILABLE)}, 400
 
-    return labeled_point_schema.jsonify(labeled_point), 200
+        return labeled_point_schema.jsonify(labeled_point), 200
+    except:
+        return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
 
 """
@@ -48,15 +50,19 @@ Required JSON:
 @router.route('', methods=['POST'])
 def add_labeled_point():
     labeled_point_dictionary = request.get_json()
-
-    if(__is_name_unique(labeled_point_dictionary['name'])):
-        if __is_height_correct(labeled_point_dictionary['height']):
-            __capitalize_name(labeled_point_dictionary)
-            own_point = labeled_point_schema.load(labeled_point_dictionary)
-            own_point.save()
-            return labeled_point_schema.jsonify(own_point), 200
-    else:
-        return {'message': '{}'.format(NAME_OF_POINT_ALREADY_EXIST)}, 404
+    try:
+        if(__is_name_unique(labeled_point_dictionary['name'])):
+            if __is_height_correct(labeled_point_dictionary['height']):
+                __capitalize_name(labeled_point_dictionary)
+                own_point = labeled_point_schema.load(labeled_point_dictionary)
+                own_point.save()
+                return labeled_point_schema.jsonify(own_point), 200
+            else:
+                return {'message': '{}'.format(HEIGHT_NOT_CORRECT)}, 400
+        else:
+            return {'message': '{}'.format(NAME_OF_POINT_ALREADY_EXIST)}, 400
+    except:
+        return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
 
 """
@@ -68,13 +74,16 @@ Required JSON:
 
 @router.route('/<int:id>', methods=['PUT'])
 def update_labeled_point(id):
-    existing_labeled_point = Labeled_point.query.get(id)
+    try:
+        existing_labeled_point = Labeled_point.query.get(id)
+    except:
+        return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
     if not existing_labeled_point:
-        return {'message': '{}'.format(POINT_NOT_AVAILABLE)}, 404
+        return {'message': '{}'.format(POINT_NOT_AVAILABLE)}, 400
 
     if __is_in_usage(existing_labeled_point):
-        return {'message': '{}'.format(POINT_IN_USAGE_EDIT)}, 404
+        return {'message': '{}'.format(POINT_IN_USAGE_EDIT)}, 400
 
     new_point_data = request.get_json()
 
@@ -86,32 +95,36 @@ def update_labeled_point(id):
     __capitalize_name(new_point_data)
     labeled_point = labeled_point_schema.load(
         request.get_json(), instance=existing_labeled_point, partial=True)
-
-    labeled_point.save()
-    return {'message': '{}'.format(POINT_EDITED)}, 200
-
-
-"""
-"""
+    try:
+        labeled_point.save()
+        return {'message': '{}'.format(POINT_EDITED)}, 200
+    except:
+        return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
 
 @router.route('/<int:id>', methods=['DELETE'])
 def delete_labeled_point(id):
-    labeled_point = Labeled_point.query.get(id)
+    try:
+        labeled_point = Labeled_point.query.get(id)
 
-    if not labeled_point:
-        return {'message': '{}'.format(POINT_NOT_AVAILABLE)}, 404
+        if not labeled_point:
+            return {'message': '{}'.format(POINT_NOT_AVAILABLE)}, 400
 
-    if __is_in_usage(labeled_point):
-        return {'message': '{}'.format(POINT_IN_USAGE_DELETE)}, 404
+        if __is_in_usage(labeled_point):
+            return {'message': '{}'.format(POINT_IN_USAGE_DELETE)}, 400
 
-    labeled_point.remove()
-    return {'message': '{}'.format(POINT_DELETED)}, 200
+        labeled_point.remove()
+        return {'message': '{}'.format(POINT_DELETED)}, 200
+    except:
+        return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
 
 def __is_name_unique(name: str):
-    labeled_point = Labeled_point.query.filter(
-        Labeled_point.name.like(name)).first()
+    try:
+        labeled_point = Labeled_point.query.filter(
+            Labeled_point.name.like(name)).first()
+    except:
+        raise ConnectionError
 
     if not labeled_point:
         return True
@@ -136,12 +149,12 @@ def __verify_new_data(existing_point: Labeled_point, data):
     is_new_name = existing_point.name != data['name']
     if is_new_name:
         if not __is_name_unique(data['name']):
-            return {'message': '{}'.format(NAME_OF_POINT_ALREADY_EXIST)}, 404
+            return {'message': '{}'.format(NAME_OF_POINT_ALREADY_EXIST)}, 400
 
     is_new_height = existing_point.height != data['height']
     if is_new_height:
         if not __is_height_correct(data['height']):
-            return {'message': '{}'.format(HEIGHT_NOT_CORRECT)}, 404
+            return {'message': '{}'.format(HEIGHT_NOT_CORRECT)}, 400
 
     return None, 200
 

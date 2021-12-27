@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from environment.config import db_URI
 from flask_cors import CORS
+import re
 
 app = Flask(__name__)
 CORS(app)
@@ -22,6 +23,7 @@ app.register_blueprint(labeled_pointsAPI.router,
                        url_prefix="/labeled-points")
 app.register_blueprint(own_pointsAPI.router,
                        url_prefix="/own-points")
+
 
 
 if __name__ == "__main__":
