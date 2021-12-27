@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask.json import jsonify
 from flask.blueprints import Blueprint
-from .utils import capitalize
+from .utils import *
 from models.labeled_point import Labeled_point
 from serializers.labeled_point import Labeled_pointSchema
 
@@ -33,7 +33,7 @@ def get_labeled_point(id):
     labeled_point = Labeled_point.query.get(id)
 
     if not labeled_point:
-        return {'message': 'Labeled point not available'}, 404
+        return {'message': '{}'.format(POINT_NOT_AVAILABLE)}, 404
 
     return labeled_point_schema.jsonify(labeled_point), 200
 
@@ -56,7 +56,7 @@ def add_labeled_point():
             own_point.save()
             return labeled_point_schema.jsonify(own_point), 200
     else:
-        return {'message': 'Name of point is not unique'}, 404
+        return {'message': '{}'.format(NAME_OF_POINT_ALREADY_EXIST)}, 404
 
 
 """
@@ -71,10 +71,10 @@ def update_labeled_point(id):
     existing_labeled_point = Labeled_point.query.get(id)
 
     if not existing_labeled_point:
-        return {'message': 'Requested labeled point not available'}, 404
+        return {'message': '{}'.format(POINT_NOT_AVAILABLE)}, 404
 
     if __is_in_usage(existing_labeled_point):
-        return {'message': 'Requested labeled point is already in usage and cannot be modified'}, 404
+        return {'message': '{}'.format(POINT_IN_USAGE_EDIT)}, 404
 
     new_point_data = request.get_json()
 
@@ -88,7 +88,7 @@ def update_labeled_point(id):
         request.get_json(), instance=existing_labeled_point, partial=True)
 
     labeled_point.save()
-    return labeled_point_schema.jsonify(labeled_point), 200
+    return {'message': '{}'.format(POINT_EDITED)}, 200
 
 
 """
@@ -100,13 +100,13 @@ def delete_labeled_point(id):
     labeled_point = Labeled_point.query.get(id)
 
     if not labeled_point:
-        return {'message': 'Requested own point not available'}, 404
+        return {'message': '{}'.format(POINT_NOT_AVAILABLE)}, 404
 
     if __is_in_usage(labeled_point):
-        return {'message': 'Requested own point is in usage and cannot be deleted'}, 404
+        return {'message': '{}'.format(POINT_IN_USAGE_DELETE)}, 404
 
     labeled_point.remove()
-    return {'message': 'Own point successfully deleted'}, 200
+    return {'message': '{}'.format(POINT_DELETED)}, 200
 
 
 def __is_name_unique(name: str):
@@ -136,12 +136,12 @@ def __verify_new_data(existing_point: Labeled_point, data):
     is_new_name = existing_point.name != data['name']
     if is_new_name:
         if not __is_name_unique(data['name']):
-            return {'message': 'New name of point must be unique'}, 404
+            return {'message': '{}'.format(NAME_OF_POINT_ALREADY_EXIST)}, 404
 
     is_new_height = existing_point.height != data['height']
     if is_new_height:
         if not __is_height_correct(data['height']):
-            return {'message': 'Incorrect new height of point'}, 404
+            return {'message': '{}'.format(HEIGHT_NOT_CORRECT)}, 404
 
     return None, 200
 
