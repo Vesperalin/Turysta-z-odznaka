@@ -13,6 +13,7 @@ import AddLabeledPoint from "./components/Container/LabeledPointManagement/AddLa
 import EditLabeledPoint from "./components/Container/LabeledPointManagement/EditLabeledPoint/EditLabeledPoint";
 import RemoveLabeledPoint from "./components/Container/LabeledPointManagement/RemoveLabeledPoint/RemoveLabeledPoint";
 import SearchLabeledPoint from "./components/Container/LabeledPointManagement/SearchLabeledPoint/SearchLabeledPoint";
+import NotFound from "./components/View/NotFound/NotFound";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
               {/*Miejsce na 4 ścieżki do CRUDA punktu własnego*/}
               <Route path='/tworzenie-trasy' element={<TourCreation />} />
               <Route path='/zglaszanie-dowodow' element={<EvidenceConfirmation />} />
+              <Route path='*' element={<NotFound />} />
             </Routes>
           </main>
         </div>

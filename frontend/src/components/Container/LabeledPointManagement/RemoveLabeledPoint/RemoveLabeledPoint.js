@@ -23,7 +23,7 @@ const RemoveLabeledPoint = () => {
   }, []);
 
   const onSubmit = () => {
-    const point = labeledPoints.find(point => point.name === term);
+    const point = labeledPoints.find(point => point.name === (term.charAt(0).toUpperCase() + term.slice(1).toLowerCase()));
     setFormIsShown(false);
 
     if (point === undefined) {
