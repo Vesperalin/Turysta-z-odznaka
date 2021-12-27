@@ -1,4 +1,4 @@
 import re
 
-def capitalize(data_dictionary):
-    data_dictionary['name'] = data_dictionary['name'][0].upper() + data_dictionary['name'][1:].lower()
+def capitalize(name):
+    return name[0].upper() + name[1:].lower()

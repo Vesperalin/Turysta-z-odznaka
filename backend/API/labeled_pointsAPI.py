@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask.json import jsonify
 from flask.blueprints import Blueprint
+from .utils import capitalize
 from models.labeled_point import Labeled_point
 from serializers.labeled_point import Labeled_pointSchema
 
@@ -50,6 +51,7 @@ def add_labeled_point():
 
     if(__is_name_unique(labeled_point_dictionary['name'])):
         if __is_height_correct(labeled_point_dictionary['height']):
+            __capitalize_name(labeled_point_dictionary)
             own_point = labeled_point_schema.load(labeled_point_dictionary)
             own_point.save()
             return labeled_point_schema.jsonify(own_point), 200
@@ -81,6 +83,7 @@ def update_labeled_point(id):
     if code == 404:
         return message, code
 
+    __capitalize_name(new_point_data)
     labeled_point = labeled_point_schema.load(
         request.get_json(), instance=existing_labeled_point, partial=True)
 
@@ -145,3 +148,7 @@ def __verify_new_data(existing_point: Labeled_point, data):
 
 def __is_height_correct(height):
     return True if height is None else (height >= 0 and isinstance(height, int))
+
+
+def __capitalize_name(data_dictionary):
+    data_dictionary['name'] = capitalize(data_dictionary['name'])
