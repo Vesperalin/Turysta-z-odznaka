@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask.json import jsonify
 from flask.blueprints import Blueprint
+from sqlalchemy.exc import OperationalError
 from .utils import *
 from models.labeled_point import Labeled_point
 from serializers.labeled_point import Labeled_pointSchema
@@ -15,7 +16,7 @@ def get_labeled_points():
     try:
         all_labeled_points = Labeled_point.query.all()
         return labeled_point_schema.jsonify(all_labeled_points, many=True), 200
-    except:
+    except OperationalError:
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
 
@@ -36,7 +37,7 @@ def get_labeled_point(id):
             return {'message': '{}'.format(POINT_NOT_AVAILABLE)}, 400
 
         return labeled_point_schema.jsonify(labeled_point), 200
-    except:
+    except OperationalError:
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
 
@@ -61,7 +62,7 @@ def add_labeled_point():
                 return {'message': '{}'.format(HEIGHT_NOT_CORRECT)}, 400
         else:
             return {'message': '{}'.format(NAME_OF_POINT_ALREADY_EXIST)}, 400
-    except:
+    except OperationalError:
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
 
@@ -76,7 +77,7 @@ Required JSON:
 def update_labeled_point(id):
     try:
         existing_labeled_point = Labeled_point.query.get(id)
-    except:
+    except OperationalError:
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
     if not existing_labeled_point:
@@ -98,7 +99,7 @@ def update_labeled_point(id):
     try:
         labeled_point.save()
         return {'message': '{}'.format(POINT_EDITED)}, 200
-    except:
+    except OperationalError:
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
 
@@ -115,7 +116,7 @@ def delete_labeled_point(id):
 
         labeled_point.remove()
         return {'message': '{}'.format(POINT_DELETED)}, 200
-    except:
+    except OperationalError:
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
 
@@ -124,7 +125,7 @@ def __is_name_unique(name: str):
         labeled_point = Labeled_point.query.filter(
             Labeled_point.name.like(name)).first()
     except:
-        raise ConnectionError
+        raise OperationalError
 
     if not labeled_point:
         return True
