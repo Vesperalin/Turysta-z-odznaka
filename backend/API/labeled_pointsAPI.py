@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask.json import jsonify
 from flask.blueprints import Blueprint
+from .utils import capitalize
 from models.labeled_point import Labeled_point
 from serializers.labeled_point import Labeled_pointSchema
 
@@ -24,8 +25,6 @@ def get_labeled_points_like(like):
 
 
 """
-Needs to be checked (based on mockups):
-- if requested point exist (DONE)
 """
 
 
@@ -40,10 +39,6 @@ def get_labeled_point(id):
 
 
 """
-Needs to be checked (based on mockups):
-- if name is unique (done)
-- if height is correct (>=0 or None)
-
 Required JSON:
 "name":
 "height":
@@ -54,8 +49,9 @@ Required JSON:
 def add_labeled_point():
     labeled_point_dictionary = request.get_json()
 
-    if(is_name_unique(labeled_point_dictionary['name'])):
-        if is_height_correct(labeled_point_dictionary['height']):
+    if(__is_name_unique(labeled_point_dictionary['name'])):
+        if __is_height_correct(labeled_point_dictionary['height']):
+            __capitalize_name(labeled_point_dictionary)
             own_point = labeled_point_schema.load(labeled_point_dictionary)
             own_point.save()
             return labeled_point_schema.jsonify(own_point), 200
@@ -64,12 +60,6 @@ def add_labeled_point():
 
 
 """
-Needs to be checked (based on mockups):
-- if requested point exist (done)
-- if requested point is in usage (done)
-- if new name is unique (done)
-- if new height is correct (>=0 or None)
-
 Required JSON:
 "name":
 "height":
@@ -83,16 +73,17 @@ def update_labeled_point(id):
     if not existing_labeled_point:
         return {'message': 'Requested labeled point not available'}, 404
 
-    if is_in_usage(existing_labeled_point):
+    if __is_in_usage(existing_labeled_point):
         return {'message': 'Requested labeled point is already in usage and cannot be modified'}, 404
 
     new_point_data = request.get_json()
 
-    message, code = verify_new_data(existing_labeled_point, new_point_data)
+    message, code = __verify_new_data(existing_labeled_point, new_point_data)
 
     if code == 404:
         return message, code
 
+    __capitalize_name(new_point_data)
     labeled_point = labeled_point_schema.load(
         request.get_json(), instance=existing_labeled_point, partial=True)
 
@@ -101,9 +92,6 @@ def update_labeled_point(id):
 
 
 """
-Needs to be checked (based on mockups):
-- if requested point exist (done)
-- if requested point is in usage (done)
 """
 
 
@@ -114,14 +102,14 @@ def delete_labeled_point(id):
     if not labeled_point:
         return {'message': 'Requested own point not available'}, 404
 
-    if is_in_usage(labeled_point):
+    if __is_in_usage(labeled_point):
         return {'message': 'Requested own point is in usage and cannot be deleted'}, 404
 
     labeled_point.remove()
     return {'message': 'Own point successfully deleted'}, 200
 
 
-def is_name_unique(name: str):
+def __is_name_unique(name: str):
     labeled_point = Labeled_point.query.filter(
         Labeled_point.name.like(name)).first()
 
@@ -131,7 +119,7 @@ def is_name_unique(name: str):
     return False
 
 
-def is_in_usage(labeled_point: Labeled_point):
+def __is_in_usage(labeled_point: Labeled_point):
     if len(labeled_point.start_of_own_segments) > 0:
         return True
     if len(labeled_point.end_of_own_segments) > 0:
@@ -144,19 +132,23 @@ def is_in_usage(labeled_point: Labeled_point):
     return False
 
 
-def verify_new_data(existing_point: Labeled_point, data):
+def __verify_new_data(existing_point: Labeled_point, data):
     is_new_name = existing_point.name != data['name']
     if is_new_name:
-        if not is_name_unique(data['name']):
+        if not __is_name_unique(data['name']):
             return {'message': 'New name of point must be unique'}, 404
 
     is_new_height = existing_point.height != data['height']
     if is_new_height:
-        if not is_height_correct(data['height']):
+        if not __is_height_correct(data['height']):
             return {'message': 'Incorrect new height of point'}, 404
 
     return None, 200
 
 
-def is_height_correct(height):
+def __is_height_correct(height):
     return True if height is None else (height >= 0 and isinstance(height, int))
+
+
+def __capitalize_name(data_dictionary):
+    data_dictionary['name'] = capitalize(data_dictionary['name'])
