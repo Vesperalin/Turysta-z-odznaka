@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import styles from "./EditLabeledPoint.module.css";
 import SearchForm from "../SearchForm";
@@ -13,15 +14,21 @@ const EditLabeledPoint = () => {
   const [term, setTerm] = useState("");
   const [labeledPoints, setLabeledPoints] = useState([]);
   const [message, setMessage] = useState("");
-  //const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get(labeledPointsBaseURL)
       .then(response => {
         setLabeledPoints(response.data);
       })
-      .catch(error => console.log(error.response.data))
-  }, []);
+      .catch(error => {
+        if (error.response.status === 503) {
+          navigate('/503');
+        } else {
+          navigate('/error');
+        }
+      });
+  }, [navigate]);
 
   const onSubmit = () => {
     const point = labeledPoints.find(point => point.name === (term.charAt(0).toUpperCase() + term.slice(1).toLowerCase()));
@@ -39,7 +46,15 @@ const EditLabeledPoint = () => {
             setMessage(`Punkt ${term} jest już używany i nie można go edytować`);
           }
         })
-        .catch(error => setMessage(error.response.data['message']))
+        .catch(error => {
+          if (error.response.status === 503) {
+            navigate('/503');
+          } else if (error.response.status === 400) {
+            setMessage(error.response.data['message']);
+          } else {
+            navigate('/error');
+          }
+        });
     }
   };
 
