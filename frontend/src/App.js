@@ -15,6 +15,7 @@ import RemoveLabeledPoint from "./components/Container/LabeledPointManagement/Re
 import SearchLabeledPoint from "./components/Container/LabeledPointManagement/SearchLabeledPoint/SearchLabeledPoint";
 import NotFound from "./components/View/NotFound/NotFound";
 import SearchOwnPoint from "./components/Container/OwnPointManagement/SearchOwnPoint/SearchOwnPoint";
+import AddOwnPoint from "./components/Container/OwnPointManagement/AddOwnPoint/AddOwnPoint";
 import ServiceUnavailable from "./components/View/ServiceUnavailable/ServiceUnavailable";
 import UnknownError from "./components/View/UnknownError/UnknownError";
 
@@ -35,6 +36,7 @@ function App() {
               <Route path='/punkt-opisany/szukaj' element={<SearchLabeledPoint />} />
               <Route path='/punkt-wlasny' element={<OwnPointManagement />} />
               <Route path='/punkt-wlasny/szukaj' element={<SearchOwnPoint />} />
+              <Route path='/punkt-wlasny/dodaj' element={<AddOwnPoint />} />
               {/*Miejsce na 3 ścieżki do CRUDA punktu własnego*/}
               <Route path='/tworzenie-trasy' element={<TourCreation />} />
               <Route path='/zglaszanie-dowodow' element={<EvidenceConfirmation />} />

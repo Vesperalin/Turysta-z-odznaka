@@ -60,6 +60,7 @@ Required JSON:
 @router.route('', methods=['POST'])
 def add_own_point():
     own_point_dictionary = request.get_json()
+    __enter_user(own_point_dictionary)
 
     if not __is_latitude_correct(own_point_dictionary['latitude']):
         return {'message': '{}'.format(LATITUDE_NOT_CORRECT)}, 400
@@ -228,3 +229,7 @@ def __is_latitude_correct(latitude):
     if isinstance(latitude, float):
         return True
     return False
+
+
+def __enter_user(new_point_dictionary):
+    new_point_dictionary['tourist_username'] = username
