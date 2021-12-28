@@ -27,8 +27,8 @@ const SearchLabeledPoint = () => {
         } else {
           navigate('/error');
         }
-      })
-  }, [navigate])
+      });
+  }, [navigate]);
 
   const onSubmit = () => {
     axios.get(`${likeBaseURL}/${term}`)
@@ -42,7 +42,7 @@ const SearchLabeledPoint = () => {
         } else {
           navigate('/error');
         }
-      })
+      });
   };
 
   return (

@@ -26,7 +26,7 @@ const RemoveLabeledPoint = () => {
         } else {
           navigate('/error');
         }
-      })
+      });
   }, [navigate]);
 
   const onSubmit = () => {
@@ -46,7 +46,7 @@ const RemoveLabeledPoint = () => {
           } else {
             navigate('/error');
           }
-        })
+        });
     }
   };
 
