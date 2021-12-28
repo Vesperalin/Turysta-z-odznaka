@@ -42,7 +42,7 @@ const RemoveLabeledPoint = () => {
           if (error.response.status === 503) {
             navigate('/503');
           } else if (error.response.status === 400) {
-            setMessage(error.response.data['message'])
+            setMessage(error.response.data['message']);
           } else {
             navigate('/error');
           }

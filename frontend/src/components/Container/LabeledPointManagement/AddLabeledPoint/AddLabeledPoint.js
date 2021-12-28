@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import LabeledPointForm from "../../../View/LabeledPointForm/LabeledPointForm";
 import LinkButton from "../../../View/LinkButton/LinkButton";
@@ -13,7 +14,7 @@ const AddLabeledPoint = () => {
   const [newPointHeight, setNewPointHeight] = useState("");
   const [formMessage, setFormMessage] = useState("");
   const [message, setMessage] = useState("");
-  //const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleNameChange = e => setNewPointName(e.target.value);
 
@@ -28,7 +29,6 @@ const AddLabeledPoint = () => {
     if (newPointName.trim() === '') {
       setFormMessage("Nie podano nazwy punktu opisanego");
     } else {
-      setFormMessage("");
       setFormIsShown(false);
 
       const newHeight = newPointHeight === "" ? null : parseInt(newPointHeight);
@@ -36,7 +36,15 @@ const AddLabeledPoint = () => {
 
       axios.post(labeledPointsBaseURL, newLabeledPoint)
         .then(response => setMessage(`Punkt ${newPointName} został pomyślnie dodany`))
-        .catch(error => setMessage(error.response.data['message']));
+        .catch(error => {
+          if (error.request || error.response.status === 503) {
+            navigate('/503');
+          } else if (error.response.status === 400) {
+            setMessage(error.response.data['message']);
+          } else {
+            navigate('/error');
+          }
+        });
     }
   };
 
