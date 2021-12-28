@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import SearchForm from "../SearchForm";
 import styles from "./SearchLabeledPoint.module.css";
 import LabeledPointsSearchResultTable from "../../../View/LabeledPointsSearchResultTable/LabeledPointsSearchResultTable";
-import { useNavigate } from "react-router-dom";
 
 const likeBaseURL = "http://127.0.0.1:5000/labeled-points/like";
 const labeledPointsBaseURL = "http://127.0.0.1:5000/labeled-points";
