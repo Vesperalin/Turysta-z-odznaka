@@ -37,7 +37,7 @@ const AddLabeledPoint = () => {
       axios.post(labeledPointsBaseURL, newLabeledPoint)
         .then(response => setMessage(`Punkt ${newPointName} został pomyślnie dodany`))
         .catch(error => {
-          if (error.request || error.response.status === 503) {
+          if((error.request && error.response === undefined) || error.response.status === 503) {
             navigate('/503');
           } else if (error.response.status === 400) {
             setMessage(error.response.data['message']);
