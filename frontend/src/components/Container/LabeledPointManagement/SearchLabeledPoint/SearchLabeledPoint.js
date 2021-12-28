@@ -4,6 +4,7 @@ import axios from "axios";
 import SearchForm from "../SearchForm";
 import styles from "./SearchLabeledPoint.module.css";
 import LabeledPointsSearchResultTable from "../../../View/LabeledPointsSearchResultTable/LabeledPointsSearchResultTable";
+import { useNavigate } from "react-router-dom";
 
 const likeBaseURL = "http://127.0.0.1:5000/labeled-points/like";
 const labeledPointsBaseURL = "http://127.0.0.1:5000/labeled-points";
@@ -13,15 +14,21 @@ const SearchLabeledPoint = () => {
   const [term, setTerm] = useState("");
   const [labeledPoints, setLabeledPoints] = useState([]);
   const [matchedLabeledPoints, setMatchedLabeledPoints] = useState([]);
-  //const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get(labeledPointsBaseURL)
       .then(response => {
         setLabeledPoints(response.data);
       })
-      .catch(error => console.log(error.response.data))
-  }, [])
+      .catch(error => {
+        if (error.response.status === 503) {
+          navigate('/503');
+        } else {
+          navigate('/error');
+        }
+      })
+  }, [navigate])
 
   const onSubmit = () => {
     axios.get(`${likeBaseURL}/${term}`)
@@ -29,12 +36,17 @@ const SearchLabeledPoint = () => {
         setMatchedLabeledPoints(response.data);
         setFormIsShown(false);
       })
-      .catch(error => console.log(error.response.data))
+      .catch(error => {
+        if (error.response.status === 503) {
+          navigate('/503');
+        } else {
+          navigate('/error');
+        }
+      })
   };
 
   return (
     <div className={styles.wrapper}>
-      {/*<p>{errorMessage}</p> -- for tests*/}
       {formIsShown &&
         <SearchForm
           title="Szukanie punktu opisanego"
