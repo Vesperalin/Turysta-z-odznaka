@@ -17,6 +17,7 @@ import NotFound from "./components/View/NotFound/NotFound";
 import SearchOwnPoint from "./components/Container/OwnPointManagement/SearchOwnPoint/SearchOwnPoint";
 import AddOwnPoint from "./components/Container/OwnPointManagement/AddOwnPoint/AddOwnPoint";
 import EditOwnPoint from "./components/Container/OwnPointManagement/EditOwnPoint/EditOwnPoint";
+import RemoveOwnPoint from "./components/Container/OwnPointManagement/RemoveOwnPoint/RemoveOwnPoint";
 import ServiceUnavailable from "./components/View/ServiceUnavailable/ServiceUnavailable";
 import UnknownError from "./components/View/UnknownError/UnknownError";
 
@@ -39,7 +40,7 @@ function App() {
               <Route path='/punkt-wlasny/szukaj' element={<SearchOwnPoint />} />
               <Route path='/punkt-wlasny/dodaj' element={<AddOwnPoint />} />
               <Route path='/punkt-wlasny/edytuj' element={<EditOwnPoint />} />
-              {/*Miejsce na 1 ścieżkę do CRUDA punktu własnego*/}
+              <Route path='/punkt-wlasny/usun' element={<RemoveOwnPoint />} />
               <Route path='/tworzenie-trasy' element={<TourCreation />} />
               <Route path='/zglaszanie-dowodow' element={<EvidenceConfirmation />} />
               <Route path='/503' element={<ServiceUnavailable />} />
