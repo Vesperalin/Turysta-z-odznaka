@@ -18,9 +18,9 @@ const SearchOwnPoint = () => {
 
   useEffect(() => {
     axios
-      .get(labeledPointsBaseURL)
+      .get(ownPointsBaseURL)
       .then((response) => {
-        setLabeledPoints(response.data);
+        setOwnPoints(response.data);
       })
       .catch((error) => {
         if (error.response.status === 503) {
