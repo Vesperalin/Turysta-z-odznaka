@@ -15,6 +15,8 @@ import RemoveLabeledPoint from "./components/Container/LabeledPointManagement/Re
 import SearchLabeledPoint from "./components/Container/LabeledPointManagement/SearchLabeledPoint/SearchLabeledPoint";
 import NotFound from "./components/View/NotFound/NotFound";
 import SearchOwnPoint from "./components/Container/OwnPointManagement/SearchOwnPoint/SearchOwnPoint";
+import ServiceUnavailable from "./components/View/ServiceUnavailable/ServiceUnavailable";
+import UnknownError from "./components/View/UnknownError/UnknownError";
 
 function App() {
   return (
@@ -36,6 +38,8 @@ function App() {
               {/*Miejsce na 3 ścieżki do CRUDA punktu własnego*/}
               <Route path='/tworzenie-trasy' element={<TourCreation />} />
               <Route path='/zglaszanie-dowodow' element={<EvidenceConfirmation />} />
+              <Route path='/503' element={<ServiceUnavailable />} />
+              <Route path='/error' element={<UnknownError />} />
               <Route path='*' element={<NotFound />} />
             </Routes>
           </main>

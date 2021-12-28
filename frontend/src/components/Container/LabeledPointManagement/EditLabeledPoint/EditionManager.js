@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import LabeledPointForm from "../../../View/LabeledPointForm/LabeledPointForm";
 import LinkButton from "../../../View/LinkButton/LinkButton";
@@ -13,7 +14,7 @@ const EditionManager = props => {
   const [newPointHeight, setNewPointHeight] = useState("");
   const [formMessage, setFormMessage] = useState("");
   const [message, setMessage] = useState("");
-  //const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleNameChange = e => setNewPointName(e.target.value);
 
@@ -37,7 +38,15 @@ const EditionManager = props => {
 
       axios.put(`${labeledPointsBaseURL}/${point.id}`, newLabeledPoint)
         .then(response => setMessage("Punkt został pomyślnie edytowany"))
-        .catch(error => setMessage(error.response.data['message']));
+        .catch(error => {
+          if (error.response.status === 503) {
+            navigate('/503');
+          } else if (error.response.status === 400) {
+            setMessage(error.response.data['message']);
+          } else {
+            navigate('/error');
+          }
+        });
     }
   };
 
