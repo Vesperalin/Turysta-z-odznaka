@@ -12,6 +12,10 @@
   color: rgb(65, 65, 65);
 }
 
+.wrapper p {
+  margin: 1% auto 2% auto;
+}
+
 .wrapper img {
   margin-top: -4%;
   max-width: 530px;

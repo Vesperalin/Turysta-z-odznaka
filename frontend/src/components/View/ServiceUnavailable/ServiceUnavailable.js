@@ -6,7 +6,8 @@ import errorImage from "../../../assets/ServiceUnavailable/503 Error Service Una
 const ServiceUnavailable = () => {
   return (
     <div className={styles.wrapper}>
-      <h2>503</h2>
+      <h2>Serwis niedostępny</h2>
+      <p>Skontaktuj się z administratorem</p>
       <img src={errorImage} alt='503 error' />
     </div>
   );
