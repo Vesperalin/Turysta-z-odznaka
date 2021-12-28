@@ -4,15 +4,15 @@ import { useNavigate } from "react-router-dom";
 
 import OwnPointForm from "../../../View/OwnPointForm/OwnPointForm";
 import LinkButton from "../../../View/LinkButton/LinkButton";
-import styles from "./AddOwnPoint.module.css";
+import styles from "./EditionManager.module.css";
 
 const ownPointsBaseURL = "http://127.0.0.1:5000/own-points";
 
-const AddOwnPoint = () => {
+const EditionManager = props => {
   const [formIsShown, setFormIsShown] = useState(true);
-  const [newPointName, setNewPointName] = useState("");
-  const [newPointLatitude, setNewPointLatitude] = useState("");
-  const [newPointLongitude, setNewPointLongitude] = useState("");
+  const [newPointName, setNewPointName] = useState(props.pointName);
+  const [newPointLatitude, setNewPointLatitude] = useState(props.pointLatitude);
+  const [newPointLongitude, setNewPointLongitude] = useState(props.pointLongitude);
   const [formMessage, setFormMessage] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
@@ -21,14 +21,14 @@ const AddOwnPoint = () => {
 
   const handleLatitudeChange = e => {
     const regPattern = /[+-]?([0-9]*[.])?[0-9]+/;
-    if (regPattern.test(e.target.value)){
+    if (e.target.value === '' || regPattern.test(e.target.value)){
       setNewPointLatitude(e.target.value)
     }
   };
 
   const handleLongitudeChange = e => {
     const regPattern = /[+-]?([0-9]*[.])?[0-9]+/;
-    if (regPattern.test(e.target.value)){
+    if (e.target.value === '' || regPattern.test(e.target.value)){
       setNewPointLongitude(e.target.value)
     }
   };
@@ -37,23 +37,24 @@ const AddOwnPoint = () => {
     if (newPointName.trim() === '') {
       setFormMessage("Nie podano nazwy punktu własnego");
     } 
-    else if (newPointLatitude.trim() === '') {
+    else if (newPointLatitude === undefined) {
       setFormMessage("Nie podano szerokości geograficznej punktu własnego");
     }
-    else if (newPointLongitude.trim() === '') {
+    else if (newPointLongitude === undefined) {
       setFormMessage("Nie podano długości geograficznej punktu własnego");
-    }
-    else {
+    } else {
+      setFormMessage("");
       setFormIsShown(false);
 
+      const point = props.ownPoints.find(point => point.name === (props.pointName.charAt(0).toUpperCase() + props.pointName.slice(1).toLowerCase()));
       const newLatitude = parseFloat(newPointLatitude)
       const newLongitude = parseFloat(newPointLongitude)
       const newOwnPoint = { name: newPointName.trim(), latitude: newLatitude, longitude: newLongitude };
 
-      axios.post(ownPointsBaseURL, newOwnPoint)
-        .then(response => setMessage(`Punkt ${newPointName} został pomyślnie dodany`))
+      axios.put(`${ownPointsBaseURL}/${point.id}`, newOwnPoint)
+        .then(response => setMessage("Punkt został pomyślnie edytowany"))
         .catch(error => {
-          if((error.request && error.response === undefined) || error.response.status === 503) {
+          if (error.response.status === 503) {
             navigate('/503');
           } else if (error.response.status === 400) {
             setMessage(error.response.data['message']);
@@ -65,17 +66,17 @@ const AddOwnPoint = () => {
   };
 
   return (
-    <div className={styles.wrapper}>
+    <>
       {formIsShown &&
         <OwnPointForm
-          title="Dodawanie punktu własnego"
+          title={`Edycja punktu własnego: ${props.pointName}`}
           name={newPointName}
           latitude={newPointLatitude}
           longitude={newPointLongitude}
           setName={handleNameChange}
           setLatitude={handleLatitudeChange}
           setLongitude={handleLongitudeChange}
-          buttonText='Dodaj punkt własny'
+          buttonText='Edytuj punkt własny'
           onSubmit={onClick}
           message={formMessage}
         />
@@ -86,8 +87,8 @@ const AddOwnPoint = () => {
           <LinkButton path='/'>Zakończ</LinkButton>
         </>
       }
-    </div>
+    </>
   );
 };
 
-export default AddOwnPoint;
+export default EditionManager;
