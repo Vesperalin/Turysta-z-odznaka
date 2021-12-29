@@ -1,5 +1,6 @@
 from app import db
-from backend.models.base import BaseModel
+from models.base import BaseModel
+from models.tourist import Tourist
 
 
 class Own_point(db.Model, BaseModel):

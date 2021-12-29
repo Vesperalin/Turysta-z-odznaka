@@ -1,7 +1,6 @@
 from flask import Flask, request
-from flask.json import jsonify
 from flask.blueprints import Blueprint
-from services.labeled_point_services import delete_labeled_point, get_labeled_points, get_labeled_points_like, get_labeled_point, update_labeled_point
+from services.labeled_point_services import delete_labeled_point, get_labeled_points, get_labeled_points_like, get_labeled_point, update_labeled_point, add_labeled_point
 
 router = Blueprint('labeled-points', __name__)
 
@@ -22,7 +21,7 @@ def get_point(id):
 
 
 @router.route('', methods=['POST'])
-def add_labeled_point():
+def add_point():
     return add_labeled_point(request)
 
 

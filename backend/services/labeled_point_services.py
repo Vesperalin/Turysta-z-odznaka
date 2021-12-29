@@ -5,6 +5,7 @@ from sqlalchemy.exc import OperationalError
 from models.labeled_point import Labeled_point
 from serializers.labeled_point import Labeled_pointSchema
 
+
 labeled_point_schema = Labeled_pointSchema()
 
 
@@ -35,7 +36,7 @@ def get_labeled_point(id):
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
 
-def add_labeled_point(request):
+def add_labeled_point():
     labeled_point_dictionary = request.get_json()
     try:
         if(__is_name_unique(labeled_point_dictionary['name'])):
@@ -52,7 +53,7 @@ def add_labeled_point(request):
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
 
-def update_labeled_point(id, request):
+def update_labeled_point(id):
     try:
         existing_labeled_point = Labeled_point.query.get(id)
     except OperationalError:

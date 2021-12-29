@@ -37,10 +37,10 @@ const EditionManager = props => {
     if (newPointName.trim() === '') {
       setFormMessage("Nie podano nazwy punktu własnego");
     } 
-    else if (newPointLatitude === undefined) {
+    else if (newPointLatitude === '') {
       setFormMessage("Nie podano szerokości geograficznej punktu własnego");
     }
-    else if (newPointLongitude === undefined) {
+    else if (newPointLongitude === '') {
       setFormMessage("Nie podano długości geograficznej punktu własnego");
     } else {
       setFormMessage("");
