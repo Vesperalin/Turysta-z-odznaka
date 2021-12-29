@@ -10,8 +10,8 @@ const labeledPointsBaseURL = "http://127.0.0.1:5000/labeled-points";
 
 const EditionManager = props => {
   const [formIsShown, setFormIsShown] = useState(true);
-  const [newPointName, setNewPointName] = useState("");
-  const [newPointHeight, setNewPointHeight] = useState("");
+  const [newPointName, setNewPointName] = useState(props.pointName);
+  const [newPointHeight, setNewPointHeight] = useState(props.pointHeight);
   const [formMessage, setFormMessage] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
