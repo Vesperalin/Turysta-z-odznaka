@@ -28,12 +28,12 @@ def get_point(id):
 
 @router.route('', methods=['POST'])
 def add_point():
-    return add_labeled_point(request)
+    return add_labeled_point()
 
 
 @router.route('/<int:id>', methods=['PUT'])
 def update_point(id):
-    return update_labeled_point(id, request)
+    return update_labeled_point(id)
 
 
 @router.route('/<int:id>', methods=['DELETE'])

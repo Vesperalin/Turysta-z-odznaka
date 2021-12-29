@@ -39,7 +39,7 @@ def get_labeled_point(id):
 def add_labeled_point():
     labeled_point_dictionary = request.get_json()
     try:
-        if(__is_name_unique(labeled_point_dictionary['name'])):
+        if(__is_name_unique(labeled_point_dictionary['name'], False)):
             if __is_height_correct(labeled_point_dictionary['height']):
                 own_point = labeled_point_schema.load(labeled_point_dictionary)
                 own_point.save()
@@ -68,7 +68,7 @@ def update_labeled_point(id):
 
     message, code = __verify_new_data(existing_labeled_point, new_point_data)
 
-    if code == 404:
+    if code == 400:
         return message, code
 
     labeled_point = labeled_point_schema.load(
@@ -96,16 +96,17 @@ def delete_labeled_point(id):
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
 
-def __is_name_unique(name: str):
+def __is_name_unique(name: str, edit: bool):
     try:
         labeled_point = Labeled_point.query.filter(
-            Labeled_point.name.like(name)).first()
+            Labeled_point.name.like(name)).all()
     except:
         raise OperationalError
 
     if not labeled_point:
         return True
-
+    elif edit and len(labeled_point) < 2:
+        return True
     return False
 
 
@@ -125,51 +126,7 @@ def __is_in_usage(labeled_point: Labeled_point):
 def __verify_new_data(existing_point: Labeled_point, data):
     is_new_name = existing_point.name != data['name']
     if is_new_name:
-        if not __is_name_unique(data['name']):
-            return {'message': '{}'.format(NAME_OF_POINT_ALREADY_EXIST)}, 400
-
-    is_new_height = existing_point.height != data['height']
-    if is_new_height:
-        if not __is_height_correct(data['height']):
-            return {'message': '{}'.format(HEIGHT_NOT_CORRECT)}, 400
-
-    return None, 200
-
-
-def __is_height_correct(height):
-    return True if height is None else (height >= 0 and isinstance(height, int))
-
-
-def __is_name_unique(name: str):
-    try:
-        labeled_point = Labeled_point.query.filter(
-            Labeled_point.name.like(name)).first()
-    except:
-        raise OperationalError
-
-    if not labeled_point:
-        return True
-
-    return False
-
-
-def __is_in_usage(labeled_point: Labeled_point):
-    if len(labeled_point.start_of_own_segments) > 0:
-        return True
-    if len(labeled_point.end_of_own_segments) > 0:
-        return True
-    if len(labeled_point.start_of_labeled_segments) > 0:
-        return True
-    if len(labeled_point.end_of_labeled_segments) > 0:
-        return True
-
-    return False
-
-
-def __verify_new_data(existing_point: Labeled_point, data):
-    is_new_name = existing_point.name != data['name']
-    if is_new_name:
-        if not __is_name_unique(data['name']):
+        if not __is_name_unique(data['name'], True):
             return {'message': '{}'.format(NAME_OF_POINT_ALREADY_EXIST)}, 400
 
     is_new_height = existing_point.height != data['height']

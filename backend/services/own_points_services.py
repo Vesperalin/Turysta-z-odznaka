@@ -51,7 +51,7 @@ def add_own_point():
         return {'message': '{}'.format(LONGITUDE_NOT_CORRECT)}, 400
 
     try:
-        if(__is_name_unique(own_point_dictionary['name'])):
+        if(__is_name_unique(own_point_dictionary['name'], False)):
             if(__are_coordinates_unique(own_point_dictionary['latitude'], own_point_dictionary['longitude'])):
                 own_point = own_point_schema.load(own_point_dictionary)
                 own_point.save()
@@ -86,7 +86,7 @@ def update_own_point(id):
 
     message, code = __verify_new_data(existing_own_point, new_point_data)
 
-    if code == 404:
+    if code == 400:
         return message, code
 
     own_point = own_point_schema.load(
@@ -124,16 +124,17 @@ def delete_own_point(id):
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
 
-def __is_name_unique(name: str):
+def __is_name_unique(name: str, edit: bool):
     try:
         own_point = Own_point.query.filter(Own_point.tourist_username.like(
-            username), Own_point.name.like(name)).first()
+            username), Own_point.name.like(name)).all()
     except:
         raise OperationalError
 
     if not own_point:
         return True
-
+    elif edit and len(own_point) < 2:
+        return True
     return False
 
 
@@ -163,7 +164,7 @@ def __verify_new_data(existing_point: Own_point, data):
     new_name = existing_point.name != data['name']
     if new_name:
         try:
-            if not __is_name_unique(data['name']):
+            if not __is_name_unique(data['name'], True):
                 return {'message': '{}'.format(NAME_OF_POINT_ALREADY_EXIST)}, 400
         except OperationalError as e:
             raise e

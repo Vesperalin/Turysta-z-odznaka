@@ -46,7 +46,7 @@ const EditionManager = props => {
       setFormMessage("");
       setFormIsShown(false);
 
-      const point = props.ownPoints.find(point => point.name === (props.pointName.charAt(0).toUpperCase() + props.pointName.slice(1).toLowerCase()));
+      const point = props.ownPoints.find(point => point.name.toLowerCase() === props.pointName.toLowerCase());
       const newLatitude = parseFloat(newPointLatitude)
       const newLongitude = parseFloat(newPointLongitude)
       const newOwnPoint = { name: newPointName.trim(), latitude: newLatitude, longitude: newLongitude };
