@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import SearchForm from "../SearchForm";
 import styles from "./SearchOwnPoint.module.css";
 import OwnPointsSearchResultTable from "../../../View/OwnPointsSearchResultTable/OwnPointsSearchResultTable";
+import LinkButton from "../../../View/LinkButton/LinkButton";
 
 const likeBaseURL = "http://127.0.0.1:5000/own-points/like";
 const ownPointsBaseURL = "http://127.0.0.1:5000/own-points";
@@ -76,10 +77,14 @@ const SearchOwnPoint = () => {
             Wyniki szukania punktu własnego dla: {term}
           </p>
           <OwnPointsSearchResultTable matchedElements={matchedOwnPoints} />
+          <LinkButton path='/'>Zakończ</LinkButton>
         </>
       )}
       {matchedOwnPoints.length === 0 && !formIsShown && (
-        <p className={styles.noResultsInfo}>Brak dopasowań dla: {term}</p>
+        <>
+          <p className={styles.noResultsInfo}>Brak dopasowań dla: {term}</p>
+          <LinkButton path='/'>Zakończ</LinkButton>
+        </>
       )}
     </div>
   );
