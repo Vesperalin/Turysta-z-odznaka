@@ -30,7 +30,7 @@ const RemoveOwnPoint = () => {
   }, [navigate]);
 
   const onSubmit = () => {
-    const point = ownPoints.find(point => point.name === (term.charAt(0).toUpperCase() + term.slice(1).toLowerCase()));
+    const point = ownPoints.find(point => point.name.toLowerCase() === term.toLowerCase());
     setFormIsShown(false);
 
     if (point === undefined) {

@@ -37,16 +37,16 @@ const EditionManager = props => {
     if (newPointName.trim() === '') {
       setFormMessage("Nie podano nazwy punktu własnego");
     } 
-    else if (newPointLatitude === undefined) {
+    else if (newPointLatitude === '') {
       setFormMessage("Nie podano szerokości geograficznej punktu własnego");
     }
-    else if (newPointLongitude === undefined) {
+    else if (newPointLongitude === '') {
       setFormMessage("Nie podano długości geograficznej punktu własnego");
     } else {
       setFormMessage("");
       setFormIsShown(false);
 
-      const point = props.ownPoints.find(point => point.name === (props.pointName.charAt(0).toUpperCase() + props.pointName.slice(1).toLowerCase()));
+      const point = props.ownPoints.find(point => point.name.toLowerCase() === props.pointName.toLowerCase());
       const newLatitude = parseFloat(newPointLatitude)
       const newLongitude = parseFloat(newPointLongitude)
       const newOwnPoint = { name: newPointName.trim(), latitude: newLatitude, longitude: newLongitude };
