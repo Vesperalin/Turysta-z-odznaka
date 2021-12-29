@@ -1,7 +1,6 @@
 from flask import Flask, request
 from flask.json import jsonify
 from flask.blueprints import Blueprint
-from backend.API.utils import *
 from models.own_point import Own_point
 from models.tourist import Tourist
 from serializers.own_point import Own_pointSchema
