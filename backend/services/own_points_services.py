@@ -22,7 +22,7 @@ def get_own_points():
 def get_own_points_like(like):
     try:
         return own_point_schema.jsonify(Own_point.query.filter(Own_point.name.like("%{}%".format(like)), Own_point.tourist_username.like(username)), many=True), 200
-    except:
+    except OperationalError:
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
 

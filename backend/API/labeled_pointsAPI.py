@@ -10,6 +10,12 @@ def get_points():
     return get_labeled_points()
 
 
+# ENDPOINT to catch empty LIKE
+@router.route('/like/', methods=['GET'])
+def get_all_points():
+    return get_labeled_points()
+
+
 @router.route('/like/<string:like>', methods=['GET'])
 def get_points_like(like):
     return get_labeled_points_like(like)
