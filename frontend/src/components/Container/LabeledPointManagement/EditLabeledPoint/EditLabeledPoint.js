@@ -12,6 +12,7 @@ const labeledPointsBaseURL = "http://127.0.0.1:5000/labeled-points";
 const EditLabeledPoint = () => {
   const [formIsShown, setFormIsShown] = useState(true);
   const [term, setTerm] = useState("");
+  const [pointHeight, setPointHeight] = useState("");
   const [labeledPoints, setLabeledPoints] = useState([]);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
@@ -40,6 +41,8 @@ const EditLabeledPoint = () => {
     if (point === undefined) {
       setMessage(`Punkt opisany o nazwie: ${term} nie istnieje`);
     } else {
+      setPointHeight(point.height);
+
       axios
         .get(`${labeledPointsBaseURL}/${point.id}`)
         .then((response) => {
@@ -87,7 +90,11 @@ const EditLabeledPoint = () => {
         </>
       )}
       {!formIsShown && message === "" && (
-        <EditionManager pointName={term} labeledPoints={labeledPoints} />
+        <EditionManager 
+          pointName={term}
+          pointHeight={pointHeight}
+          labeledPoints={labeledPoints} 
+        />
       )}
     </div>
   );
