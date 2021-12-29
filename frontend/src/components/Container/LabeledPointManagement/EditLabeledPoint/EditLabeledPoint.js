@@ -17,42 +17,50 @@ const EditLabeledPoint = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(labeledPointsBaseURL)
-      .then(response => {
+    axios
+      .get(labeledPointsBaseURL)
+      .then((response) => {
         setLabeledPoints(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         if (error.response.status === 503) {
-          navigate('/503');
+          navigate("/503");
         } else {
-          navigate('/error');
+          navigate("/error");
         }
       });
   }, [navigate]);
 
   const onSubmit = () => {
-    const point = labeledPoints.find(point => point.name === (term.charAt(0).toUpperCase() + term.slice(1).toLowerCase()));
+    const point = labeledPoints.find(
+      (point) => point.name.toLowerCase() === term.toLowerCase()
+    );
     setFormIsShown(false);
 
     if (point === undefined) {
       setMessage(`Punkt opisany o nazwie: ${term} nie istnieje`);
     } else {
-      axios.get(`${labeledPointsBaseURL}/${point.id}`)
-        .then(response => {
-          if (response.data.end_of_labeled_segments.length !== 0 ||
+      axios
+        .get(`${labeledPointsBaseURL}/${point.id}`)
+        .then((response) => {
+          if (
+            response.data.end_of_labeled_segments.length !== 0 ||
             response.data.end_of_own_segments.length !== 0 ||
             response.data.start_of_labeled_segments.length !== 0 ||
-            response.data.start_of_own_segments.length !== 0) {
-            setMessage(`Punkt ${term} jest już używany i nie można go edytować`);
+            response.data.start_of_own_segments.length !== 0
+          ) {
+            setMessage(
+              `Punkt ${term} jest już używany i nie można go edytować`
+            );
           }
         })
-        .catch(error => {
+        .catch((error) => {
           if (error.response.status === 503) {
-            navigate('/503');
+            navigate("/503");
           } else if (error.response.status === 400) {
-            setMessage(error.response.data['message']);
+            setMessage(error.response.data["message"]);
           } else {
-            navigate('/error');
+            navigate("/error");
           }
         });
     }
@@ -60,7 +68,7 @@ const EditLabeledPoint = () => {
 
   return (
     <div className={styles.wrapper}>
-      {formIsShown &&
+      {formIsShown && (
         <SearchForm
           title="Edycja punktu opisanego"
           inputPlaceholder="Nazwa punktu"
@@ -71,19 +79,16 @@ const EditLabeledPoint = () => {
           onSubmit={onSubmit}
           labeledPoints={labeledPoints}
         />
-      }
-      {(!formIsShown && message !== "") &&
+      )}
+      {!formIsShown && message !== "" && (
         <>
           <p className={styles.info}>{message}</p>
-          <LinkButton path='/'>Zakończ</LinkButton>
+          <LinkButton path="/">Zakończ</LinkButton>
         </>
-      }
-      {(!formIsShown && message === "") &&
-        <EditionManager
-          pointName={term}
-          labeledPoints={labeledPoints}
-        />
-      }
+      )}
+      {!formIsShown && message === "" && (
+        <EditionManager pointName={term} labeledPoints={labeledPoints} />
+      )}
     </div>
   );
 };
