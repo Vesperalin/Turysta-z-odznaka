@@ -1,5 +1,3 @@
-import re
-
 POINT_NOT_AVAILABLE = 'Punkt o wybranej nazwie nie istnieje'
 POINT_IN_USAGE_EDIT = 'Punkt jest już używany w odcinkach. Nie można go edytować'
 POINT_IN_USAGE_DELETE = 'Punkt jest już używany w odcinkach. Nie można go usuwać'
@@ -13,7 +11,3 @@ LONGITUDE_NOT_CORRECT = 'Niepoprawne dane. Długość geograficzna musi być lic
 LATITUDE_NOT_CORRECT = 'Niepoprawne dane. Szerokość geograficzna musi być liczbą rzeczywistą'
 HEIGHT_NOT_CORRECT = 'Niepoprawna wartość wysokości'
 NO_DB_CONNECTION = 'Brak połączenia z bazą danych'
-
-
-def capitalize(name):
-    return name[0].upper() + name[1:].lower()
