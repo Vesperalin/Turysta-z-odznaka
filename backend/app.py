@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from environment.config import db_URI
 from flask_cors import CORS
-import re
 
 app = Flask(__name__)
 CORS(app)
@@ -17,12 +16,14 @@ ma = Marshmallow(app)
 # Simplification
 username = "jankowalski"
 
-from API import labeled_pointsAPI, own_pointsAPI
+from API import labeled_pointsAPI, own_pointsAPI, tour_creationAPI
 
 app.register_blueprint(labeled_pointsAPI.router,
                        url_prefix="/labeled-points")
 app.register_blueprint(own_pointsAPI.router,
                        url_prefix="/own-points")
+app.register_blueprint(tour_creationAPI.router,
+                       url_prefix="/tour-creation")
 
 
 

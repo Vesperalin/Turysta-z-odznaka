@@ -1,6 +1,8 @@
 from marshmallow_sqlalchemy.schema import auto_field
 from app import ma
+from marshmallow import fields
 from models.labeled_segment import Labeled_segment
+from serializers.closed_segment import Closed_segmentSchema
 
 
 class Labeled_segmentSchema(ma.SQLAlchemyAutoSchema):
@@ -16,3 +18,4 @@ class Labeled_segmentSchema(ma.SQLAlchemyAutoSchema):
     mountain_group_id = auto_field()
     start_point_id = auto_field()
     end_point_id = auto_field()
+    closed_segments = fields.Nested('Closed_segmentSchema', many=True, exclude={'segment_id'})
