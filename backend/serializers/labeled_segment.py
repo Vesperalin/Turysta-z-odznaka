@@ -19,3 +19,5 @@ class Labeled_segmentSchema(ma.SQLAlchemyAutoSchema):
     start_point_id = auto_field()
     end_point_id = auto_field()
     closed_segments = fields.Nested('Closed_segmentSchema', many=True, exclude={'segment_id'})
+    liquidated_segment = fields.Nested('Liquidated_segmentSchema', many=False, exclude={'id'})
+    
