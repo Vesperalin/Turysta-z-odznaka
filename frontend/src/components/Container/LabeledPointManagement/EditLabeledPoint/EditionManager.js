@@ -37,7 +37,7 @@ const EditionManager = props => {
       const newLabeledPoint = { name: newPointName.trim(), height: newHeight };
 
       axios.put(`${labeledPointsBaseURL}/${point.id}`, newLabeledPoint)
-        .then(response => setMessage("Punkt został pomyślnie edytowany"))
+        .then(response => setMessage(response.data['message']))
         .catch(error => {
           if (error.response.status === 503) {
             navigate('/503');
