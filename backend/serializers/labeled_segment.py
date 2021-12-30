@@ -5,6 +5,7 @@ from models.labeled_segment import Labeled_segment
 from serializers.closed_segment import Closed_segmentSchema
 from serializers.liquidated_segment import Liquidated_segmentSchema
 
+
 class Labeled_segmentSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Labeled_segment
@@ -18,6 +19,7 @@ class Labeled_segmentSchema(ma.SQLAlchemyAutoSchema):
     mountain_group_id = auto_field()
     start_point_id = auto_field()
     end_point_id = auto_field()
-    closed_segments = fields.Nested('Closed_segmentSchema', many=True, exclude={'segment_id'})
-    liquidated_segment = fields.Nested('Liquidated_segmentSchema', many=False, exclude={'id'})
-    
+    closed_segments = fields.Nested(
+        'Closed_segmentSchema', many=True, exclude={'segment_id'})
+    liquidated_segment = fields.Nested(
+        'Liquidated_segmentSchema', many=False, exclude={'id'})
