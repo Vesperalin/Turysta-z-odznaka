@@ -3,7 +3,7 @@ from app import ma
 from marshmallow import fields
 from models.labeled_segment import Labeled_segment
 from serializers.closed_segment import Closed_segmentSchema
-
+from serializers.liquidated_segment import Liquidated_segmentSchema
 
 class Labeled_segmentSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
