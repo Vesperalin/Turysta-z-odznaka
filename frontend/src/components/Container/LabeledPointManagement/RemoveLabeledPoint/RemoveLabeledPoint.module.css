@@ -14,3 +14,9 @@
   font-size: 1.5rem;
   color: #DD9549;
 }
+
+@media screen and (max-width: 900px) {
+  .wrapper {
+    background-image: none;
+  }
+}

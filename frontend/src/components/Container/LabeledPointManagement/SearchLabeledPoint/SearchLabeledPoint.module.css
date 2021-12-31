@@ -20,3 +20,9 @@
   color: #DD9549;
   font-weight: 700;
 }
+
+@media screen and (max-width: 900px) {
+  .wrapper {
+    background-image: none;
+  }
+}
