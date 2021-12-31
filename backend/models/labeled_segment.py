@@ -8,7 +8,7 @@ class Labeled_segment(db.Model, BaseModel):
 
 
     id = db.Column('id_odcinka', db.Integer, primary_key=True)
-    through = db.Column('przez', db.String(45), nullable=False)
+    through = db.Column('przez', db.String(45), nullable=True)
     color = db.Column('FK_kolor', db.String(45), nullable=False)    # TODO Enum type
     is_bidirectional = db.Column('czyDwukierunkowy', db.Boolean, nullable=False)
     points = db.Column('punktacja', db.Integer, nullable=False)
