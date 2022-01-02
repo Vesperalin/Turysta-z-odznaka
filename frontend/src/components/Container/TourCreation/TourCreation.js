@@ -63,6 +63,7 @@ const TourCreation = () => {
               setChosenSegments={setChosenSegments}
               startingPoint={startingPoint}
               setStartingPoint={setStartingPoint}
+              setPoints={setPoints}
               onSubmit={onSubmit}
             />
           </>

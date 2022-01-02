@@ -28,6 +28,11 @@ const TourCreationForm = props => {
     );
   }
 
+  //naliczanie punktów
+  const countPoints = segment => {
+    props.setPoints(previousPoints => previousPoints + segment.points);
+  };
+
   // akcja po naduszenou przycisku zatwierdzającego dodanie punktu początkowego
   const startingPointSubmitHandler = () => {
     const point = props.labeledPoints.find(point => point.name.toLowerCase() === tempStartingPoint.toLowerCase());
@@ -89,6 +94,7 @@ const TourCreationForm = props => {
     );
 
     setFilteredSegments(tempFilteredSegments);
+    countPoints(segment);
   };
 
   // akcja po naduszenou przycisku usunięcia ostatniego punktu
@@ -116,6 +122,7 @@ const TourCreationForm = props => {
       );
 
       setFilteredSegments(tempFilteredSegments);
+      props.setPoints(0);
 
     } else {
       //console.log("usuwanie pkt innego");
@@ -138,6 +145,7 @@ const TourCreationForm = props => {
       );
 
       setFilteredSegments(tempFilteredSegments);
+      countPoints(segment);
 
     }
   };
