@@ -7,6 +7,7 @@ import "@reach/listbox/styles.css";
 
 import ComboboxInputField from "../../View/ComboboxInputField/ComboboxInputField";
 import Button from "../../View/Button/Button";
+import SmallButton from "../../View/SmallButton/SmallButton";
 import styles from "./TourCreationForm.module.css";
 
 const labeledPointsBaseURL = "http://127.0.0.1:5000/labeled-points";
@@ -164,14 +165,16 @@ const TourCreationForm = props => {
             )}
           </ListboxInput>
           {message !== "" && <p className={styles.errorInfo}>{message}</p>}
-          <Button
-            onClick={nextPointSubmitHandler}
-            text="Dodaj punkt"
-          />
-          <Button
-            onClick={removeLastPointHandler}
-            text="Usuń ostatni punkt z listy"
-          />
+          <div className={styles.buttonsWrapper}>
+            <SmallButton
+              onClick={nextPointSubmitHandler}
+              text="+ Dodaj punkt"
+            />
+            <SmallButton
+              onClick={removeLastPointHandler}
+              text="- Usuń ostatni punkt"
+            />
+          </div>
           <Button
             onClick={props.onSubmit}
             text="Zatwierdź trasę"
