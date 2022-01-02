@@ -148,7 +148,7 @@ const TourCreationForm = props => {
           </ul>
 
           <div className={styles.formWrapper}>
-            <p className={styles.formInfo}>Wybierz punkt z listy</p>
+            <p className={styles.formInfo}>Wybierz kolejny punkt z listy</p>
             <ListboxInput value={chosenSegmentId} onChange={value => setChosenSegmentId(value)}>
               <ListboxButton arrow="▼"></ListboxButton>
               {filteredSegments.length > 0 ? (
