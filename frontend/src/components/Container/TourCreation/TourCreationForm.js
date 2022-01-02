@@ -28,7 +28,27 @@ const TourCreationForm = props => {
     );
   }
 
-  // akcja po naduszenou przycisku zatwierdzającego dodanie punktu początkowego
+  //zwraca możliwe zakończenia odcinka
+  function getFilteredSegments(pointId) {
+    const date = new Date();
+    
+    const tempFilteredSegments = props.labeledSegments.filter(currentSegments =>
+      currentSegments.start_point_id === pointId &&
+      currentSegments.liquidated_segment === null &&
+      currentSegments.closed_segments.filter(closedSegment => {
+        if (closedSegment.openingDate === null) {
+          return date >= new Date(closedSegment.closureDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
+        } else {
+          return date >= new Date(closedSegment.closureDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3")) &&
+            date <= new Date(closedSegment.openingDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
+        }
+      }).length === 0
+    );
+
+    return tempFilteredSegments;
+  }
+
+  // akcja po naduszeniu przycisku zatwierdzającego dodanie punktu początkowego
   const startingPointSubmitHandler = () => {
     const point = props.labeledPoints.find(point => point.name.toLowerCase() === tempStartingPoint.toLowerCase());
 
@@ -39,8 +59,9 @@ const TourCreationForm = props => {
         .then((response) => {
           setMessage("");
           props.setStartingPoint(response.data);
+          const tempFilteredSegments = getFilteredSegments(point.id);
 
-          const date = new Date();
+          /*const date = new Date();
           const tempFilteredSegments = props.labeledSegments.filter(currentSegments =>
             currentSegments.start_point_id === point.id &&
             currentSegments.liquidated_segment === null &&
@@ -52,7 +73,7 @@ const TourCreationForm = props => {
                   date <= new Date(closedSegment.openingDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
               }
             }).length === 0
-          );
+          );*/
 
           setFilteredSegments(tempFilteredSegments);
         })
@@ -71,14 +92,15 @@ const TourCreationForm = props => {
 
   // akcja po naduszenou przycisku dodania kolejnego punktu
   const nextPointSubmitHandler = () => {
-    if(chosenSegmentId === "") {
+    if (chosenSegmentId === "") {
       setMessage(`Nie wybrano punktu`);
     } else {
       setMessage("");
       const segment = props.labeledSegments.find(segment => segment.id === parseInt(chosenSegmentId));
       props.setChosenSegments(previousChosenSegments => [...previousChosenSegments, segment]);
-  
-      const date = new Date();
+      const tempFilteredSegments = getFilteredSegments(segment.end_point_id);
+
+      /*const date = new Date();
       const tempFilteredSegments = props.labeledSegments.filter(currentSegments =>
         currentSegments.start_point_id === segment.end_point_id &&
         currentSegments.liquidated_segment === null &&
@@ -90,13 +112,13 @@ const TourCreationForm = props => {
               date <= new Date(closedSegment.openingDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
           }
         }).length === 0
-      );
-  
+      );*/
+
       setFilteredSegments(tempFilteredSegments);
       props.setPoints(previousPoints => previousPoints + segment.points);
       setChosenSegmentId("");
     }
-    
+
   };
 
   // akcja po naduszenou przycisku usunięcia ostatniego punktu
@@ -109,7 +131,9 @@ const TourCreationForm = props => {
       //console.log("usuwanie pkt przedostatniego");
 
       props.chosenSegments.pop();
-      const date = new Date();
+
+      const tempFilteredSegments = getFilteredSegments(props.startingPoint.id);
+      /*const date = new Date();
       const tempFilteredSegments = props.labeledSegments.filter(currentSegments =>
         currentSegments.start_point_id === props.startingPoint.id &&
         currentSegments.liquidated_segment === null &&
@@ -121,7 +145,7 @@ const TourCreationForm = props => {
               date <= new Date(closedSegment.openingDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
           }
         }).length === 0
-      );
+      );*/
 
       setFilteredSegments(tempFilteredSegments);
       props.setPoints(0);
@@ -134,7 +158,9 @@ const TourCreationForm = props => {
       props.chosenSegments.pop();
       segment = props.chosenSegments[props.chosenSegments.length - 1];
 
-      const date = new Date();
+      const tempFilteredSegments = getFilteredSegments(segment.end_point_id);
+
+      /*const date = new Date();
       const tempFilteredSegments = props.labeledSegments.filter(currentSegments =>
         currentSegments.start_point_id === segment.end_point_id &&
         currentSegments.liquidated_segment === null &&
@@ -146,7 +172,7 @@ const TourCreationForm = props => {
               date <= new Date(closedSegment.openingDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
           }
         }).length === 0
-      );
+      );*/
 
       setFilteredSegments(tempFilteredSegments);
     }
