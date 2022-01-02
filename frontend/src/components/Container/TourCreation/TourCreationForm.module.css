@@ -1,5 +1,4 @@
 .wrapper {
-  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,9 +16,21 @@
   font-family: inherit;
   background-color: #f9f9f9;
   border: 2px solid rgb(141, 141, 141);
+  border-radius: 5px;
 }
 
 .buttonsWrapper {
   flex-wrap: wrap;
   display: flex;
+}
+
+.formInfo {
+  font-size: 0.9rem;
+}
+
+.chosenPointsList {
+  width: 100%;
+  list-style: none;
+  font-size: 1.1rem;
+  text-align: left;
 }

@@ -9,6 +9,8 @@ import ComboboxInputField from "../../View/ComboboxInputField/ComboboxInputField
 import Button from "../../View/Button/Button";
 import SmallButton from "../../View/SmallButton/SmallButton";
 import styles from "./TourCreationForm.module.css";
+import StartFlag from "../../View/Flags/StartFlag";
+import EndFlag from "../../View/Flags/EndFlag";
 
 const labeledPointsBaseURL = "http://127.0.0.1:5000/labeled-points";
 
@@ -131,16 +133,17 @@ const TourCreationForm = props => {
 
       {Object.keys(props.startingPoint).length !== 0 &&
         <div className={styles.wrapper}>
-          <ul>
-            <li>{props.startingPoint.name}</li>
+          <ul className={styles.chosenPointsList}>
+            <li><StartFlag />{props.startingPoint.name}</li>
             {props.chosenSegments.map((segment, index) => (
               <li key={index}>
+                {index === props.chosenSegments.length - 1 && <EndFlag />}
                 {props.labeledPoints.find(point => point.id === segment.end_point_id).name}{segment.through === null ? "" : " przez " + segment.through}
               </li>
             ))}
           </ul>
 
-          <p>Wybierz punkt z listy</p>
+          <p className={styles.formInfo}>Wybierz punkt z listy</p>
           <ListboxInput value={chosenSegmentId} onChange={value => setChosenSegmentId(value)}>
             <ListboxButton arrow="▼"></ListboxButton>
             {filteredSegments.length > 0 ? (
