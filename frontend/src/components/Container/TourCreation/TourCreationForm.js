@@ -75,7 +75,7 @@ const TourCreationForm = props => {
 
   // akcja po naduszeniu przycisku dodania kolejnego punktu
   const nextPointSubmitHandler = () => {
-    if (chosenSegmentId === "") {
+    if (chosenSegmentId === "" || chosenSegmentId === "no-value") {
       setMessage(`Nie wybrano punktu`);
     } else {
       setMessage("");
@@ -138,6 +138,7 @@ const TourCreationForm = props => {
             ))}
           </ul>
 
+          <p>Wybierz punkt z listy</p>
           <ListboxInput value={chosenSegmentId} onChange={value => setChosenSegmentId(value)}>
             <ListboxButton arrow="▼"></ListboxButton>
             {filteredSegments.length > 0 ? (
@@ -156,7 +157,7 @@ const TourCreationForm = props => {
             ) : (
               <ListboxPopover>
                 <ListboxList>
-                  <ListboxOption key="none" value="none">Brak dopasowań</ListboxOption>
+                  <ListboxOption value="no-value">Brak dopasowań</ListboxOption>
                 </ListboxList>
               </ListboxPopover>
             )}

@@ -48,7 +48,6 @@ const TourCreation = () => {
 
   const onSubmit = () => {
     console.log(chosenSegments);
-    console.log(chosenSegments.map(s => s.points));
   };
 
   return (
