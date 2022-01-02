@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { matchSorter } from 'match-sorter';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-//import { Listbox, ListboxOption } from "@reach/listbox";
-//import "@reach/listbox/styles.css";
+import { ListboxOption, ListboxPopover, ListboxInput, ListboxButton, ListboxList } from "@reach/listbox";
+import "@reach/listbox/styles.css";
 
 import ComboboxInputField from "../../View/ComboboxInputField/ComboboxInputField";
 import Button from "../../View/Button/Button";
@@ -12,9 +12,11 @@ import styles from "./TourCreationForm.module.css";
 const labeledPointsBaseURL = "http://127.0.0.1:5000/labeled-points";
 
 const TourCreationForm = props => {
-  const [tempStartingPoint, setTempStartingPoint] = useState("");
-  const [message, setMessage] = useState("");
-  const matchedPoints = nameMatch(tempStartingPoint);
+  const [tempStartingPoint, setTempStartingPoint] = useState(""); //do trzymania chwilowo punktu początkowego
+  const [message, setMessage] = useState(""); // info o błędzie
+  const [filteredSegments, setFilteredSegments] = useState([]); // odcinki, których początek to poprzedni punkt
+  const matchedPoints = nameMatch(tempStartingPoint); //do wybierania punktu początkowego
+  const [chosenSegmentId, setChosenSegmentId] = useState(""); //id wybranego odcinka - jako string bo tak tylko listbox pozwala
   const navigate = useNavigate();
 
   // dopasowywanie nazw podczas wyszukiwania punktu początkowego
@@ -39,19 +41,20 @@ const TourCreationForm = props => {
           props.setStartingPoint(response.data);
 
           const date = new Date();
-          const filteredPoints = props.labeledSegments.filter(currentPoint =>
-            currentPoint.start_point_id === point.id &&
-            currentPoint.liquidated_segment === null &&
-            currentPoint.closed_segments.filter(closedSegment => {
+          const tempFilteredSegments = props.labeledSegments.filter(currentSegments =>
+            currentSegments.start_point_id === point.id &&
+            currentSegments.liquidated_segment === null &&
+            currentSegments.closed_segments.filter(closedSegment => {
               if (closedSegment.openingDate === null) {
                 return date >= new Date(closedSegment.closureDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
               } else {
                 return date >= new Date(closedSegment.closureDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3")) &&
-                date <= new Date(closedSegment.openingDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
+                  date <= new Date(closedSegment.openingDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
               }
             }).length === 0
           );
-          console.log(filteredPoints);
+
+          setFilteredSegments(tempFilteredSegments);
         })
         .catch((error) => {
           console.log(error);
@@ -64,8 +67,28 @@ const TourCreationForm = props => {
           }
         });
     }
+  };
 
+  // akcja po naduszenou przycisku dodania kolejnego punktu
+  const nextPointSubmitHandler = () => {
+    const segment = props.labeledSegments.find(segment => segment.id === parseInt(chosenSegmentId));
+    props.setChosenSegments(previousChosenSegments => [...previousChosenSegments, segment]);
 
+    const date = new Date();
+    const tempFilteredSegments = props.labeledSegments.filter(currentSegments =>
+      currentSegments.start_point_id === segment.end_point_id &&
+      currentSegments.liquidated_segment === null &&
+      currentSegments.closed_segments.filter(closedSegment => {
+        if (closedSegment.openingDate === null) {
+          return date >= new Date(closedSegment.closureDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
+        } else {
+          return date >= new Date(closedSegment.closureDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3")) &&
+            date <= new Date(closedSegment.openingDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
+        }
+      }).length === 0
+    );
+
+    setFilteredSegments(tempFilteredSegments);
   };
 
   return (
@@ -86,12 +109,44 @@ const TourCreationForm = props => {
           />
         </div>
       }
+
       {Object.keys(props.startingPoint).length !== 0 &&
         <div className={styles.wrapper}>
           <ul>
             <li>{props.startingPoint.name}</li>
+
+            {props.chosenSegments.map((segment, index) => (
+              <li key={index}>{props.labeledPoints.find(point => point.id === segment.end_point_id).name}{segment.through === null ? "" : " przez " + segment.through}</li>
+            ))}
           </ul>
 
+          <ListboxInput value={chosenSegmentId} onChange={value => setChosenSegmentId(value)}>
+            <ListboxButton arrow="▼"></ListboxButton>
+            {filteredSegments.length > 0 ? (
+              <ListboxPopover>
+                <ListboxList>
+                  {filteredSegments.map((result, index) => (
+                    <ListboxOption
+                      key={index}
+                      value={result.id.toString()}
+                    >
+                      {props.labeledPoints.find(point => point.id === result.end_point_id).name}{result.through === null ? "" : " przez " + result.through}
+                    </ListboxOption>
+                  ))}
+                </ListboxList>
+              </ListboxPopover>
+            ) : (
+              <ListboxPopover>
+                <ListboxList>
+                  <ListboxOption key="none" value="none">Brak dopasowań</ListboxOption>
+                </ListboxList>
+              </ListboxPopover>
+            )}
+          </ListboxInput>
+          <Button
+            onClick={nextPointSubmitHandler}
+            text="Dodaj punkt"
+          />
         </div>
       }
     </>
