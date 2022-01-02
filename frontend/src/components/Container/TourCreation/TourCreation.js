@@ -3,11 +3,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 import styles from "./TourCreation.module.css";
+import TourCreationForm from "./TourCreationForm";
 
 const labeledPointsBaseURL = "http://127.0.0.1:5000/labeled-points";
 const labeledSegmentsBaseURL = "http://127.0.0.1:5000/tour-creation/labeled-segments";
 
-// #TODO add media queries for points presenter
+// #TODO add media queries for points presenter - position absolute
 
 const TourCreation = () => {
   const [isTourCreationFormShown, setIsTourCreationFormShown] = useState(true);
@@ -15,8 +16,8 @@ const TourCreation = () => {
   const [points, setPoints] = useState(0); // #TODO - dopisać do tego useEffect, że jak się zmienią chosenSegments to punktu się będą obliczać
   const [labeledSegments, setLabeledSegments] = useState([]);
   const [labeledPoints, setLabeledPoints] = useState([]);
-  //const [chosenSegments, setChosenSegments] = useState([]);
-  //const [startingPoint, setStartingPoint] = useState("");
+  const [chosenSegments, setChosenSegments] = useState([]);
+  const [startingPoint, setStartingPoint] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,13 +46,25 @@ const TourCreation = () => {
       });
   }, [navigate]);
 
+  const onSubmit = () => {
+    console.log(chosenSegments);
+  };
+
   return (
     <div className={styles.wrapper}>
       {(isTourCreationFormShown && !isTourNameFormShown) &&
         <>
           <>
             <h3>Stwórz trasę poprzez podanie punktów tworzących odcinki</h3>
-            <div className={styles.temp}></div>
+            <TourCreationForm
+              labeledSegments={labeledSegments}
+              labeledPoints={labeledPoints}
+              chosenSegments={chosenSegments}
+              setChosenSegments={setChosenSegments}
+              startingPoint={startingPoint}
+              setStartingPoint={setStartingPoint}
+              onSubmit={onSubmit}
+            />
           </>
           <div className={styles.pointsPresenter}>
             <p>Punkty do GOT</p>
