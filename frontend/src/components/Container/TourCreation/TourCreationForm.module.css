@@ -4,3 +4,7 @@
   flex-direction: column;
   align-items: center;
 }
+
+.errorInfo {
+  color: #ff6565;
+}
