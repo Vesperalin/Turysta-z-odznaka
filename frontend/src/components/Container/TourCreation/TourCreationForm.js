@@ -89,6 +89,7 @@ const TourCreationForm = props => {
 
   // akcja po naduszenou przycisku usunięcia ostatniego punktu
   const removeLastPointHandler = () => {
+    setMessage("");
     if (props.chosenSegments.length === 0) {
       props.chosenSegments.pop();
       props.setStartingPoint({});

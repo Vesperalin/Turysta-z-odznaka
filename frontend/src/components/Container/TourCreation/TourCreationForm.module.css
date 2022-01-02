@@ -8,3 +8,13 @@
 .errorInfo {
   color: #ff6565;
 }
+
+[data-reach-listbox-button]{
+  width: 400px;
+  height: 33px;
+  font-size: 1.05rem;
+  padding: 5px 10px;
+  font-family: inherit;
+  background-color: #f9f9f9;
+  border: 2px solid rgb(141, 141, 141);
+}
