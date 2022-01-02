@@ -134,50 +134,57 @@ const TourCreationForm = props => {
       {Object.keys(props.startingPoint).length !== 0 &&
         <div className={styles.wrapper}>
           <ul className={styles.chosenPointsList}>
-            <li><StartFlag />{props.startingPoint.name}</li>
+            <li><StartFlag /><span>{props.startingPoint.name}</span></li>
             {props.chosenSegments.map((segment, index) => (
               <li key={index}>
                 {index === props.chosenSegments.length - 1 && <EndFlag />}
-                {props.labeledPoints.find(point => point.id === segment.end_point_id).name}{segment.through === null ? "" : " przez " + segment.through}
+                <span
+                  className={index !== props.chosenSegments.length - 1 ? styles.middlePoints : ""}
+                >
+                  {props.labeledPoints.find(point => point.id === segment.end_point_id).name}{segment.through === null ? "" : " przez " + segment.through}
+                </span>
               </li>
             ))}
           </ul>
 
-          <p className={styles.formInfo}>Wybierz punkt z listy</p>
-          <ListboxInput value={chosenSegmentId} onChange={value => setChosenSegmentId(value)}>
-            <ListboxButton arrow="▼"></ListboxButton>
-            {filteredSegments.length > 0 ? (
-              <ListboxPopover>
-                <ListboxList>
-                  {filteredSegments.map((result, index) => (
-                    <ListboxOption
-                      key={index}
-                      value={result.id.toString()}
-                    >
-                      {props.labeledPoints.find(point => point.id === result.end_point_id).name}{result.through === null ? "" : " przez " + result.through}
-                    </ListboxOption>
-                  ))}
-                </ListboxList>
-              </ListboxPopover>
-            ) : (
-              <ListboxPopover>
-                <ListboxList>
-                  <ListboxOption value="no-value">Brak dopasowań</ListboxOption>
-                </ListboxList>
-              </ListboxPopover>
-            )}
-          </ListboxInput>
-          {message !== "" && <p className={styles.errorInfo}>{message}</p>}
-          <div className={styles.buttonsWrapper}>
-            <SmallButton
-              onClick={nextPointSubmitHandler}
-              text="+ Dodaj punkt"
-            />
-            <SmallButton
-              onClick={removeLastPointHandler}
-              text="- Usuń ostatni punkt"
-            />
+          <div className={styles.formWrapper}>
+            <p className={styles.formInfo}>Wybierz punkt z listy</p>
+            <ListboxInput value={chosenSegmentId} onChange={value => setChosenSegmentId(value)}>
+              <ListboxButton arrow="▼"></ListboxButton>
+              {filteredSegments.length > 0 ? (
+                <ListboxPopover>
+                  <ListboxList>
+                    {filteredSegments.map((result, index) => (
+                      <ListboxOption
+                        key={index}
+                        value={result.id.toString()}
+                      >
+                        {props.labeledPoints.find(point => point.id === result.end_point_id).name}{result.through === null ? "" : " przez " + result.through}
+                      </ListboxOption>
+                    ))}
+                  </ListboxList>
+                </ListboxPopover>
+              ) : (
+                <ListboxPopover>
+                  <ListboxList>
+                    <ListboxOption value="no-value">Brak dopasowań</ListboxOption>
+                  </ListboxList>
+                </ListboxPopover>
+              )}
+            </ListboxInput>
+            {message !== "" && <p className={styles.errorInfo}>{message}</p>}
+            <div className={styles.buttonsWrapper}>
+              <SmallButton
+                onClick={nextPointSubmitHandler}
+                text="+ Dodaj punkt"
+              />
+              <SmallButton
+                onClick={removeLastPointHandler}
+                text="- Usuń ostatni punkt"
+              />
+            </div>
           </div>
+
           <Button
             onClick={props.onSubmit}
             text="Zatwierdź trasę"
