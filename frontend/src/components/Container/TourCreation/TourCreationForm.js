@@ -91,9 +91,60 @@ const TourCreationForm = props => {
     setFilteredSegments(tempFilteredSegments);
   };
 
+  // akcja po naduszenou przycisku usunięcia ostatniego punktu
+  const removeLastPointHandler = () => {
+    if (props.chosenSegments.length === 0) {
+      //console.log("usuwanie pkt pocz");
+      props.chosenSegments.pop();
+      props.setStartingPoint({});
+    } else if (props.chosenSegments.length === 1) {
+      //console.log("usuwanie pkt przedostatniego");
+
+      props.chosenSegments.pop();
+      const date = new Date();
+      const tempFilteredSegments = props.labeledSegments.filter(currentSegments =>
+        currentSegments.start_point_id === props.startingPoint.id &&
+        currentSegments.liquidated_segment === null &&
+        currentSegments.closed_segments.filter(closedSegment => {
+          if (closedSegment.openingDate === null) {
+            return date >= new Date(closedSegment.closureDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
+          } else {
+            return date >= new Date(closedSegment.closureDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3")) &&
+              date <= new Date(closedSegment.openingDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
+          }
+        }).length === 0
+      );
+
+      setFilteredSegments(tempFilteredSegments);
+
+    } else {
+      //console.log("usuwanie pkt innego");
+
+      props.chosenSegments.pop();
+      const segment = props.chosenSegments[props.chosenSegments.length - 1];
+
+      const date = new Date();
+      const tempFilteredSegments = props.labeledSegments.filter(currentSegments =>
+        currentSegments.start_point_id === segment.end_point_id &&
+        currentSegments.liquidated_segment === null &&
+        currentSegments.closed_segments.filter(closedSegment => {
+          if (closedSegment.openingDate === null) {
+            return date >= new Date(closedSegment.closureDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
+          } else {
+            return date >= new Date(closedSegment.closureDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3")) &&
+              date <= new Date(closedSegment.openingDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"))
+          }
+        }).length === 0
+      );
+
+      setFilteredSegments(tempFilteredSegments);
+
+    }
+  };
+
   return (
     <>
-      {Object.keys(props.startingPoint).length === 0 &&
+      {(Object.keys(props.startingPoint).length === 0 && props.chosenSegments.length === 0) &&
         <div className={styles.wrapper}>
           <ComboboxInputField
             comboboxLabel="LabeledPoints"
@@ -114,7 +165,6 @@ const TourCreationForm = props => {
         <div className={styles.wrapper}>
           <ul>
             <li>{props.startingPoint.name}</li>
-
             {props.chosenSegments.map((segment, index) => (
               <li key={index}>{props.labeledPoints.find(point => point.id === segment.end_point_id).name}{segment.through === null ? "" : " przez " + segment.through}</li>
             ))}
@@ -146,6 +196,14 @@ const TourCreationForm = props => {
           <Button
             onClick={nextPointSubmitHandler}
             text="Dodaj punkt"
+          />
+          <Button
+            onClick={removeLastPointHandler}
+            text="Usuń ostatni punkt z listy"
+          />
+          <Button
+            onClick={props.onSubmit}
+            text="Zatwierdź trasę"
           />
         </div>
       }
