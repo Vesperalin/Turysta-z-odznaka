@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 import styles from "./TourCreation.module.css";
+import TourCreationNameForm from "./TourCreationNameForm";
 import TourCreationForm from "./TourCreationForm";
 
 const labeledPointsBaseURL = "http://127.0.0.1:5000/labeled-points";
@@ -17,6 +18,7 @@ const TourCreation = () => {
   const [labeledPoints, setLabeledPoints] = useState([]);
   const [chosenSegments, setChosenSegments] = useState([]);
   const [startingPoint, setStartingPoint] = useState({});
+  const [tourName, setTourName] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,7 +34,7 @@ const TourCreation = () => {
         }
       });
 
-      axios.get(labeledSegmentsBaseURL)
+    axios.get(labeledSegmentsBaseURL)
       .then(response => {
         setLabeledSegments(response.data);
       })
@@ -46,31 +48,36 @@ const TourCreation = () => {
   }, [navigate]);
 
   const onSubmit = () => {
-    console.log(chosenSegments);
+    //console.log(chosenSegments);
+    setIsTourCreationFormShown(false); // na razie tylko - do testowania formularza z nazwą
+    setIsTourNameFormShown(true); // na razie tylko - do testowania formularza z nazwą
   };
 
   return (
     <div className={styles.wrapper}>
       {(isTourCreationFormShown && !isTourNameFormShown) &&
         <>
-          <>
-            <h3>Stwórz trasę poprzez podanie punktów tworzących odcinki</h3>
-            <TourCreationForm
-              labeledSegments={labeledSegments}
-              labeledPoints={labeledPoints}
-              chosenSegments={chosenSegments}
-              setChosenSegments={setChosenSegments}
-              startingPoint={startingPoint}
-              setStartingPoint={setStartingPoint}
-              onSubmit={onSubmit}
-            />
-          </>
+          <h3>Stwórz trasę poprzez podanie punktów tworzących odcinki</h3>
+          <TourCreationForm
+            labeledSegments={labeledSegments}
+            labeledPoints={labeledPoints}
+            chosenSegments={chosenSegments}
+            setChosenSegments={setChosenSegments}
+            startingPoint={startingPoint}
+            setStartingPoint={setStartingPoint}
+            onSubmit={onSubmit}
+          />
         </>
       }
       {(!isTourCreationFormShown && isTourNameFormShown) &&
-        <>
-          <p>Tu będzie nadawanie trasie nazwy</p>
-        </>
+        <div className={styles.background}>
+          <h3>Nadaj trasie nazwę</h3>
+          <TourCreationNameForm 
+            tourName={tourName}
+            setTourName={setTourName}
+            buttonText="Zatwierdź"
+          />
+        </div>
       }
       {(!isTourCreationFormShown && !isTourNameFormShown) &&
         <>
