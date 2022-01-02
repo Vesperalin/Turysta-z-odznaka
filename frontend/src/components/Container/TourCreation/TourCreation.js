@@ -13,7 +13,6 @@ const labeledSegmentsBaseURL = "http://127.0.0.1:5000/tour-creation/labeled-segm
 const TourCreation = () => {
   const [isTourCreationFormShown, setIsTourCreationFormShown] = useState(true);
   const [isTourNameFormShown, setIsTourNameFormShown] = useState(false);
-  const [points, setPoints] = useState(0);
   const [labeledSegments, setLabeledSegments] = useState([]);
   const [labeledPoints, setLabeledPoints] = useState([]);
   const [chosenSegments, setChosenSegments] = useState([]);
@@ -63,14 +62,9 @@ const TourCreation = () => {
               setChosenSegments={setChosenSegments}
               startingPoint={startingPoint}
               setStartingPoint={setStartingPoint}
-              setPoints={setPoints}
               onSubmit={onSubmit}
             />
           </>
-          <div className={styles.pointsPresenter}>
-            <p>Punkty do GOT</p>
-            <p>{points}</p>
-          </div>
         </>
       }
       {(!isTourCreationFormShown && isTourNameFormShown) &&

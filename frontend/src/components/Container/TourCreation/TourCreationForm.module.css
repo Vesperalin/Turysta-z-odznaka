@@ -4,6 +4,21 @@
   align-items: center;
 }
 
+.pointsPresenter {
+  display: inline-block;
+  border: 2px solid #DD9549;
+  border-radius: 10px;
+  text-align: center;
+  position: absolute;
+  top: 3%;
+  right: 7%;
+}
+
+.pointsPresenter p {
+  margin: 6px 12px;
+  font-weight: bold;
+}
+
 .formWrapper {
   margin: 30px auto;
   background-color: #fdfdfd;
@@ -56,4 +71,18 @@
 
 .chosenPointsList li .middlePoints {
   margin-left: 27px;
+}
+
+@media screen and (max-width: 1170px) {
+  .pointsPresenter {
+    position: static;
+    margin-bottom: 20px;
+    padding: 0 10px;
+  }
+
+  .pointsPresenter p {
+    display: inline-block;
+    margin: 6px 3px;
+    font-weight: normal;
+  }
 }

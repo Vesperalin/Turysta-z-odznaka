@@ -21,6 +21,7 @@ const TourCreationForm = props => {
   const matchedPoints = nameMatch(tempStartingPoint); //do wybierania punktu początkowego
   const [chosenSegmentId, setChosenSegmentId] = useState(""); //id wybranego odcinka - jako string bo tak tylko listbox pozwala
   const navigate = useNavigate();
+  const [points, setPoints] = useState(0);
 
   // dopasowywanie nazw podczas wyszukiwania punktu początkowego
   function nameMatch(term) {
@@ -86,7 +87,7 @@ const TourCreationForm = props => {
       const segment = props.labeledSegments.find(segment => segment.id === parseInt(chosenSegmentId));
       props.setChosenSegments(previousChosenSegments => [...previousChosenSegments, segment]);
       setFilteredSegments(getFilteredSegments(segment.end_point_id));
-      props.setPoints(previousPoints => previousPoints + segment.points);
+      setPoints(previousPoints => previousPoints + segment.points);
     }
   };
 
@@ -99,10 +100,10 @@ const TourCreationForm = props => {
     } else if (props.chosenSegments.length === 1) {
       props.chosenSegments.pop();
       setFilteredSegments(getFilteredSegments(props.startingPoint.id));
-      props.setPoints(0);
+      setPoints(0);
     } else {
       let segment = props.chosenSegments[props.chosenSegments.length - 1];
-      props.setPoints(previousPoints => previousPoints - segment.points);
+      setPoints(previousPoints => previousPoints - segment.points);
       props.chosenSegments.pop();
       segment = props.chosenSegments[props.chosenSegments.length - 1];
       setFilteredSegments(getFilteredSegments(segment.end_point_id));
@@ -111,6 +112,10 @@ const TourCreationForm = props => {
 
   return (
     <>
+      <div className={styles.pointsPresenter}>
+        <p>Punkty do GOT</p>
+        <p>{points}</p>
+      </div>
       {(Object.keys(props.startingPoint).length === 0 && props.chosenSegments.length === 0) &&
         <div className={styles.wrapper}>
           <ComboboxInputField
