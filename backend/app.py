@@ -16,7 +16,7 @@ ma = Marshmallow(app)
 # Simplification
 username = "jankowalski"
 
-from API import labeled_pointsAPI, own_pointsAPI, tour_creationAPI
+from API import labeled_pointsAPI, own_pointsAPI, tour_creationAPI, evidence_confirmationAPI
 
 app.register_blueprint(labeled_pointsAPI.router,
                        url_prefix="/labeled-points")
@@ -24,6 +24,8 @@ app.register_blueprint(own_pointsAPI.router,
                        url_prefix="/own-points")
 app.register_blueprint(tour_creationAPI.router,
                        url_prefix="/tour-creation")
+app.register_blueprint(evidence_confirmationAPI.router,
+                       url_prefix="/evidence-confirmation")
 
 
 
