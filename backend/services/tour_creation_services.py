@@ -33,7 +33,7 @@ def get_if_tour_name_unique():
     except OperationalError:
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
-# nie używane - TODO - usunąć
+# nie używane - TODO - usunąć / przerobić na get tour by id
 def get_tourist_tours():
     try:
         all_tours = Tour.query.filter_by(

@@ -19,7 +19,7 @@ def get_point(id):
 def get_if_name_unique():
     return get_if_tour_name_unique()
 
-# nie używane - TODO - usunąć
+# nie używane - TODO - usunąć / przerobić na get tour by id
 @router.route('/tours', methods=['GET'])
 def get_tour():
     return get_tourist_tours()
