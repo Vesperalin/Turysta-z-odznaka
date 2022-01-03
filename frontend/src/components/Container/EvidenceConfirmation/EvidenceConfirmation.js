@@ -3,16 +3,19 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 import SearchForm from "./SearchForm";
+import EvidenceConfirmationManager from "./EvidenceConfirmationManager";
+import LinkButton from "../../View/LinkButton/LinkButton";
 import styles from "./EvidenceConfirmation.module.css";
 
-//const likeBaseURL = "http://127.0.0.1:5000/labeled-points/like";
+const tourSegmentsBaseURL = "http://127.0.0.1:5000/evidence-confirmation/segments";
 const toursBaseURL = "http://127.0.0.1:5000/evidence-confirmation/tours";
 
 const EvidenceConfirmation = () => {
   const [formIsShown, setFormIsShown] = useState(true);
   const [term, setTerm] = useState("");
   const [tours, setTours] = useState([]);
-  // const [matchedTour, setMatchedTour] = useState([]);
+  const [matchedSegments, setMatchedSegments] = useState([]);
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,20 +32,35 @@ const EvidenceConfirmation = () => {
       });
   }, [navigate]);
 
-  /*const onSubmit = () => {
-    axios.get(`${likeBaseURL}/${term}`)
-      .then(response => {
-        setMatchedTour(response.data);
-        setFormIsShown(false);
-      })
-      .catch(error => {
-        if (error.response.status === 503) {
-          navigate('/503');
-        } else {
-          navigate('/error');
-        }
-      });
-  };*/
+
+  const onSubmit = () => {
+    const tour = tours.find(
+      (tour) => tour.name.toLowerCase() === term.toLowerCase()
+    );
+    setFormIsShown(false);
+
+    if (tour === undefined) {
+      setMessage(`Trasa o nazwie: ${term} nie istnieje`);
+    } else {
+      console.log(tour)
+      axios
+        .get(`${tourSegmentsBaseURL}/${tour.id}`)
+        .then((response) => {
+          // console.log(response.data)
+          setMatchedSegments(response.data);
+          setFormIsShown(false);
+        })
+        .catch((error) => {
+          if (error.response.status === 503) {
+            navigate("/503");
+          } else if (error.response.status === 400) {
+            setMessage(error.response.data["message"]);
+          } else {
+            navigate("/error");
+          }
+        });
+    }
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -54,23 +72,23 @@ const EvidenceConfirmation = () => {
           buttonText="Szukaj trasy"
           term={term}
           setTerm={setTerm}
-          //onSubmit={onSubmit}
+          onSubmit={onSubmit}
           tours={tours}
         />
       }
-      {/*(matchedTour.length !== 0 && !formIsShown) &&
+      {!formIsShown && message !== "" && (
         <>
-          <p className={styles.info}>Wyniki szukania punktu opisanego dla: {term}</p>
-          <LabeledPointsSearchResultTable matchedElements={matchedTour} />
-          <LinkButton path='/'>Zakończ</LinkButton>
+          <p className={styles.info}>{message}</p>
+          <LinkButton path="/">Zakończ</LinkButton>
         </>
-      }
-      {(matchedTour.length === 0 && !formIsShown) &&
+      )}
+      {!formIsShown && message === "" && (
         <>
-          <p className={styles.noResultsInfo}>Brak dopasowań dla: {term}</p>
-          <LinkButton path='/'>Zakończ</LinkButton>
+          <EvidenceConfirmationManager
+            matchedSegments = {matchedSegments}
+           />
         </>
-      */}
+      )}
     </div>
   );
 };
