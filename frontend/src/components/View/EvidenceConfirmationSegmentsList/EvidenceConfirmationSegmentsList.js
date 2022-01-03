@@ -16,7 +16,17 @@ const EvidenceConfirmationSegmentsList = props => {
           </tr>
         </thead>
         <tbody>
-          
+        {props.matchedElements.map(element => {
+            return (
+              <tr key={element.id}>
+                <td>{element.id}</td>
+                <td>{element.labeled_segment.end_point.name}</td>
+                <td>{element.labeled_segment.start_point.name}</td>
+                <td>{element.labeled_segment.mountain_group.name}</td>
+                <td>{element.points}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
