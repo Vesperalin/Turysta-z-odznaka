@@ -20,6 +20,20 @@ def get_labeled_segments():
     except OperationalError:
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
+def get_if_tour_name_unique():
+    data = request.get_json()
+
+    try:
+        matching_tours = Tour.query.filter(Tour.tourist_username.like(username), Tour.name.like(data['name'])).all()
+
+        if not matching_tours:
+            return jsonify(True), 200
+        else:
+            return {'message': '{}'.format(TOUR_WITH_NAME_EXIST)}, 400
+    except OperationalError:
+        return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
+
+# nie używane - TODO - usunąć
 def get_tourist_tours():
     try:
         all_tours = Tour.query.filter_by(

@@ -11,3 +11,4 @@ LONGITUDE_NOT_CORRECT = 'Niepoprawne dane. Długość geograficzna musi być lic
 LATITUDE_NOT_CORRECT = 'Niepoprawne dane. Szerokość geograficzna musi być liczbą rzeczywistą'
 HEIGHT_NOT_CORRECT = 'Niepoprawna wartość wysokości'
 NO_DB_CONNECTION = 'Brak połączenia z bazą danych'
+TOUR_WITH_NAME_EXIST = 'Trasa o wybranej nazwie już istnieje. Wybierz inną nazwę'
