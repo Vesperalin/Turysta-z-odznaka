@@ -1,7 +1,7 @@
 import os
 
 user = 'root'
-pwd = 'root'
+pwd = '1234'
 host = 'localhost'
 db = 'mydb'
 

@@ -27,3 +27,9 @@
   background-position: 95% 95%;
   background-size: 45%;
 }
+
+@media screen and (max-width: 900px) {
+  .background {
+    background-image: none;
+  }
+}
