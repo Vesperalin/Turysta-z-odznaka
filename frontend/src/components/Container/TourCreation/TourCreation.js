@@ -9,8 +9,6 @@ import TourCreationForm from "./TourCreationForm";
 const labeledPointsBaseURL = "http://127.0.0.1:5000/labeled-points";
 const labeledSegmentsBaseURL = "http://127.0.0.1:5000/tour-creation/labeled-segments";
 
-// #TODO add media queries for points presenter - position absolute
-
 const TourCreation = () => {
   const [isTourCreationFormShown, setIsTourCreationFormShown] = useState(true);
   const [isTourNameFormShown, setIsTourNameFormShown] = useState(false);
@@ -47,10 +45,15 @@ const TourCreation = () => {
       });
   }, [navigate]);
 
-  const onSubmit = () => {
-    //console.log(chosenSegments);
-    setIsTourCreationFormShown(false); // na razie tylko - do testowania formularza z nazwą
-    setIsTourNameFormShown(true); // na razie tylko - do testowania formularza z nazwą
+  const onSegmentsSubmit = () => {
+    setIsTourCreationFormShown(false);
+    setIsTourNameFormShown(true);
+  };
+
+  const onNameSubmit = () => {
+    console.log(tourName + ": wybrano tę nazwę"); // temp dopóki nie mam endpointów zapisywania trasy
+    setIsTourCreationFormShown(false);
+    setIsTourNameFormShown(false);
   };
 
   return (
@@ -65,17 +68,18 @@ const TourCreation = () => {
             setChosenSegments={setChosenSegments}
             startingPoint={startingPoint}
             setStartingPoint={setStartingPoint}
-            onSubmit={onSubmit}
+            onSubmit={onSegmentsSubmit}
           />
         </>
       }
       {(!isTourCreationFormShown && isTourNameFormShown) &&
         <div className={styles.background}>
           <h3>Nadaj trasie nazwę</h3>
-          <TourCreationNameForm 
+          <TourCreationNameForm
             tourName={tourName}
             setTourName={setTourName}
             buttonText="Zatwierdź"
+            onClick={onNameSubmit}
           />
         </div>
       }
