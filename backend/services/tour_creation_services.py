@@ -7,6 +7,7 @@ from serializers.labeled_segment import Labeled_segmentSchema
 from models.tour import Tour
 from serializers.tour import TourSchema
 from app import username
+from datetime import datetime
 
 
 labeled_segment_schema = Labeled_segmentSchema()
@@ -32,6 +33,28 @@ def get_if_tour_name_unique():
             return {'message': '{}'.format(TOUR_WITH_NAME_EXIST)}, 400
     except OperationalError:
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
+
+# TODO - przerabianie odcinków opisanych na odcinki trasy i zapisanie ich do bazy
+def add_tour_and_tour_segments():
+    tour_data = request.get_json()
+    #print(tour_data['name'])
+    #print(tour_data['points'])
+
+    tour_dictionary = {
+        'name': tour_data['name'], 
+        'pointsSum': tour_data['points'], 
+        'creationDate': datetime.today().strftime('%Y-%m-%d'),
+        'tourist_username': username
+    }
+
+    try:
+        print(tour_dictionary)
+        own_tour = tours_schema.load(tour_dictionary)
+        own_tour.save()
+        return {'message': '{}'.format("Powidzenie - test")}, 200 # TODO - zwracać odcinki trasy
+    except OperationalError:
+        return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
+    
 
 # nie używane - TODO - usunąć / przerobić na get tour by id
 def get_tourist_tours():
