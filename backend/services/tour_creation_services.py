@@ -75,6 +75,8 @@ def add_tour_and_tour_segments():
 
         returned_tour_segments = Tour_segment.query.filter(Tour_segment.tour_id.like(matching_tours.id)).all()
 
+        returned_tour_segments.sort(key=lambda x: x.id)
+
         return tour_segment_nested_schema.jsonify(returned_tour_segments, many=True), 200
     except OperationalError:
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
