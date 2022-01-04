@@ -22,6 +22,8 @@ def get_if_name_unique():
 def add_tour():
     return add_tour_and_tour_segments()
 
+
+
 # nie używane - TODO - usunąć / przerobić na get tour by id
 @router.route('/tours', methods=['GET'])
 def get_tour():

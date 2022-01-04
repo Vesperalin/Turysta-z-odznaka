@@ -12,7 +12,7 @@ class Tour_segment(db.Model, BaseModel):
     startDate = db.Column('dataRozpoczecia', db.Date, nullable=True)
     endDate = db.Column('dataZakonczenia', db.Date, nullable=True)
     creationDate = db.Column('dataUtworzenia', db.Date, nullable=False)
-    through = db.Column('przez', db.String(45), nullable=False)
+    through = db.Column('przez', db.String(45), nullable=True)
     isLabeled = db.Column('czyOpisany', db.Boolean, nullable=False)
     points = db.Column('punktacja', db.Integer, nullable=False)
     tour_id = db.Column('FK_trasy', db.Integer, db.ForeignKey(
