@@ -40,12 +40,9 @@ def get_if_tour_name_unique():
     except OperationalError:
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
-
-# TODO - clean code after finishing
+# doesn't check if segments contiguous in points - provided by frontend always
 def add_tour_and_tour_segments():
     tour_data = request.get_json()
-    ##print(tour_data['name'])
-    ##print(tour_data['points'])
 
     tour_dictionary = {
         'name': tour_data['name'], 
@@ -57,30 +54,10 @@ def add_tour_and_tour_segments():
     tour_segments = []
 
     try:
-        ##print(tour_dictionary)
         own_tour = tours_schema.load(tour_dictionary)
         own_tour.save()
 
-        ## do tego, żeby w odcinkach trasy mieć id trasy
         matching_tours = Tour.query.filter(Tour.tourist_username.like(username), Tour.name.like(tour_dictionary['name'])).first()
-        ##print(matching_tours.name)
-        ##print(matching_tours.id)
-
-        ##print(tour_data['segments'][0])
-        ##print(tour_data['segments'][1])
-
-        """for segment in tour_data['segments']:
-            tour_segments.append({
-                'creationDate': datetime.today().strftime('%Y-%m-%d'),
-                'isLabeled': True,
-                'points': segment['points'],
-                'tour_id': matching_tours.id,
-                'labeled_segment_id': segment['id'],
-            })
-
-        for tour_segment in tour_segments:
-            segment = tour_segment_schema.load(tour_segment)
-            segment.save()"""
 
         for segment in tour_data['segments']:
             tour_segments.append(tour_segment_schema.load(
@@ -96,22 +73,12 @@ def add_tour_and_tour_segments():
         db.session.bulk_save_objects(tour_segments)
         db.session.commit()
 
-        ##print(tour_segments[0])
-        ##print(tour_segments[1])
-
         returned_tour_segments = Tour_segment.query.filter(Tour_segment.tour_id.like(matching_tours.id)).all()
-        print(returned_tour_segments)
 
         return tour_segment_nested_schema.jsonify(returned_tour_segments, many=True), 200
     except OperationalError:
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
-    #return {'message': '{}'.format("Powidzenie - test")}, 200 # TODO - zwracać odcinki trasy
-
-
-
-
-# nie używane - TODO - usunąć / przerobić na get tour by id
 def get_tourist_tours():
     try:
         all_tours = Tour.query.filter_by(
@@ -119,8 +86,3 @@ def get_tourist_tours():
         return tours_schema.jsonify(all_tours, many=True), 200
     except OperationalError:
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
-
-# FOR TEST ONLY
-def get_tours():
-    all_tours = Tour.query.all()
-    return tours_schema.jsonify(all_tours, many=True), 200

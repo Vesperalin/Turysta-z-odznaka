@@ -15,14 +15,13 @@ import EndFlag from "../../View/Flags/EndFlag";
 const labeledPointsBaseURL = "http://127.0.0.1:5000/labeled-points";
 
 const TourCreationForm = props => {
-  const [tempStartingPoint, setTempStartingPoint] = useState(""); //do trzymania chwilowo punktu początkowego
-  const [message, setMessage] = useState(""); // info o błędzie
-  const [filteredSegments, setFilteredSegments] = useState([]); // odcinki, których początek to poprzedni punkt
-  const matchedPoints = nameMatch(tempStartingPoint); //do wybierania punktu początkowego
-  const [chosenSegmentId, setChosenSegmentId] = useState(""); //id wybranego odcinka - jako string bo tak tylko listbox pozwala
+  const [tempStartingPoint, setTempStartingPoint] = useState("");
+  const [message, setMessage] = useState("");
+  const [filteredSegments, setFilteredSegments] = useState([]);
+  const matchedPoints = nameMatch(tempStartingPoint);
+  const [chosenSegmentId, setChosenSegmentId] = useState("");
   const navigate = useNavigate();
 
-  // dopasowywanie nazw podczas wyszukiwania punktu początkowego
   function nameMatch(term) {
     return (
       term.trim() === ""
@@ -31,7 +30,6 @@ const TourCreationForm = props => {
     );
   }
 
-  //zwraca możliwe zakończenia odcinka
   function getFilteredSegments(pointId) {
     const date = new Date();
     const tempFilteredSegments = props.labeledSegments.filter(currentSegments =>
@@ -50,7 +48,6 @@ const TourCreationForm = props => {
     return tempFilteredSegments;
   }
 
-  // akcja po naduszeniu przycisku zatwierdzającego dodanie punktu początkowego
   const startingPointSubmitHandler = () => {
     const point = props.labeledPoints.find(point => point.name.toLowerCase() === tempStartingPoint.toLowerCase());
 
@@ -76,7 +73,6 @@ const TourCreationForm = props => {
     }
   };
 
-  // akcja po naduszeniu przycisku dodania kolejnego punktu
   const nextPointSubmitHandler = () => {
     if (chosenSegmentId === "" || chosenSegmentId === "no-value") {
       setMessage(`Nie wybrano punktu`);
@@ -90,7 +86,6 @@ const TourCreationForm = props => {
     }
   };
 
-  // akcja po naduszenou przycisku usunięcia ostatniego punktu
   const removeLastPointHandler = () => {
     setMessage("");
     if (props.chosenSegments.length === 0) {

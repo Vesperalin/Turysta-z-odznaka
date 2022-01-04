@@ -1,6 +1,6 @@
 from flask import Flask
 from flask.blueprints import Blueprint
-from services.tour_creation_services import get_labeled_segments, get_tourist_tours, get_if_tour_name_unique, add_tour_and_tour_segments #, get_tours
+from services.tour_creation_services import get_labeled_segments, get_if_tour_name_unique, add_tour_and_tour_segments
 from services.labeled_point_services import get_labeled_point
 
 router = Blueprint('tour-creation', __name__)
@@ -21,16 +21,4 @@ def get_if_name_unique():
 @router.route('/tour', methods=['POST'])
 def add_tour():
     return add_tour_and_tour_segments()
-
-
-
-# nie używane - TODO - usunąć / przerobić na get tour by id
-@router.route('/tours', methods=['GET'])
-def get_tour():
-    return get_tourist_tours()
-
-# FOR TEST ONLY
-# @router.route('/tours', methods=['GET'])
-# def get_tour():
-    # return get_tours()
     
