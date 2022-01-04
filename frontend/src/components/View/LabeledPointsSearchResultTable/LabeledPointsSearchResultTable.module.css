@@ -6,12 +6,12 @@
 
 .resultTable {
   text-align: left;
-  border-spacing:0;
+  border-spacing: 0;
 }
 
-.resultTable thead{
+.resultTable thead {
   background-color: rgb(224, 224, 224);
-  color:rgb(112, 112, 112)
+  color: rgb(112, 112, 112)
 }
 
 .resultTable td {

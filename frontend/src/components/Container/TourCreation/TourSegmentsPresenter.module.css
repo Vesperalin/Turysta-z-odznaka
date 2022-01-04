@@ -1,0 +1,29 @@
+.tableWrapper {
+  display: flex;
+  justify-content: center;
+  margin: 30px auto;
+}
+
+.resultTable {
+  text-align: left;
+  border-spacing: 0;
+}
+
+.resultTable thead {
+  background-color: rgb(224, 224, 224);
+  color: rgb(112, 112, 112)
+}
+
+.resultTable td {
+  min-width: 200px;
+  padding: 10px 25px;
+}
+
+.resultTable .numberTd {
+  min-width: 0;
+  width: 50px;
+}
+
+.resultTable tbody td {
+  border-bottom: 1px solid rgb(167, 167, 167);
+}

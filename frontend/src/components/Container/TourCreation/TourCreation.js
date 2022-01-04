@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import styles from "./TourCreation.module.css";
 import TourCreationNameForm from "./TourCreationNameForm";
 import TourCreationForm from "./TourCreationForm";
+import TourSegmentsPresenter from "./TourSegmentsPresenter";
+import LinkButton from "../../View/LinkButton/LinkButton";
 
 const labeledPointsBaseURL = "http://127.0.0.1:5000/labeled-points";
 const labeledSegmentsBaseURL = "http://127.0.0.1:5000/tour-creation/labeled-segments";
@@ -54,17 +56,11 @@ const TourCreation = () => {
   };
 
   const onNameSubmit = () => {
-    //console.log(tourName + ": wybrano tę nazwę"); // temp dopóki nie mam endpointów zapisywania trasy
-    //console.log(chosenSegments); // tests
-    //console.log(points); // tests
-
     const tour = {
       name: tourName.trim(),
       points: points,
       segments: chosenSegments
     };
-
-    //console.log(tour);
 
     axios.post(tourCreationBaseURL, tour)
       .then(response => {
@@ -77,7 +73,6 @@ const TourCreation = () => {
           navigate('/error');
         }
       });
-
 
     setIsTourCreationFormShown(false);
     setIsTourNameFormShown(false);
@@ -114,9 +109,12 @@ const TourCreation = () => {
       }
       {(!isTourCreationFormShown && !isTourNameFormShown) &&
         <div className={styles.background}>
-          <h3>Zapisano trasę: {tourName}</h3>
-          <p>Liczba punktów: {points}</p>
-
+          <h3 className={styles.resultInfo}>Zapisano trasę: {tourName}</h3>
+          <p className={styles.points}>Liczba punktów do GOT: {points}</p>
+          <TourSegmentsPresenter
+            tourSegments={tourSegments}
+          />
+          <LinkButton path='/'>Zakończ</LinkButton>
         </div>
       }
     </div>

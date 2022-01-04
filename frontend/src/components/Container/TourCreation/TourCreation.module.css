@@ -25,7 +25,16 @@
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: 95% 95%;
-  background-size: 45%;
+  background-size: 35%;
+}
+
+.resultInfo {
+  color: #DD9549;
+  font-size: 1.2rem;
+}
+
+.points {
+  margin: 10px auto;
 }
 
 @media screen and (max-width: 900px) {
