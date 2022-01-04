@@ -17,6 +17,7 @@ const TourCreation = () => {
   const [chosenSegments, setChosenSegments] = useState([]);
   const [startingPoint, setStartingPoint] = useState({});
   const [tourName, setTourName] = useState("");
+  const [points, setPoints] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,6 +53,8 @@ const TourCreation = () => {
 
   const onNameSubmit = () => {
     console.log(tourName + ": wybrano tę nazwę"); // temp dopóki nie mam endpointów zapisywania trasy
+    console.log(chosenSegments); // tests
+    console.log(points); // tests
     setIsTourCreationFormShown(false);
     setIsTourNameFormShown(false);
   };
@@ -69,6 +72,8 @@ const TourCreation = () => {
             startingPoint={startingPoint}
             setStartingPoint={setStartingPoint}
             onSubmit={onSegmentsSubmit}
+            points={points}
+            setPoints={setPoints}
           />
         </>
       }
