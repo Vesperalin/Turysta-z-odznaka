@@ -6,6 +6,7 @@ from models.labeled_segment import Labeled_segment
 from serializers.labeled_segment import Labeled_segmentSchema
 from models.tour_segment import Tour_segment
 from serializers.tour_segment import Tour_segmentSchema
+from serializers.tour_segment import Tour_segment_nestedSchema
 from models.tour import Tour
 from serializers.tour import TourSchema
 from app import username
@@ -15,6 +16,7 @@ from app import db
 
 labeled_segment_schema = Labeled_segmentSchema()
 tour_segment_schema = Tour_segmentSchema()
+tour_segment_nested_schema = Tour_segment_nestedSchema()
 tours_schema = TourSchema()
 
 
@@ -38,11 +40,10 @@ def get_if_tour_name_unique():
     except OperationalError:
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
-# TODO - przerabianie odcinków opisanych na odcinki trasy i zapisanie ich do bazy
 def add_tour_and_tour_segments():
     tour_data = request.get_json()
-    #print(tour_data['name'])
-    #print(tour_data['points'])
+    ##print(tour_data['name'])
+    ##print(tour_data['points'])
 
     tour_dictionary = {
         'name': tour_data['name'], 
@@ -55,7 +56,7 @@ def add_tour_and_tour_segments():
 
     try:
         ##print(tour_dictionary)
-        #own_tour = tours_schema.load(tour_dictionary) # do testów, żeby ciągle nie dodawać do bazy - potem odkomentować
+        #own_tour = tours_schema.load(tour_dictionary) # zakomentowane do testów - żeby tyle do bazy nie wrzucać śmieci
         #own_tour.save()
 
         ## do tego, żeby w odcinkach trasy mieć id trasy
@@ -90,7 +91,7 @@ def add_tour_and_tour_segments():
             }))
 
         #db.session.bulk_save_objects(tour_segments) # odkomentować bo to do testów zakomentowane
-        #db.session.commit() -,,-
+        #db.session.commit()
 
         ##print(tour_segments[0])
         ##print(tour_segments[1])
@@ -98,7 +99,7 @@ def add_tour_and_tour_segments():
         returned_tour_segments = Tour_segment.query.filter(Tour_segment.tour_id.like(matching_tours.id)).all()
         print(returned_tour_segments)
 
-        return tour_segment_schema.jsonify(returned_tour_segments, many=True), 200
+        return tour_segment_nested_schema.jsonify(returned_tour_segments, many=True), 200
     except OperationalError:
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 

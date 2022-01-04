@@ -25,9 +25,10 @@ class Tour_segment_nestedSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Tour_segment
         load_instance = True
-        exclude = ('startDate', 'endDate', 'isLabeled', 'creationDate', 'through')
+        exclude = ('startDate', 'endDate', 'isLabeled', 'creationDate')
 
     id = auto_field()
+    through = auto_field()
     points = auto_field()
     tour_id = auto_field()
     labeled_segment = fields.Nested('Labeled_segment_nestedSchema')
