@@ -40,6 +40,8 @@ def get_if_tour_name_unique():
     except OperationalError:
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
+
+# TODO - clean code after finishing
 def add_tour_and_tour_segments():
     tour_data = request.get_json()
     ##print(tour_data['name'])
@@ -56,8 +58,8 @@ def add_tour_and_tour_segments():
 
     try:
         ##print(tour_dictionary)
-        #own_tour = tours_schema.load(tour_dictionary) # zakomentowane do testów - żeby tyle do bazy nie wrzucać śmieci
-        #own_tour.save()
+        own_tour = tours_schema.load(tour_dictionary)
+        own_tour.save()
 
         ## do tego, żeby w odcinkach trasy mieć id trasy
         matching_tours = Tour.query.filter(Tour.tourist_username.like(username), Tour.name.like(tour_dictionary['name'])).first()
@@ -90,8 +92,8 @@ def add_tour_and_tour_segments():
                 'labeled_segment_id': segment['id'],
             }))
 
-        #db.session.bulk_save_objects(tour_segments) # odkomentować bo to do testów zakomentowane
-        #db.session.commit()
+        db.session.bulk_save_objects(tour_segments)
+        db.session.commit()
 
         ##print(tour_segments[0])
         ##print(tour_segments[1])
