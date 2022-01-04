@@ -83,8 +83,8 @@ const TourCreationForm = props => {
       setMessage(`Nie wybrano punktu`);
     } else {
       setMessage("");
-      setChosenSegmentId("");
       const segment = props.labeledSegments.find(segment => segment.id === parseInt(chosenSegmentId));
+      setChosenSegmentId("");
       props.setChosenSegments(previousChosenSegments => [...previousChosenSegments, segment]);
       setFilteredSegments(getFilteredSegments(segment.end_point_id));
       setPoints(previousPoints => previousPoints + segment.points);
