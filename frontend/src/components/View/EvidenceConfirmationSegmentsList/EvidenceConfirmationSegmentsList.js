@@ -5,6 +5,7 @@ import styles from "./EvidenceConfirmationSegmentsList.module.css";
 const EvidenceConfirmationSegmentsList = props => {
   return (
     <div className={styles.tableWrapper}>
+      <p className={styles.tableTitle}>{props.tourName}</p>
       <table className={styles.resultTable}>
         <thead>
           <tr>
