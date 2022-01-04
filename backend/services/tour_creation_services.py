@@ -40,7 +40,7 @@ def get_if_tour_name_unique():
     except OperationalError:
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
-# doesn't check if segments contiguous in points - provided by frontend
+# doesn't check if segments contiguous in points - provided by frontend always
 def add_tour_and_tour_segments():
     tour_data = request.get_json()
 
@@ -74,8 +74,15 @@ def add_tour_and_tour_segments():
         db.session.commit()
 
         returned_tour_segments = Tour_segment.query.filter(Tour_segment.tour_id.like(matching_tours.id)).all()
-        print(returned_tour_segments)
 
         return tour_segment_nested_schema.jsonify(returned_tour_segments, many=True), 200
+    except OperationalError:
+        return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
+
+def get_tourist_tours():
+    try:
+        all_tours = Tour.query.filter_by(
+            tourist_username=username).all()
+        return tours_schema.jsonify(all_tours, many=True), 200
     except OperationalError:
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503

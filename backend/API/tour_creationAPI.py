@@ -1,6 +1,6 @@
 from flask import Flask
 from flask.blueprints import Blueprint
-from services.tour_creation_services import get_labeled_segments, get_tourist_tours, get_if_tour_name_unique, add_tour_and_tour_segments #, get_tours
+from services.tour_creation_services import get_labeled_segments, get_if_tour_name_unique, add_tour_and_tour_segments
 from services.labeled_point_services import get_labeled_point
 
 router = Blueprint('tour-creation', __name__)
