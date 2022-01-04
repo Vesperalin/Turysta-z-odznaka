@@ -40,6 +40,7 @@ def get_if_tour_name_unique():
     except OperationalError:
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
+# doesn't check if segments contiguous in points - provided by frontend
 def add_tour_and_tour_segments():
     tour_data = request.get_json()
 
