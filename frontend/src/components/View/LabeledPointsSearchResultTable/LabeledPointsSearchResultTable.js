@@ -29,7 +29,6 @@ const LabeledPointsSearchResultTable = props => {
         </tbody>
       </table>
     </div>
-
   );
 };
 
