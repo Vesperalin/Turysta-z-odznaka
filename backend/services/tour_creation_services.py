@@ -86,6 +86,7 @@ def add_tour_and_tour_segments():
             tour_segments.append(tour_segment_schema.load(
             {
                 'creationDate': datetime.today().strftime('%Y-%m-%d'),
+                'through': segment['through'],
                 'isLabeled': True,
                 'points': segment['points'],
                 'tour_id': matching_tours.id,
