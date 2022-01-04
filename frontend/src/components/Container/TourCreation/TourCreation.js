@@ -8,6 +8,7 @@ import TourCreationForm from "./TourCreationForm";
 
 const labeledPointsBaseURL = "http://127.0.0.1:5000/labeled-points";
 const labeledSegmentsBaseURL = "http://127.0.0.1:5000/tour-creation/labeled-segments";
+const tourCreationBaseURL = "http://127.0.0.1:5000/tour-creation/tour";
 
 const TourCreation = () => {
   const [isTourCreationFormShown, setIsTourCreationFormShown] = useState(true);
@@ -17,6 +18,8 @@ const TourCreation = () => {
   const [chosenSegments, setChosenSegments] = useState([]);
   const [startingPoint, setStartingPoint] = useState({});
   const [tourName, setTourName] = useState("");
+  const [points, setPoints] = useState(0);
+  const [tourSegments, setTourSegments] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,7 +54,31 @@ const TourCreation = () => {
   };
 
   const onNameSubmit = () => {
-    console.log(tourName + ": wybrano tę nazwę"); // temp dopóki nie mam endpointów zapisywania trasy
+    //console.log(tourName + ": wybrano tę nazwę"); // temp dopóki nie mam endpointów zapisywania trasy
+    //console.log(chosenSegments); // tests
+    //console.log(points); // tests
+
+    const tour = {
+      name: tourName.trim(),
+      points: points,
+      segments: chosenSegments
+    };
+
+    //console.log(tour);
+
+    axios.post(tourCreationBaseURL, tour)
+      .then(response => {
+        setTourSegments(response.data);
+      })
+      .catch(error => {
+        if ((error.request && error.response === undefined) || error.response.status === 503) {
+          navigate('/503');
+        } else {
+          navigate('/error');
+        }
+      });
+
+
     setIsTourCreationFormShown(false);
     setIsTourNameFormShown(false);
   };
@@ -69,6 +96,8 @@ const TourCreation = () => {
             startingPoint={startingPoint}
             setStartingPoint={setStartingPoint}
             onSubmit={onSegmentsSubmit}
+            points={points}
+            setPoints={setPoints}
           />
         </>
       }
@@ -84,9 +113,11 @@ const TourCreation = () => {
         </div>
       }
       {(!isTourCreationFormShown && !isTourNameFormShown) &&
-        <>
-          <p>Tu będzie komunikat zwrotny</p>
-        </>
+        <div className={styles.background}>
+          <h3>Zapisano trasę: {tourName}</h3>
+          <p>Liczba punktów: {points}</p>
+
+        </div>
       }
     </div>
   );
