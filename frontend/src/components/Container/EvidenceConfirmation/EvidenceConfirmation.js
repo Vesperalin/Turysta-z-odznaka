@@ -14,6 +14,7 @@ const EvidenceConfirmation = () => {
   const [formIsShown, setFormIsShown] = useState(true);
   const [term, setTerm] = useState("");
   const [tours, setTours] = useState([]);
+  const [tourName, setTourName] = useState("");
   const [matchedSegments, setMatchedSegments] = useState([]);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ const EvidenceConfirmation = () => {
     if (tour === undefined) {
       setMessage(`Trasa o nazwie: ${term} nie istnieje`);
     } else {
-      console.log(tour)
+      setTourName(tour.name);
       axios
         .get(`${tourSegmentsBaseURL}/${tour.id}`)
         .then((response) => {
@@ -85,7 +86,8 @@ const EvidenceConfirmation = () => {
       {!formIsShown && message === "" && (
         <>
           <EvidenceConfirmationManager
-            matchedSegments = {matchedSegments}
+            matchedSegments={matchedSegments}
+            tourName={tourName}
            />
         </>
       )}

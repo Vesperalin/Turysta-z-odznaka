@@ -1,11 +1,11 @@
 .wrapper {
     height: 100%;
     width: 100%;
-    
+    background-image: url('../../../assets/EvidenceConfirmation/background.png');
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: 95% 95%;
-    background-size: 45%;
+    background-size: 20%;
     text-align: center;
   }
   
