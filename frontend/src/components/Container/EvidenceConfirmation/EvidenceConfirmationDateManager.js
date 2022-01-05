@@ -15,7 +15,8 @@ const EvidenceConfirmationDateManager = (props) => {
     });
 
     if (message === "") {
-      console.log("przeszlo" + { message });
+        const completedSegments = props.selectedSegments.map(segment => ({"id":segment.id, "startDate":segment.startDate, "endDate":segment.endDate}) );
+        console.log(completedSegments);
     }
   };
 
