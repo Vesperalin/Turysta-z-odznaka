@@ -5,6 +5,7 @@ import EvidenceConfirmationSegmentsList from "../../View/EvidenceConfirmationSeg
 import LinkButton from "../../View/LinkButton/LinkButton";
 import Button from "../../View/Button/Button";
 import EvidenceConfirmationRegistry from "../../View/EvidenceConfirmationRegistry/EvidenceConfirmationRegistry";
+import EvidenceConfirmationDateForm from "../../View/EvidenceConfirmationDateForm/EvidenceConfirmationDateForm";
 
 const EvidenceConfirmationManager = (props) => {
   const [attachment, setAttachment] = useState(0);
@@ -16,7 +17,7 @@ const EvidenceConfirmationManager = (props) => {
   const handleSelection = (id) => {
     if (selectedSegments.includes(id)) {
       setSelectedSegments(
-        selectedSegments.filter((segmentId) => segmentId != id)
+        selectedSegments.filter((segmentId) => segmentId !== id)
       );
     } else {
       setSelectedSegments([...selectedSegments, id]);
@@ -24,7 +25,7 @@ const EvidenceConfirmationManager = (props) => {
   };
 
   const onClick = () => {
-    if (selectedSegments.length == 0) {
+    if (selectedSegments.length === 0) {
       // TODO error message
     } else {
       setTableIsShown(false);
@@ -53,6 +54,9 @@ const EvidenceConfirmationManager = (props) => {
           verifying={verifying}
         />
       )}
+      {dateFormIsShown && (<EvidenceConfirmationDateForm formTitle='Wybierz odcinki'/>)
+
+      }
     </div>
   );
 };
