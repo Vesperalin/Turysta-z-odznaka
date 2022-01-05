@@ -3,10 +3,6 @@ import React from "react";
 import styles from "./EvidenceConfirmationSegmentsList.module.css";
 
 const EvidenceConfirmationSegmentsList = props => {
-  const handleClick = segment => {
-    props.onClick(segment);
-  }
-
   return (
     <div className={styles.tableWrapper}>
       <p className={styles.tableTitle}>{props.tourName}</p>
@@ -23,7 +19,7 @@ const EvidenceConfirmationSegmentsList = props => {
         <tbody>
         {props.matchedElements.map(element => {
             return (
-              <tr key={element.id} className={props.selectedSegments.includes(element) ? styles.clickedRow : ""} onClick={() => handleClick(element)}>
+              <tr key={element.id} className={props.selectedSegments.includes(element) ? styles.clickedRow : ""} onClick={() => props.onClick(element)}>
                 <td>{element.id}</td>
                 <td>{element.labeled_segment.start_point.name}</td>
                 <td>{element.labeled_segment.end_point.name}</td>

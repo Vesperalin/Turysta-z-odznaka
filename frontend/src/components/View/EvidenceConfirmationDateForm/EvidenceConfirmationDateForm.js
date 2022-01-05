@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useState } from "react";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -18,8 +19,18 @@ const Input = ({ onChange, placeholder, value, isSecure, id, onClick }) => (
 );
 
 const EvidenceConfirmationDateForm = (props) => {
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
+  const [startDate, setStartDate] = useState(props.startDate)
+  const [endDate, setEndDate] = useState(props.endtDate)
+
+  const handleStartDateChange = (date) => {
+    setStartDate(date);
+    props.handleStartDateChange(props.segment, date);
+  }
+
+  const handleEndDateChange = (date) => {
+    setEndDate(date);
+    props.handleEndDateChange(props.segment, date);
+  }
 
   return (
     <div className={styles.formWrapper}>
@@ -32,7 +43,7 @@ const EvidenceConfirmationDateForm = (props) => {
         <DatePicker
           selected={startDate}
           customInput={<Input />}
-          onChange={(date) => setStartDate(date)}
+          onChange={(date) => handleStartDateChange(date)}
           maxDate={new Date(endDate)}
         />
       </div>
@@ -41,7 +52,7 @@ const EvidenceConfirmationDateForm = (props) => {
         <DatePicker
           selected={endDate}
           customInput={<Input />}
-          onChange={(date) => setEndDate(date)}
+          onChange={(date) => handleEndDateChange(date)}
           minDate={new Date(startDate)}
         />
       </div>
