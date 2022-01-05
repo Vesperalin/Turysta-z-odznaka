@@ -104,6 +104,14 @@ const TourCreationForm = props => {
     }
   };
 
+  const onFormSubmit = () => {
+    if (props.chosenSegments.length === 0) {
+      setMessage(`Nie wybrano punktu tworzącego odcinek`);
+    } else {
+      props.onSubmit();
+    }
+  };
+
   return (
     <>
       <div className={styles.pointsPresenter}>
@@ -184,7 +192,7 @@ const TourCreationForm = props => {
             </div>
           </div>
           <Button
-            onClick={props.onSubmit}
+            onClick={onFormSubmit}
             text="Zatwierdź trasę"
           />
         </div>
