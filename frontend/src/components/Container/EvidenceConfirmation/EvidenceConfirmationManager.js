@@ -5,7 +5,7 @@ import EvidenceConfirmationSegmentsList from "../../View/EvidenceConfirmationSeg
 import LinkButton from "../../View/LinkButton/LinkButton";
 import Button from "../../View/Button/Button";
 import EvidenceConfirmationRegistry from "../../View/EvidenceConfirmationRegistry/EvidenceConfirmationRegistry";
-import EvidenceConfirmationDateForm from "../../View/EvidenceConfirmationDateForm/EvidenceConfirmationDateForm";
+import EvidenceConfirmationDateManager from "./EvidenceConfirmationDateManager";
 
 const EvidenceConfirmationManager = (props) => {
   const [attachment, setAttachment] = useState(0);
@@ -14,13 +14,13 @@ const EvidenceConfirmationManager = (props) => {
   const [tableIsShown, setTableIsShown] = useState(true);
   const [dateFormIsShown, setDateFormIsShown] = useState(false);
 
-  const handleSelection = (id) => {
-    if (selectedSegments.includes(id)) {
+  const handleSelection = (segment) => {
+    if (selectedSegments.includes(segment)) {
       setSelectedSegments(
-        selectedSegments.filter((segmentId) => segmentId !== id)
+        selectedSegments.filter((element) => segment.id !== element.id)
       );
     } else {
-      setSelectedSegments([...selectedSegments, id]);
+      setSelectedSegments([...selectedSegments, segment]);
     }
   };
 
@@ -44,19 +44,16 @@ const EvidenceConfirmationManager = (props) => {
           selectedSegments={selectedSegments}
         />
       )}
-      {tableIsShown && (<Button
-        text='Dalej'
-        onClick={onClick}
-      />)}
+      {tableIsShown && <Button text="Dalej" onClick={onClick} />}
       {tableIsShown && (
         <EvidenceConfirmationRegistry
           attachment={attachment}
           verifying={verifying}
         />
       )}
-      {dateFormIsShown && (<EvidenceConfirmationDateForm formTitle='Wybierz odcinki'/>)
-
-      }
+      {dateFormIsShown && (
+        <EvidenceConfirmationDateManager selectedSegments={selectedSegments} />
+      )}
     </div>
   );
 };

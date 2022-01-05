@@ -4,10 +4,15 @@
 }
 
 .formWrapper h2 {
-  padding: 40px 0 20px 0;
+  padding: 40px 0 30px 0;
   font-size: 1.1rem;
-  font-weight: bold;
+  font-weight: 500;
 }
+
+.formWrapper p {
+  font-size: 0.8rem;
+}
+
 .formWrapper > div {
   flex: 1 0 50%;
   text-align: left;
@@ -30,4 +35,8 @@
   font-family: inherit;
   background-color: #f9f9f9;
   border-bottom: 1px solid rgb(141, 141, 141);
+}
+
+input:focus {
+  outline: none;
 }

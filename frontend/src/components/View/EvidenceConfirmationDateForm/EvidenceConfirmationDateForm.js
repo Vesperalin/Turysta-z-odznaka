@@ -13,6 +13,7 @@ const Input = ({ onChange, placeholder, value, isSecure, id, onClick }) => (
     isSecure={isSecure}
     id={id}
     onClick={onClick}
+    required
   />
 );
 
