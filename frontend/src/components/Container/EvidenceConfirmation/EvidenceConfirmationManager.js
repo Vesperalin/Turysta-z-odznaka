@@ -23,12 +23,14 @@ const EvidenceConfirmationManager = (props) => {
   const [attachmentMessage, setAttachmentMessage] = useState("");
 
   const handleSelection = (segment) => {
-    if (selectedSegments.includes(segment)) {
-      setSelectedSegments(
-        selectedSegments.filter((element) => segment.id !== element.id)
-      );
-    } else {
-      setSelectedSegments([...selectedSegments, segment]);
+    if (!completedSegments.some((e) => e.id === segment.id)) {
+      if (selectedSegments.includes(segment)) {
+        setSelectedSegments(
+          selectedSegments.filter((element) => segment.id !== element.id)
+        );
+      } else {
+        setSelectedSegments([...selectedSegments, segment]);
+      }
     }
   };
 
@@ -81,12 +83,14 @@ const EvidenceConfirmationManager = (props) => {
   };
 
   const handleAddAttachmentClick = () => {
-    if (attachment.trim() === '') {
+    if (attachment.trim() === "") {
       setAttachmentMessage("Nie dodano załącznika!");
-    }
-    else {
+    } else {
       setAttachmentIsShown(false);
-      setAttachments([...attachments, {"value": attachment, "tour_segments": selectedSegments}]);
+      setAttachments([
+        ...attachments,
+        { value: attachment, tour_segments: selectedSegments },
+      ]);
       setSelectedSegments([]);
 
       setTableIsShown(true);
