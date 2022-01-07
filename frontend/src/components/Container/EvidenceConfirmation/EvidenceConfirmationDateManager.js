@@ -5,21 +5,6 @@ import EvidenceConfirmationDateForm from "../../View/EvidenceConfirmationDateFor
 const EvidenceConfirmationDateManager = (props) => {
   const [message, setMessage] = useState("");
 
-  const handleOnClick = () => {
-    setMessage("");
-    props.selectedSegments.map((segment) => {
-      if (segment.startDate === undefined || segment.endDate === undefined) {
-        setMessage("Uzupełnij wszystkie pola!");
-        console.log(segment);
-      }
-    });
-
-    if (message === "") {
-        const completedSegments = props.selectedSegments.map(segment => ({"id":segment.id, "startDate":segment.startDate, "endDate":segment.endDate}) );
-        console.log(completedSegments);
-    }
-  };
-
   const handleStartDateChange = (segment, startDate) => {
     segment.startDate = startDate;
   };
@@ -43,7 +28,7 @@ const EvidenceConfirmationDateManager = (props) => {
         );
       })}
       <p>{message}</p>
-      <Button text="Zapisz daty" onClick={handleOnClick} />
+      <Button text="Zapisz daty" onClick={props.onClick} />
     </div>
   );
 };
