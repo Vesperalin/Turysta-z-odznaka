@@ -2,7 +2,6 @@ import React, { useState } from "react";
 
 import styles from "./EvidenceConfirmationManager.module.css";
 import EvidenceConfirmationSegmentsList from "../../View/EvidenceConfirmationSegmentsList/EvidenceConfirmationSegmentsList";
-import LinkButton from "../../View/LinkButton/LinkButton";
 import Button from "../../View/Button/Button";
 import EvidenceConfirmationRegistry from "../../View/EvidenceConfirmationRegistry/EvidenceConfirmationRegistry";
 import EvidenceConfirmationDateManager from "./EvidenceConfirmationDateManager";
@@ -21,6 +20,7 @@ const EvidenceConfirmationManager = (props) => {
   const [attachmentIsShown, setAttachmentIsShown] = useState(false);
   const [attachment, setAttachment] = useState("");
   const [attachmentMessage, setAttachmentMessage] = useState("");
+  const [noSegmentSelectedMessage, setNoSegmentSelectedMessage] = useState("");
 
   const handleSelection = (segment) => {
     if (!completedSegments.some((e) => e.id === segment.id)) {
@@ -29,23 +29,27 @@ const EvidenceConfirmationManager = (props) => {
           selectedSegments.filter((element) => segment.id !== element.id)
         );
       } else {
-        setSelectedSegments([...selectedSegments, segment]);
+        setSelectedSegments((selectedSegments) => [
+          ...selectedSegments,
+          segment,
+        ]);
       }
     }
   };
 
   const onClickNext = () => {
     if (selectedSegments.length === 0) {
-      // TODO error message
+      setNoSegmentSelectedMessage("Wybierz odcinki by przejść dalej.");
     } else {
       setTableIsShown(false);
       setDateFormIsShown(true);
+      setNoSegmentSelectedMessage("");
     }
   };
 
   const onClickAttachment = () => {
     const mountainGroup = selectedSegments.mountainGroup;
-    selectedSegments.map((segment) => {
+    selectedSegments.forEach((segment) => {
       if (segment.mountainGroup !== mountainGroup) {
         setMountainGroupMessage(
           "Nie można dodać załącznika dla odcinków z różnych grup górskich!"
@@ -61,7 +65,7 @@ const EvidenceConfirmationManager = (props) => {
 
   const handleSaveDatesClick = () => {
     setMessage("");
-    selectedSegments.map((segment) => {
+    selectedSegments.forEach((segment) => {
       if (segment.startDate === undefined || segment.endDate === undefined) {
         setMessage("Uzupełnij wszystkie pola!");
         console.log(segment);
@@ -69,14 +73,17 @@ const EvidenceConfirmationManager = (props) => {
     });
 
     if (message === "") {
-      const completedSegments = selectedSegments.map((segment) => ({
+      const confirmedSegments = selectedSegments.map((segment) => ({
         id: segment.id,
         startDate: segment.startDate,
         endDate: segment.endDate,
       }));
-      console.log(completedSegments);
+      console.log(confirmedSegments);
       //TODO weryfikacja dat
-      setCompletedSegments(completedSegments);
+      setCompletedSegments((completedSegments) => [
+        ...completedSegments,
+        ...confirmedSegments,
+      ]);
       setSelectedTableIsShown(true);
       setDateFormIsShown(false);
     }
@@ -116,6 +123,7 @@ const EvidenceConfirmationManager = (props) => {
           confirmedSegments={completedSegments}
         />
       )}
+      {tableIsShown && <p className={styles.error}>{noSegmentSelectedMessage}</p>}
       {tableIsShown && <Button text="Dalej" onClick={onClickNext} />}
       {tableIsShown && (
         <EvidenceConfirmationRegistry
@@ -141,9 +149,8 @@ const EvidenceConfirmationManager = (props) => {
       )}
       {selectedTableIsShown && (
         <div>
-          {" "}
-          <Button text="Dodaj załącznik" onClick={onClickAttachment} />{" "}
-          <Button text="Przypisz weryfikującego" onClick={() => {}} />{" "}
+          <Button text="Dodaj załącznik" onClick={onClickAttachment} />
+          <Button text="Przypisz weryfikującego" onClick={() => {}} />
         </div>
       )}
       {selectedTableIsShown && (
@@ -155,7 +162,7 @@ const EvidenceConfirmationManager = (props) => {
       {attachmentIsShown && (
         <EvidenceConfirmationAttachmentForm
           title={"Dodaj załącznik"}
-          message={setAttachmentMessage}
+          message={attachmentMessage}
           buttonText={"Dodaj"}
           onSubmit={handleAddAttachmentClick}
           setAttachment={handleAttachmentChange}
