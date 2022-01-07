@@ -2,7 +2,7 @@ import React from "react";
 
 import styles from "./EvidenceConfirmationSegmentsList.module.css";
 
-const EvidenceConfirmationSegmentsList = props => {
+const EvidenceConfirmationSegmentsList = (props) => {
   return (
     <div className={styles.tableWrapper}>
       <p className={styles.tableTitle}>{props.tourName}</p>
@@ -17,9 +17,19 @@ const EvidenceConfirmationSegmentsList = props => {
           </tr>
         </thead>
         <tbody>
-        {props.matchedElements.map(element => {
+          {props.matchedElements.map((element) => {
             return (
-              <tr key={element.id} className={props.selectedSegments.includes(element) ? styles.clickedRow : ""} onClick={() => props.onClick(element)}>
+              <tr
+                key={element.id}
+                className={
+                  props.selectedSegments.some((e) => e.id === element.id)
+                    ? styles.clickedRow
+                    : props.confirmedSegments.some((e) => e.id === element.id)
+                    ? styles.confirmedRow
+                    : ""
+                }
+                onClick={() => props.onClick(element)}
+              >
                 <td>{element.id}</td>
                 <td>{element.labeled_segment.start_point.name}</td>
                 <td>{element.labeled_segment.end_point.name}</td>
@@ -31,7 +41,6 @@ const EvidenceConfirmationSegmentsList = props => {
         </tbody>
       </table>
     </div>
-
   );
 };
 

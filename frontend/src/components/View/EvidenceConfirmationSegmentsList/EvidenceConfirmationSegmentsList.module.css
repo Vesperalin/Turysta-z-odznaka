@@ -32,3 +32,7 @@
 .clickedRow {
   background-color: rgba(221, 149, 73, 0.25);
 }
+
+.confirmedRow {
+  background-color: rgba(197, 221, 73, 0.25);
+}
