@@ -9,7 +9,6 @@ const EvidenceConfirmationSegmentsList = (props) => {
       <table className={styles.resultTable}>
         <thead>
           <tr>
-            <td>LP.</td>
             <td>Początek</td>
             <td>Koniec</td>
             <td>Grupa górska</td>
@@ -30,7 +29,6 @@ const EvidenceConfirmationSegmentsList = (props) => {
                 }
                 onClick={() => props.onClick(element)}
               >
-                <td>{element.id}</td>
                 <td>{element.labeled_segment.start_point.name}</td>
                 <td>{element.labeled_segment.end_point.name}</td>
                 <td>{element.labeled_segment.mountain_group.name}</td>

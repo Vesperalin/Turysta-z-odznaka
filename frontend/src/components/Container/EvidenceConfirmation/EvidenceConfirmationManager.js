@@ -137,11 +137,13 @@ const EvidenceConfirmationManager = (props) => {
   };
 
   const onSubmitReport = () => {
-    if(attachments.length === 0 && verifying.length === 0){
-      setReportMessage("Musisz załączyć dowód lub przypisać przewodnika do odcinka trasy.")
+    if (attachments.length === 0 && verifying.length === 0) {
+      setReportMessage(
+        "Musisz załączyć dowód lub przypisać przewodnika do odcinka trasy."
+      );
     }
     //TODO axios to backend
-  }
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -165,6 +167,8 @@ const EvidenceConfirmationManager = (props) => {
         <EvidenceConfirmationRegistry
           attachment={attachments.length}
           verifying={verifying.length}
+          buttonText={"Zgłoś"}
+          onSubmit={onSubmitReport}
         />
       )}
       {dateFormIsShown && (

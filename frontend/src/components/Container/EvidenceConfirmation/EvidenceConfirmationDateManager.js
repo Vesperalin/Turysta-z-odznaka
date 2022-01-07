@@ -1,6 +1,8 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Button from "../../View/Button/Button";
 import EvidenceConfirmationDateForm from "../../View/EvidenceConfirmationDateForm/EvidenceConfirmationDateForm";
+
+import styles from "./EvidenceConfirmationDateManager.module.css";
 
 const EvidenceConfirmationDateManager = (props) => {
   const [message, setMessage] = useState("");
@@ -15,6 +17,7 @@ const EvidenceConfirmationDateManager = (props) => {
 
   return (
     <div>
+      <p className={styles.info}>Wybierz odcinki do weryfikacji</p>
       {props.selectedSegments.map((element) => {
         return (
           <EvidenceConfirmationDateForm
