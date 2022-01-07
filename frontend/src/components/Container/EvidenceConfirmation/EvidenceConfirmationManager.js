@@ -88,7 +88,7 @@ const EvidenceConfirmationManager = (props) => {
       setAttachmentIsShown(false);
       setAttachments([...attachments, {"value": attachment, "tour_segments": selectedSegments}]);
       setSelectedSegments([]);
-      
+
       setTableIsShown(true);
     }
   };
@@ -109,6 +109,7 @@ const EvidenceConfirmationManager = (props) => {
           tourName={props.tourName}
           onClick={handleSelection}
           selectedSegments={selectedSegments}
+          confirmedSegments={completedSegments}
         />
       )}
       {tableIsShown && <Button text="Dalej" onClick={onClickNext} />}
@@ -131,6 +132,7 @@ const EvidenceConfirmationManager = (props) => {
           tourName={props.tourName}
           onClick={() => {}}
           selectedSegments={selectedSegments}
+          confirmedSegments={completedSegments}
         />
       )}
       {selectedTableIsShown && (
