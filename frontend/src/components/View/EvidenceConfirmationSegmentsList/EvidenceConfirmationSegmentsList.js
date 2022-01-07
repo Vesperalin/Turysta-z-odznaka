@@ -19,7 +19,7 @@ const EvidenceConfirmationSegmentsList = props => {
         <tbody>
         {props.matchedElements.map(element => {
             return (
-              <tr key={element.id} className={props.selectedSegments.includes(element) ? styles.clickedRow : ""} onClick={() => props.onClick(element)}>
+              <tr key={element.id} className={props.selectedSegments.includes(element.id) ? styles.clickedRow : ""} onClick={() => props.onClick(element)}>
                 <td>{element.id}</td>
                 <td>{element.labeled_segment.start_point.name}</td>
                 <td>{element.labeled_segment.end_point.name}</td>
