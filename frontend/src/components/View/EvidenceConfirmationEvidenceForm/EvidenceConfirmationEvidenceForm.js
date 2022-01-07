@@ -1,15 +1,16 @@
 import React from "react";
 
-import styles from "./EvidenceConfirmationAttachmentForm.module.css";
-import Button from "../../View/Button/Button";
+import styles from "./EvidenceConfirmationEvidenceForm.module.css";
+import Button from "../Button/Button";
 
-const EvidenceConfirmationAttachmentForm = props => {
+const EvidenceConfirmationEvidenceForm = props => {
   return (
     <div className={styles.formWrapper}>
       <h2>{props.title}</h2>
       <div className={styles.input}>
         <input
-          id="pointNewHeight"
+          id="evidence"
+          placeholder={props.placeholder}
           type="text"
           onChange={props.setAttachment}
         />
@@ -20,4 +21,4 @@ const EvidenceConfirmationAttachmentForm = props => {
   );
 };
 
-export default EvidenceConfirmationAttachmentForm;
+export default EvidenceConfirmationEvidenceForm;

@@ -5,22 +5,26 @@ import EvidenceConfirmationSegmentsList from "../../View/EvidenceConfirmationSeg
 import Button from "../../View/Button/Button";
 import EvidenceConfirmationRegistry from "../../View/EvidenceConfirmationRegistry/EvidenceConfirmationRegistry";
 import EvidenceConfirmationDateManager from "./EvidenceConfirmationDateManager";
-import EvidenceConfirmationAttachmentForm from "../../View/EvidenceConfirmationAttachmentForm/EvidenceConfirmationAttachmentForm";
+import EvidenceConfirmationEvidenceForm from "../../View/EvidenceConfirmationEvidenceForm/EvidenceConfirmationEvidenceForm";
 
 const EvidenceConfirmationManager = (props) => {
   const [attachments, setAttachments] = useState([]);
   const [verifying, setVerifying] = useState([]);
   const [selectedSegments, setSelectedSegments] = useState([]);
   const [completedSegments, setCompletedSegments] = useState([]);
-  const [message, setMessage] = useState("");
+  const [dateMessage, setDateMessage] = useState("");
   const [mountainGroupMessage, setMountainGroupMessage] = useState("");
   const [tableIsShown, setTableIsShown] = useState(true);
   const [dateFormIsShown, setDateFormIsShown] = useState(false);
   const [selectedTableIsShown, setSelectedTableIsShown] = useState(false);
   const [attachmentIsShown, setAttachmentIsShown] = useState(false);
+  const [verifyingIsShown, setVerifyingIsShown] = useState(false);
   const [attachment, setAttachment] = useState("");
   const [attachmentMessage, setAttachmentMessage] = useState("");
+  const [guide, setGuide] = useState("");
+  const [verifyingMessage, setVerifyingMessage] = useState("");
   const [noSegmentSelectedMessage, setNoSegmentSelectedMessage] = useState("");
+  const [reportMessage, setReportMessage] = useState("");
 
   const handleSelection = (segment) => {
     if (!completedSegments.some((e) => e.id === segment.id)) {
@@ -63,16 +67,20 @@ const EvidenceConfirmationManager = (props) => {
     }
   };
 
+  const onClickVerifying = () => {
+    setVerifyingIsShown(true);
+    setSelectedTableIsShown(false);
+  };
+
   const handleSaveDatesClick = () => {
-    setMessage("");
+    setDateMessage("");
     selectedSegments.forEach((segment) => {
       if (segment.startDate === undefined || segment.endDate === undefined) {
-        setMessage("Uzupełnij wszystkie pola!");
-        console.log(segment);
+        setDateMessage("Uzupełnij wszystkie pola!");
       }
     });
 
-    if (message === "") {
+    if (dateMessage === "") {
       const confirmedSegments = selectedSegments.map((segment) => ({
         id: segment.id,
         startDate: segment.startDate,
@@ -109,6 +117,32 @@ const EvidenceConfirmationManager = (props) => {
     console.log(attachment);
   };
 
+  const handleAddVerifyingClick = () => {
+    if (guide.trim() === "") {
+      setVerifyingMessage("Nie podano numeru legitymacji przewodnika!");
+    } else {
+      setVerifyingIsShown(false);
+      setVerifying([
+        ...verifying,
+        { guide: guide, tour_segments: selectedSegments },
+      ]);
+      setSelectedSegments([]);
+
+      setTableIsShown(true);
+    }
+  };
+
+  const handleVerifyingChange = (e) => {
+    setGuide(e.target.value);
+  };
+
+  const onSubmitReport = () => {
+    if(attachments.length === 0 && verifying.length === 0){
+      setReportMessage("Musisz załączyć dowód lub przypisać przewodnika do odcinka trasy.")
+    }
+    //TODO axios to backend
+  }
+
   return (
     <div className={styles.wrapper}>
       {tableIsShown && (
@@ -123,7 +157,9 @@ const EvidenceConfirmationManager = (props) => {
           confirmedSegments={completedSegments}
         />
       )}
-      {tableIsShown && <p className={styles.error}>{noSegmentSelectedMessage}</p>}
+      {tableIsShown && (
+        <p className={styles.error}>{noSegmentSelectedMessage}</p>
+      )}
       {tableIsShown && <Button text="Dalej" onClick={onClickNext} />}
       {tableIsShown && (
         <EvidenceConfirmationRegistry
@@ -134,7 +170,7 @@ const EvidenceConfirmationManager = (props) => {
       {dateFormIsShown && (
         <EvidenceConfirmationDateManager
           selectedSegments={selectedSegments}
-          message={message}
+          message={dateMessage}
           onClick={handleSaveDatesClick}
         />
       )}
@@ -150,22 +186,35 @@ const EvidenceConfirmationManager = (props) => {
       {selectedTableIsShown && (
         <div>
           <Button text="Dodaj załącznik" onClick={onClickAttachment} />
-          <Button text="Przypisz weryfikującego" onClick={() => {}} />
+          <Button text="Przypisz weryfikującego" onClick={onClickVerifying} />
         </div>
       )}
       {selectedTableIsShown && (
         <EvidenceConfirmationRegistry
           attachment={attachments.length}
           verifying={verifying.length}
+          buttonText={"Zgłoś"}
+          onSubmit={onSubmitReport}
         />
       )}
       {attachmentIsShown && (
-        <EvidenceConfirmationAttachmentForm
+        <EvidenceConfirmationEvidenceForm
           title={"Dodaj załącznik"}
+          placeholder={"Zdjęcie, wypis GPS etc."}
           message={attachmentMessage}
           buttonText={"Dodaj"}
           onSubmit={handleAddAttachmentClick}
           setAttachment={handleAttachmentChange}
+        />
+      )}
+      {verifyingIsShown && (
+        <EvidenceConfirmationEvidenceForm
+          title={"Wpisz dane przewodnika odbywającego z Tobą trasę"}
+          placeholder={"Numer legitymacji"}
+          message={verifyingMessage}
+          buttonText={"Dodaj"}
+          onSubmit={handleAddVerifyingClick}
+          setAttachment={handleVerifyingChange}
         />
       )}
     </div>
