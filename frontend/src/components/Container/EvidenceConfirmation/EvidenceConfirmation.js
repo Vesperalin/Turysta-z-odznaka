@@ -47,7 +47,6 @@ const EvidenceConfirmation = () => {
       axios
         .get(`${tourSegmentsBaseURL}/${tour.id}`)
         .then((response) => {
-          // console.log(response.data)
           setMatchedSegments(response.data);
           setFormIsShown(false);
         })
