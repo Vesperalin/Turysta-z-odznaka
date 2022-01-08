@@ -8,11 +8,11 @@ const EvidenceConfirmationDateManager = (props) => {
   const [message, setMessage] = useState("");
 
   const handleStartDateChange = (segment, startDate) => {
-    segment.startDate = startDate;
+    segment.startDate = startDate.toISOString().slice(0,10);
   };
 
   const handleEndDateChange = (segment, endDate) => {
-    segment.endDate = endDate;
+    segment.endDate = endDate.toISOString().slice(0,10);
   };
 
   return (
