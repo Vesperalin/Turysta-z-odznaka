@@ -1,5 +1,4 @@
 from marshmallow import fields
-from marshmallow_sqlalchemy import load_instance_mixin
 from marshmallow_sqlalchemy.schema import auto_field
 from app import ma
 from models.tour_segment import Tour_segment
@@ -18,6 +17,7 @@ class Tour_segmentSchema(ma.SQLAlchemyAutoSchema):
     isLabeled = auto_field()
     points = auto_field()
     tour_id = auto_field()
+    evidence_id = auto_field()
     labeled_segment_id = auto_field()
 
 
