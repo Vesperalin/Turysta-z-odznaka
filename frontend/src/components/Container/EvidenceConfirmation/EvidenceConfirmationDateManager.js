@@ -8,11 +8,31 @@ const EvidenceConfirmationDateManager = (props) => {
   const [message, setMessage] = useState("");
 
   const handleStartDateChange = (segment, startDate) => {
-    segment.startDate = startDate.toISOString().slice(0,10);
+    segment.startDate = startDate.toISOString().slice(0, 10);
   };
 
   const handleEndDateChange = (segment, endDate) => {
-    segment.endDate = endDate.toISOString().slice(0,10);
+    segment.endDate = endDate.toISOString().slice(0, 10);
+  };
+
+  const getExcludeDateIntervals = (labeled_segment) => {
+    let excludeDateIntervals = labeled_segment.closed_segments.map(
+      (closed_segment) => {
+        return {
+          start: new Date(closed_segment.closureDate),
+          end: new Date(closed_segment.openingDate),
+        };
+      }
+    );
+
+    if (labeled_segment.liquidated_segment !== null) {
+      excludeDateIntervals.push({
+        start: new Date(labeled_segment.liquidated_segment.liquidationDate),
+        end: new Date(),
+      });
+    }
+    
+    return excludeDateIntervals;
   };
 
   return (
@@ -27,6 +47,9 @@ const EvidenceConfirmationDateManager = (props) => {
             startDate={element.startDate}
             handleEndDateChange={handleEndDateChange}
             handleStartDateChange={handleStartDateChange}
+            excludeDateIntervals={getExcludeDateIntervals(
+              element.labeled_segment
+            )}
           />
         );
       })}
