@@ -20,7 +20,7 @@ const Input = ({ onChange, placeholder, value, isSecure, id, onClick }) => (
 
 const EvidenceConfirmationDateForm = (props) => {
   const [startDate, setStartDate] = useState(props.startDate)
-  const [endDate, setEndDate] = useState(props.endtDate)
+  const [endDate, setEndDate] = useState(props.endDate)
 
   const handleStartDateChange = (date) => {
     setStartDate(date);
@@ -44,7 +44,8 @@ const EvidenceConfirmationDateForm = (props) => {
           selected={startDate}
           customInput={<Input />}
           onChange={(date) => handleStartDateChange(date)}
-          maxDate={new Date(endDate)}
+          maxDate={endDate === undefined ? new Date() : new Date(endDate)}
+          excludeDateIntervals={props.excludeDateIntervals}
         />
       </div>
       <div className={styles.formDateWrapper}>
@@ -54,6 +55,8 @@ const EvidenceConfirmationDateForm = (props) => {
           customInput={<Input />}
           onChange={(date) => handleEndDateChange(date)}
           minDate={new Date(startDate)}
+          maxDate={new Date()}
+          excludeDateIntervals={props.excludeDateIntervals}
         />
       </div>
     </div>

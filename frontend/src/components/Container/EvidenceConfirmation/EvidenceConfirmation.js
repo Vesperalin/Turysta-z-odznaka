@@ -47,8 +47,14 @@ const EvidenceConfirmation = () => {
       axios
         .get(`${tourSegmentsBaseURL}/${tour.id}`)
         .then((response) => {
-          setMatchedSegments(response.data);
-          setFormIsShown(false);
+          if (response.data.length === 0){
+            setMessage(`Trasa o nazwie: ${term} nie ma niezgłoszonych odcinków`);
+          }
+          else{
+            setMatchedSegments(response.data);
+            setFormIsShown(false);
+          }
+          
         })
         .catch((error) => {
           if (error.response.status === 503) {
@@ -78,7 +84,7 @@ const EvidenceConfirmation = () => {
       }
       {!formIsShown && message !== "" && (
         <>
-          <p className={styles.info}>{message}</p>
+          <p className={styles.noResultsInfo}>{message}</p>
           <LinkButton path="/">Zakończ</LinkButton>
         </>
       )}
