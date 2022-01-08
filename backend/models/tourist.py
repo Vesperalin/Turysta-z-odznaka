@@ -14,3 +14,4 @@ class Tourist(db.Model, BaseModel):
     birth_date = db.Column('dataUrodzenia', db.Date, nullable=False)
     is_invalid = db.Column('czyOsobaNiepelnosprawna',
                            db.Boolean, nullable=False)
+                           
