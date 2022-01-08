@@ -1,5 +1,6 @@
 from flask import Flask, request
 from flask.json import jsonify
+from sqlalchemy.sql.elements import Null, and_
 from .utils import *
 from sqlalchemy.exc import OperationalError
 from models.labeled_segment import Labeled_segment
@@ -11,16 +12,14 @@ from serializers.tour import TourSchema
 from app import username
 
 
-
 tours_schema = TourSchema()
 nested_tour_segment_schema = Tour_segment_nestedSchema()
 
 
 def get_unconfirmed_tour_segments(id):
     try:
-        segments = Tour_segment.query.filter_by(
-            tour_id=id).all()
+        segments = Tour_segment.query.filter(and_(Tour_segment.tour_id == id, Tour_segment.evidence_id == None)
+                                             ).all()
         return nested_tour_segment_schema.jsonify(segments, many=True), 200
     except OperationalError:
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
-

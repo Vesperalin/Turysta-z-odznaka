@@ -2,6 +2,7 @@ from app import db
 from backend.models.base import BaseModel
 from models.tour import Tour
 from models.labeled_segment import Labeled_segment
+from models.evidence import Evidence
 
 
 class Tour_segment(db.Model, BaseModel):
@@ -20,7 +21,11 @@ class Tour_segment(db.Model, BaseModel):
     labeled_segment_id = db.Column('FK_odcinekOpisany', db.Integer, db.ForeignKey(
         'odcinkiopisane.id_odcinka'), nullable=True)
     # own_segment_id simplification - TOUR HAS ONLY LABELED SEGMENTS
+    evidence_id = db.Column('FK_dowod', db.Integer, db.ForeignKey(
+        'dowody.id_dowodu'), nullable=True)
 
     tour = db.relationship('Tour', backref="tour_segments")
     labeled_segment = db.relationship(
         'Labeled_segment', backref="tour_segments")
+    evidence = db.relationship(
+        'Evidence', backref="tour_segment")

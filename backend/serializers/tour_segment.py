@@ -31,4 +31,5 @@ class Tour_segment_nestedSchema(ma.SQLAlchemyAutoSchema):
     through = auto_field()
     points = auto_field()
     tour_id = auto_field()
+    evidence_id = auto_field()
     labeled_segment = fields.Nested('Labeled_segment_nestedSchema')
