@@ -1,8 +1,7 @@
 from flask import Flask, request
 from flask.json import jsonify
 from sqlalchemy.sql.elements import and_
-from backend.serializers.guide import GuideSchema
-from backend.serializers.tour_segment import Tour_segmentSchema
+from serializers.tour_segment import Tour_segmentSchema
 from .utils import *
 from sqlalchemy.exc import OperationalError
 from models.labeled_segment import Labeled_segment
@@ -22,6 +21,15 @@ nested_tour_segment_schema = Tour_segment_nestedSchema()
 tour_segment_schema = Tour_segmentSchema()
 labeled_segment_schema = Labeled_segmentSchema()
 evidence_schema = EvidenceSchema()
+
+
+def get_tourist_tours():
+    try:
+        all_tours = Tour.query.filter_by(
+            tourist_username=username).all()
+        return tours_schema.jsonify(all_tours, many=True), 200
+    except OperationalError:
+        return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
 
 def get_unconfirmed_tour_segments(id):
@@ -52,10 +60,10 @@ def _process_attachments(attachments):
             }
         evidence = evidence_schema.load(evidence_dictionary)
         evidence.save()
-        for tour_segment in attachment['segments']:
+        for tour_segment in attachment['tour_segments']:
             tour_segment_dictionary = {
-                'startDate': tour_segment['start_date'],
-                'endDate': tour_segment['end_date'],
+                'startDate': tour_segment['startDate'],
+                'endDate': tour_segment['endDate'],
                 'evidence_id': evidence.id
             }
             existing_tour_segment = Tour_segment.query.get(tour_segment['id'])
@@ -76,10 +84,10 @@ def _process_verifying(verifying):
         evidence = evidence_schema.load(evidence_dictionary)
         evidence.save()
 
-        for tour_segment in guide_data['segments']:
+        for tour_segment in guide_data['tour_segments']:
             tour_segment_dictionary = {
-                'startDate': tour_segment['start_date'],
-                'endDate': tour_segment['end_date'],
+                'startDate': tour_segment['startDate'],
+                'endDate': tour_segment['endDate'],
                 'evidence_id': evidence.id
             }
             existing_tour_segment = Tour_segment.query.get(tour_segment['id'])

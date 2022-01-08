@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import styles from "./EvidenceConfirmationManager.module.css";
 import EvidenceConfirmationSegmentsList from "../../View/EvidenceConfirmationSegmentsList/EvidenceConfirmationSegmentsList";
@@ -14,7 +16,7 @@ const EvidenceConfirmationManager = (props) => {
   const [attachments, setAttachments] = useState([]);
   const [verifying, setVerifying] = useState([]);
   const [selectedSegments, setSelectedSegments] = useState([]);
-  const [completedSegments, setCompletedSegments] = useState([]);
+  const [segmentsWithDates, setSegmentsWithDates] = useState([]);
   const [dateMessage, setDateMessage] = useState("");
   const [mountainGroupMessage, setMountainGroupMessage] = useState("");
   const [tableIsShown, setTableIsShown] = useState(true);
@@ -29,9 +31,10 @@ const EvidenceConfirmationManager = (props) => {
   const [noSegmentSelectedMessage, setNoSegmentSelectedMessage] = useState("");
   const [reportMessage, setReportMessage] = useState("");
   const [finalMessage, setFinalMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleSelection = (segment) => {
-    if (!completedSegments.some((e) => e.id === segment.id)) {
+    if (!segmentsWithDates.some((e) => e.id === segment.id)) {
       if (selectedSegments.includes(segment)) {
         setSelectedSegments(
           selectedSegments.filter((element) => segment.id !== element.id)
@@ -92,7 +95,7 @@ const EvidenceConfirmationManager = (props) => {
       }));
       console.log(confirmedSegments);
       //TODO weryfikacja dat
-      setCompletedSegments((completedSegments) => [
+      setSegmentsWithDates((completedSegments) => [
         ...completedSegments,
         ...confirmedSegments,
       ]);
@@ -128,7 +131,7 @@ const EvidenceConfirmationManager = (props) => {
       setVerifyingIsShown(false);
       setVerifying([
         ...verifying,
-        { guide: guide, tour_segments: selectedSegments },
+        { id_verifying: guide, tour_segments: selectedSegments },
       ]);
       setSelectedSegments([]);
 
@@ -160,7 +163,7 @@ const EvidenceConfirmationManager = (props) => {
           ) {
             navigate("/503");
           } else if (error.response.status === 400) {
-            setMessage(error.response.data["message"]);
+            setFinalMessage(error.response.data["message"]);
           } else {
             navigate("/error");
           }
@@ -179,7 +182,7 @@ const EvidenceConfirmationManager = (props) => {
           tourName={props.tourName}
           onClick={handleSelection}
           selectedSegments={selectedSegments}
-          confirmedSegments={completedSegments}
+          confirmedSegments={segmentsWithDates}
         />
       )}
       {tableIsShown && (
@@ -207,7 +210,7 @@ const EvidenceConfirmationManager = (props) => {
           tourName={props.tourName}
           onClick={() => {}}
           selectedSegments={selectedSegments}
-          confirmedSegments={completedSegments}
+          confirmedSegments={segmentsWithDates}
         />
       )}
       {selectedTableIsShown && (
