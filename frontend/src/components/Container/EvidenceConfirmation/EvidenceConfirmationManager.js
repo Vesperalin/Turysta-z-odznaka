@@ -7,6 +7,9 @@ import EvidenceConfirmationRegistry from "../../View/EvidenceConfirmationRegistr
 import EvidenceConfirmationDateManager from "./EvidenceConfirmationDateManager";
 import EvidenceConfirmationEvidenceForm from "../../View/EvidenceConfirmationEvidenceForm/EvidenceConfirmationEvidenceForm";
 
+const addEvidenceBaseURL =
+  "http://localhost:5000/evidence-confirmation/evidence";
+
 const EvidenceConfirmationManager = (props) => {
   const [attachments, setAttachments] = useState([]);
   const [verifying, setVerifying] = useState([]);
@@ -25,6 +28,7 @@ const EvidenceConfirmationManager = (props) => {
   const [verifyingMessage, setVerifyingMessage] = useState("");
   const [noSegmentSelectedMessage, setNoSegmentSelectedMessage] = useState("");
   const [reportMessage, setReportMessage] = useState("");
+  const [finalMessage, setFinalMessage] = useState("");
 
   const handleSelection = (segment) => {
     if (!completedSegments.some((e) => e.id === segment.id)) {
@@ -141,8 +145,27 @@ const EvidenceConfirmationManager = (props) => {
       setReportMessage(
         "Musisz załączyć dowód lub przypisać przewodnika do odcinka trasy."
       );
+    } else {
+      setTableIsShown(false);
+
+      const evidences = { attachments: attachments, verifying: verifying };
+
+      axios
+        .post(addEvidenceBaseURL, evidences)
+        .then((response) => setFinalMessage(response.data["message"]))
+        .catch((error) => {
+          if (
+            (error.request && error.response === undefined) ||
+            error.response.status === 503
+          ) {
+            navigate("/503");
+          } else if (error.response.status === 400) {
+            setMessage(error.response.data["message"]);
+          } else {
+            navigate("/error");
+          }
+        });
     }
-    //TODO axios to backend
   };
 
   return (
@@ -221,6 +244,11 @@ const EvidenceConfirmationManager = (props) => {
           setAttachment={handleVerifyingChange}
         />
       )}
+      {!tableIsShown &&
+        !verifyingIsShown &&
+        !attachmentIsShown &&
+        !selectedTableIsShown &&
+        !dateFormIsShown && <p className={styles.info}>{finalMessage}</p>}
     </div>
   );
 };

@@ -30,10 +30,14 @@ class Labeled_segment_nestedSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Labeled_segment
         load_instance = True
-        exclude = ('closed_segments', 'liquidated_segment', 'points', 'is_bidirectional', 'color', 'through')
+        exclude = ('points', 'is_bidirectional', 'color', 'through')
 
     id = auto_field()
     mountain_group = fields.Nested('Mountain_groupSchema')
     start_point = fields.Nested('Labeled_point_nestedSchema')
     end_point = fields.Nested('Labeled_point_nestedSchema')
+    closed_segments = fields.Nested(
+        'Closed_segmentSchema', many=True, exclude={'segment_id'})
+    liquidated_segment = fields.Nested(
+        'Liquidated_segmentSchema', many=False, exclude={'id'})
     
