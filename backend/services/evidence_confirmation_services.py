@@ -45,19 +45,28 @@ def add_evidences():
     data_dictionary = request.get_json()
     _process_attachments(data_dictionary['attachments'])
     _process_verifying(data_dictionary['verifying'])
-    return {'message': 'Zgłoszenie przebiegło pomyślnie, oczekuj na weryfikację!'}
+    return {'message': 'Zgłoszenie przebiegło pomyślnie, oczekuj na weryfikację!'}, 200
+
+
+def check_if_guide_exists(guide_id_number):
+    guide = Guide.query.filter_by(id_number=guide_id_number).first()
+
+    if not guide:
+        return {'message': 'Niepoprawny numer legitymacji przewodnika'}, 404
+
+    return {'message': 'OK'}, 200
 
 
 def _process_attachments(attachments):
     for attachment in attachments:
         evidence_dictionary = {
-            'attachmentDate': datetime.today().strftime('%Y-%m-%d'), 
-            'isConfirmed': False, 
-            'isWaiting': True, 
-            'photo_attachment': attachment['value'], 
+            'attachmentDate': datetime.today().strftime('%Y-%m-%d'),
+            'isConfirmed': False,
+            'isWaiting': True,
+            'photo_attachment': attachment['value'],
             'tourist_username': username
-            #TODO mountain_id
-            }
+            # TODO mountain_id
+        }
         evidence = evidence_schema.load(evidence_dictionary)
         evidence.save()
         for tour_segment in attachment['tour_segments']:
@@ -67,17 +76,19 @@ def _process_attachments(attachments):
                 'evidence_id': evidence.id
             }
             existing_tour_segment = Tour_segment.query.get(tour_segment['id'])
-            updated_tour_segment = tour_segment_schema.load(tour_segment_dictionary, instance=existing_tour_segment, partial=True)
+            updated_tour_segment = tour_segment_schema.load(
+                tour_segment_dictionary, instance=existing_tour_segment, partial=True)
             updated_tour_segment.save()
 
 
 def _process_verifying(verifying):
     for guide_data in verifying:
-        guide = Guide.query.filter_by(id_number=guide_data['id_verifying']).first()
+        guide = Guide.query.filter_by(
+            id_number=guide_data['id_verifying']).first()
         evidence_dictionary = {
-            'attachmentDate': datetime.today().strftime('%Y-%m-%d'), 
-            'isConfirmed': False, 
-            'isWaiting': True, 
+            'attachmentDate': datetime.today().strftime('%Y-%m-%d'),
+            'isConfirmed': False,
+            'isWaiting': True,
             'verifying_username': guide.username,
             'tourist_username': username
         }
@@ -91,6 +102,7 @@ def _process_verifying(verifying):
                 'evidence_id': evidence.id
             }
             existing_tour_segment = Tour_segment.query.get(tour_segment['id'])
-            updated_tour_segment = tour_segment_schema.load(tour_segment_dictionary, instance=existing_tour_segment, partial=True)
+            updated_tour_segment = tour_segment_schema.load(
+                tour_segment_dictionary, instance=existing_tour_segment, partial=True)
             updated_tour_segment.save()
     return None

@@ -11,6 +11,7 @@ import EvidenceConfirmationEvidenceForm from "../../View/EvidenceConfirmationEvi
 
 const addEvidenceBaseURL =
   "http://localhost:5000/evidence-confirmation/evidence";
+const checkGuideBaseURL = "http://localhost:5000/evidence-confirmation/guide";
 
 const EvidenceConfirmationManager = (props) => {
   const [attachments, setAttachments] = useState([]);
@@ -93,8 +94,7 @@ const EvidenceConfirmationManager = (props) => {
         startDate: segment.startDate,
         endDate: segment.endDate,
       }));
-      console.log(confirmedSegments);
-      //TODO weryfikacja dat
+
       setSegmentsWithDates((completedSegments) => [
         ...completedSegments,
         ...confirmedSegments,
@@ -128,14 +128,23 @@ const EvidenceConfirmationManager = (props) => {
     if (guide.trim() === "") {
       setVerifyingMessage("Nie podano numeru legitymacji przewodnika!");
     } else {
-      setVerifyingIsShown(false);
-      setVerifying([
-        ...verifying,
-        { id_verifying: guide, tour_segments: selectedSegments },
-      ]);
-      setSelectedSegments([]);
+      axios
+        .get(`${checkGuideBaseURL}/${guide.trim()}`)
+        .then(() => {
+          setVerifyingIsShown(false);
+          setVerifying([
+            ...verifying,
+            { id_verifying: guide.trim(), tour_segments: selectedSegments },
+          ]);
+          setSelectedSegments([]);
 
-      setTableIsShown(true);
+          setTableIsShown(true);
+        })
+        .catch((error) => {
+          if (error.response.status === 404) {
+            setVerifyingMessage(error.response.data["message"]);
+          }
+        });
     }
   };
 
