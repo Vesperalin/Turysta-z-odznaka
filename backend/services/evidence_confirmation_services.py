@@ -16,7 +16,7 @@ tours_schema = TourSchema()
 nested_tour_segment_schema = Tour_segment_nestedSchema()
 
 
-def get_tour_segments(id):
+def get_unconfirmed_tour_segments(id):
     try:
         segments = Tour_segment.query.filter_by(
             tour_id=id).all()
