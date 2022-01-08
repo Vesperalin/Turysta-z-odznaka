@@ -63,4 +63,6 @@ def _process_attachments(attachments):
 
 
 def _process_verifying(verifying):
+    # for guide in verifying:
+
     return None

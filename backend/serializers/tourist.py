@@ -16,3 +16,5 @@ class TouristSchema(ma.SQLAlchemyAutoSchema):
     birth_date = auto_field()
     is_invalid = auto_field()
     own_points = fields.Nested('Own_pointSchema', many=True, exclude={'tourist_username'})
+    guide = fields.Nested(
+        'GuideSchema', many=False, exclude={'username'})
