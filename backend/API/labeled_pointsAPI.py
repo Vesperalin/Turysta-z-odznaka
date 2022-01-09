@@ -13,7 +13,7 @@ def get_points():
     Returns all labeled points.
     Returns data in format: result, status code:
     - on success: array of labeled points (in JSON format), 200
-    - when database error: {"message": "Brak połączenia z bazą danych"}, 503"""
+    - when database error occurs: {"message": "Brak połączenia z bazą danych"}, 503"""
     return get_labeled_points()
 
 @router.route('/like/', methods=['GET'])
@@ -23,7 +23,7 @@ def get_all_points():
     Returns all labeled points. Catches requests: /like/<string:like> where argument is empty.
     Returns data in format: result, status code:
     - on success: array of labeled points (in JSON format), 200
-    - when database error: {"message": "Brak połączenia z bazą danych"}, 503"""
+    - when database error occurs: {"message": "Brak połączenia z bazą danych"}, 503"""
     return get_labeled_points()
 
 @router.route('/like/<string:like>', methods=['GET'])
@@ -33,7 +33,7 @@ def get_points_like(like):
     Returns labeled points that contains given phrase.
     Returns data in format: result, status code:
     - on success: array of labeled points (in JSON format), 200
-    - when database error: {"message": "Brak połączenia z bazą danych"}, 503"""
+    - when database error occurs: {"message": "Brak połączenia z bazą danych"}, 503"""
     return get_labeled_points_like(like)
 
 @router.route('/<int:id>', methods=['GET'])
@@ -44,7 +44,7 @@ def get_point(id):
     Returns data in format: result, status code:
     - on success: labeled point (in JSON format), 200
     - when point with id not exists: {"message": "Punkt o wybranej nazwie nie istnieje"}, 400
-    - when database error: {"message": "Brak połączenia z bazą danych"}, 503"""
+    - when database error occurs: {"message": "Brak połączenia z bazą danych"}, 503"""
     return get_labeled_point(id)
 
 @router.route('', methods=['POST'])
@@ -62,7 +62,7 @@ def add_point():
     - on success: {"message": "Punkt został pomyślnie dodany"}, 200
     - when height is not correct: {"message": "Niepoprawna wartość wysokości"}, 400
     - when name is not unique: {"message": "Punkt o takiej nazwie już istnieje. Wybierz inną nazwę"}, 400
-    - when database error: {"message": "Brak połączenia z bazą danych"}, 503"""
+    - when database error occurs: {"message": "Brak połączenia z bazą danych"}, 503"""
     return add_labeled_point()
 
 @router.route('/<int:id>', methods=['PUT'])
@@ -82,7 +82,7 @@ def update_point(id):
     - when point is used in segments and can't be edited: {"message": "Punkt jest już używany w odcinkach. Nie można go edytować"}, 400
     - when point with specified name already exists: {"message": "Punkt o takiej nazwie już istnieje. Wybierz inną nazwę"}, 400
     - when height is not correct: {"message": "Niepoprawna wartość wysokości"}, 400
-    - when database error: {"message": "Brak połączenia z bazą danych"}, 503"""
+    - when database error occurs: {"message": "Brak połączenia z bazą danych"}, 503"""
     return update_labeled_point(id)
 
 @router.route('/<int:id>', methods=['DELETE'])
@@ -94,7 +94,7 @@ def delete_point(id):
     - on success: {"message": "Punkt został pomyślnie usunięty"}, 200
     - when point is used in segments and can't be removed: {"message": "Punkt jest już używany w odcinkach. Nie można go usuwać"}, 400
     - when point with id not exists: {"message": "Punkt o wybranej nazwie nie istnieje"}, 400
-    - when database error: {"message": "Brak połączenia z bazą danych"}, 503"""
+    - when database error occurs: {"message": "Brak połączenia z bazą danych"}, 503"""
     return delete_labeled_point(id)
 
 @router.route('/labele-point-API')
