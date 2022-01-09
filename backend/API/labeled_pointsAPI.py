@@ -7,7 +7,7 @@ router = Blueprint('labeled-points', __name__)
 from app import auto
 
 @router.route('', methods=['GET'])
-@auto.doc()
+@auto.doc(groups=['labeled-point'])
 def get_points():
     """
     Returns all labeled points.
@@ -17,7 +17,7 @@ def get_points():
     return get_labeled_points()
 
 @router.route('/like/', methods=['GET'])
-@auto.doc()
+@auto.doc(groups=['labeled-point'])
 def get_all_points():
     """
     Returns all labeled points. Catches requests: /like/<string:like> where argument is empty.
@@ -27,7 +27,7 @@ def get_all_points():
     return get_labeled_points()
 
 @router.route('/like/<string:like>', methods=['GET'])
-@auto.doc()
+@auto.doc(groups=['labeled-point'])
 def get_points_like(like):
     """
     Returns labeled points that contains given phrase.
@@ -37,7 +37,7 @@ def get_points_like(like):
     return get_labeled_points_like(like)
 
 @router.route('/<int:id>', methods=['GET'])
-@auto.doc()
+@auto.doc(groups=['labeled-point'])
 def get_point(id):
     """
     Returns labeled point with specified id.
@@ -48,7 +48,7 @@ def get_point(id):
     return get_labeled_point(id)
 
 @router.route('', methods=['POST'])
-@auto.doc()
+@auto.doc(groups=['labeled-point'])
 def add_point():
     """
     Adds new labeled point.
@@ -66,7 +66,7 @@ def add_point():
     return add_labeled_point()
 
 @router.route('/<int:id>', methods=['PUT'])
-@auto.doc()
+@auto.doc(groups=['labeled-point'])
 def update_point(id):
     """
     Updates labeled point with specified id.
@@ -86,7 +86,7 @@ def update_point(id):
     return update_labeled_point(id)
 
 @router.route('/<int:id>', methods=['DELETE'])
-@auto.doc()
+@auto.doc(groups=['labeled-point'])
 def delete_point(id):
     """
     Deletes labeled point with specified id.
@@ -99,6 +99,7 @@ def delete_point(id):
 
 @router.route('/labele-point-API')
 def documentation():
-    return auto.html(template='documentation_template.html', 
-                     title='Documentation for labeld points API',
-                     author='Klaudia Błażyczek',)
+    return auto.html(groups=['labeled-point'],
+                    template='documentation_template.html', 
+                    title='Documentation for labeld points API',
+                    author='Klaudia Błażyczek',)
