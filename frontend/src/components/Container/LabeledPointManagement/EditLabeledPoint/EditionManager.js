@@ -11,7 +11,7 @@ const labeledPointsBaseURL = "http://127.0.0.1:5000/labeled-points";
 const EditionManager = props => {
   const [formIsShown, setFormIsShown] = useState(true);
   const [newPointName, setNewPointName] = useState(props.pointName);
-  const [newPointHeight, setNewPointHeight] = useState(props.pointHeight);
+  const [newPointHeight, setNewPointHeight] = useState(parseInt(props.pointHeight));
   const [formMessage, setFormMessage] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
@@ -56,7 +56,7 @@ const EditionManager = props => {
         <LabeledPointForm
           title={`Edycja punktu opisanego: ${props.pointName}`}
           name={newPointName}
-          height={newPointHeight}
+          height={isNaN(newPointHeight) ?  "" : newPointHeight}
           setName={handleNameChange}
           setHeight={handleHeightChange}
           buttonText='Edytuj punkt opisany'

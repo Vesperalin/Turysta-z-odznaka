@@ -13,6 +13,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
+from flask_autodoc.autodoc import Autodoc
+auto = Autodoc(app)
+
 # Simplification
 username = "jankowalski"
 
