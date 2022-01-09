@@ -6,6 +6,7 @@ router = Blueprint('labeled-points', __name__)
 
 from app import auto
 
+
 @router.route('', methods=['GET'])
 @auto.doc(groups=['labeled-point'])
 def get_points():
