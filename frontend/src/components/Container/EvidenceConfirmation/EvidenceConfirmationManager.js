@@ -60,12 +60,12 @@ const EvidenceConfirmationManager = (props) => {
   };
 
   const onClickAttachment = () => {
-    const mountainGroup = selectedSegments[0].mountainGroup;
-    console.log(selectedSegments);
+    const mountainGroup = selectedSegments[0].labeled_segment.mountain_group;
     let isCorrect = true;
+
     selectedSegments.forEach((segment) => {
-      if (segment.mountainGroup !== mountainGroup) {
-        console.log(segment.mountainGroup);
+      
+      if (segment.labeled_segment.mountainGroup !== mountainGroup) {
         setSelectedSegmentsMessage(
           "Nie można dodać załącznika dla odcinków z różnych grup górskich!"
         );
@@ -76,6 +76,7 @@ const EvidenceConfirmationManager = (props) => {
     if (isCorrect) {
       setAttachmentIsShown(true);
       setSelectedTableIsShown(false);
+      setSelectedSegmentsMessage("");
     }
   };
 
@@ -233,6 +234,7 @@ const EvidenceConfirmationManager = (props) => {
           onClick={() => {}}
           selectedSegments={selectedSegments}
           confirmedSegments={segmentsWithDates}
+          message={selectedSegmentsMessage}
         />
       )}
       {selectedTableIsShown && (
