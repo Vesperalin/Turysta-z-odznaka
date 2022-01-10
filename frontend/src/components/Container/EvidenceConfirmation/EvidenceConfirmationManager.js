@@ -19,7 +19,6 @@ const EvidenceConfirmationManager = (props) => {
   const [selectedSegments, setSelectedSegments] = useState([]);
   const [segmentsWithDates, setSegmentsWithDates] = useState([]);
   const [dateMessage, setDateMessage] = useState("");
-  const [mountainGroupMessage, setMountainGroupMessage] = useState("");
   const [tableIsShown, setTableIsShown] = useState(true);
   const [dateFormIsShown, setDateFormIsShown] = useState(false);
   const [selectedTableIsShown, setSelectedTableIsShown] = useState(false);
@@ -29,7 +28,7 @@ const EvidenceConfirmationManager = (props) => {
   const [attachmentMessage, setAttachmentMessage] = useState("");
   const [guide, setGuide] = useState("");
   const [verifyingMessage, setVerifyingMessage] = useState("");
-  const [noSegmentSelectedMessage, setNoSegmentSelectedMessage] = useState("");
+  const [selectedSegmentsMessage, setSelectedSegmentsMessage] = useState("");
   const [reportMessage, setReportMessage] = useState("");
   const [finalMessage, setFinalMessage] = useState("");
   const navigate = useNavigate();
@@ -51,25 +50,30 @@ const EvidenceConfirmationManager = (props) => {
 
   const onClickNext = () => {
     if (selectedSegments.length === 0) {
-      setNoSegmentSelectedMessage("Wybierz odcinki by przejść dalej.");
+      setSelectedSegmentsMessage("Wybierz odcinki by przejść dalej.");
     } else {
       setTableIsShown(false);
       setDateFormIsShown(true);
-      setNoSegmentSelectedMessage("");
+      setSelectedSegmentsMessage("");
+      setReportMessage("");
     }
   };
 
   const onClickAttachment = () => {
-    const mountainGroup = selectedSegments.mountainGroup;
+    const mountainGroup = selectedSegments[0].mountainGroup;
+    console.log(selectedSegments);
+    let isCorrect = true;
     selectedSegments.forEach((segment) => {
       if (segment.mountainGroup !== mountainGroup) {
-        setMountainGroupMessage(
+        console.log(segment.mountainGroup);
+        setSelectedSegmentsMessage(
           "Nie można dodać załącznika dla odcinków z różnych grup górskich!"
         );
+        isCorrect = false;
       }
     });
 
-    if (mountainGroupMessage === "") {
+    if (isCorrect) {
       setAttachmentIsShown(true);
       setSelectedTableIsShown(false);
     }
@@ -81,14 +85,16 @@ const EvidenceConfirmationManager = (props) => {
   };
 
   const handleSaveDatesClick = () => {
+    let isCorrect = true;
     setDateMessage("");
     selectedSegments.forEach((segment) => {
       if (segment.startDate === undefined || segment.endDate === undefined) {
         setDateMessage("Uzupełnij wszystkie pola!");
+        isCorrect = false;
       }
     });
 
-    if (dateMessage === "") {
+    if (isCorrect) {
       const confirmedSegments = selectedSegments.map((segment) => ({
         id: segment.id,
         startDate: segment.startDate,
@@ -127,6 +133,8 @@ const EvidenceConfirmationManager = (props) => {
   const handleAddVerifyingClick = () => {
     if (guide.trim() === "") {
       setVerifyingMessage("Nie podano numeru legitymacji przewodnika!");
+    } else if (guide.trim().length !== 6) {
+      setVerifyingMessage("Numer legitymacji przewodnika składa się z 6 cyfr!");
     } else {
       axios
         .get(`${checkGuideBaseURL}/${guide.trim()}`)
@@ -149,7 +157,13 @@ const EvidenceConfirmationManager = (props) => {
   };
 
   const handleVerifyingChange = (e) => {
-    setGuide(e.target.value);
+    const regPattern = /^[0-9\b]+$/;
+    if (
+      e.target.value === "" ||
+      (regPattern.test(e.target.value) && e.target.value.length < 7)
+    ) {
+      setGuide(e.target.value);
+    }
   };
 
   const onSubmitReport = () => {
@@ -192,10 +206,8 @@ const EvidenceConfirmationManager = (props) => {
           onClick={handleSelection}
           selectedSegments={selectedSegments}
           confirmedSegments={segmentsWithDates}
+          message={selectedSegmentsMessage}
         />
-      )}
-      {tableIsShown && (
-        <p className={styles.error}>{noSegmentSelectedMessage}</p>
       )}
       {tableIsShown && <Button text="Dalej" onClick={onClickNext} />}
       {tableIsShown && (
@@ -204,6 +216,7 @@ const EvidenceConfirmationManager = (props) => {
           verifying={verifying.length}
           buttonText={"Zgłoś"}
           onSubmit={onSubmitReport}
+          message={reportMessage}
         />
       )}
       {dateFormIsShown && (
@@ -234,6 +247,7 @@ const EvidenceConfirmationManager = (props) => {
           verifying={verifying.length}
           buttonText={"Zgłoś"}
           onSubmit={onSubmitReport}
+          message={reportMessage}
         />
       )}
       {attachmentIsShown && (
@@ -242,6 +256,7 @@ const EvidenceConfirmationManager = (props) => {
           placeholder={"Zdjęcie, wypis GPS etc."}
           message={attachmentMessage}
           buttonText={"Dodaj"}
+          value={attachment}
           onSubmit={handleAddAttachmentClick}
           setAttachment={handleAttachmentChange}
         />
@@ -252,6 +267,7 @@ const EvidenceConfirmationManager = (props) => {
           placeholder={"Numer legitymacji"}
           message={verifyingMessage}
           buttonText={"Dodaj"}
+          value={guide}
           onSubmit={handleAddVerifyingClick}
           setAttachment={handleVerifyingChange}
         />

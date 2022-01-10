@@ -101,6 +101,6 @@ def delete_point(id):
 @router.route('/labele-point-API')
 def documentation():
     return auto.html(groups=['labeled-point'],
-                    template='documentation_template.html', 
-                    title='Documentation for labeld points API',
-                    author='Klaudia Błażyczek',)
+                     template='documentation_template.html',
+                     title='Documentation for labeld points API',
+                     author='Klaudia Błażyczek',)

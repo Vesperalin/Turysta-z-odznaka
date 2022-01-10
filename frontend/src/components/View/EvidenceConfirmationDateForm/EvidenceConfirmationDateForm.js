@@ -5,18 +5,18 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styles from "./EvidenceConfirmationDateForm.module.css";
 
-const Input = ({ onChange, placeholder, value, isSecure, id, onClick }) => (
+const Input = React.forwardRef(({ onChange, placeholder, value, id, onClick }, ref) => (
   <input
     className={styles.input}
+    ref={ref}
     onChange={onChange}
     placeholder={placeholder}
     value={value}
-    isSecure={isSecure}
     id={id}
     onClick={onClick}
     required
   />
-);
+));
 
 const EvidenceConfirmationDateForm = (props) => {
   const [startDate, setStartDate] = useState(props.startDate)

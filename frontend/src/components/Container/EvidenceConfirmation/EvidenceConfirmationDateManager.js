@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "../../View/Button/Button";
 import EvidenceConfirmationDateForm from "../../View/EvidenceConfirmationDateForm/EvidenceConfirmationDateForm";
 
 import styles from "./EvidenceConfirmationDateManager.module.css";
 
 const EvidenceConfirmationDateManager = (props) => {
-  const [message, setMessage] = useState("");
-
   const handleStartDateChange = (segment, startDate) => {
     segment.startDate = startDate.toISOString().slice(0, 10);
   };
@@ -31,16 +29,17 @@ const EvidenceConfirmationDateManager = (props) => {
         end: new Date(),
       });
     }
-    
+
     return excludeDateIntervals;
   };
 
   return (
-    <div>
+    <div className={styles.wrapper}>
       <p className={styles.info}>Wybierz odcinki do weryfikacji</p>
       {props.selectedSegments.map((element) => {
         return (
           <EvidenceConfirmationDateForm
+            key={element.id}
             segment={element}
             formTitle={`${element.labeled_segment.start_point.name} -> ${element.labeled_segment.end_point.name}`}
             endDate={element.endDate}
@@ -53,7 +52,7 @@ const EvidenceConfirmationDateManager = (props) => {
           />
         );
       })}
-      <p>{message}</p>
+      <p className={styles.error}>{props.message}</p>
       <Button text="Zapisz daty" onClick={props.onClick} />
     </div>
   );
