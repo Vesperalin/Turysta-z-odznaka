@@ -8,6 +8,8 @@ import Button from "../../View/Button/Button";
 import EvidenceConfirmationRegistry from "../../View/EvidenceConfirmationRegistry/EvidenceConfirmationRegistry";
 import EvidenceConfirmationDateManager from "./EvidenceConfirmationDateManager";
 import EvidenceConfirmationEvidenceForm from "../../View/EvidenceConfirmationEvidenceForm/EvidenceConfirmationEvidenceForm";
+import EvidenceConfirmationConfirmedSegmentsList from "../../View/EvidenceConfirmationConfirmedSegmentsList/EvidenceConfirmationConfirmedSegmentsList";
+import LinkButton from "../../View/LinkButton/LinkButton";
 
 const addEvidenceBaseURL =
   "http://localhost:5000/evidence-confirmation/evidence";
@@ -30,7 +32,7 @@ const EvidenceConfirmationManager = (props) => {
   const [verifyingMessage, setVerifyingMessage] = useState("");
   const [selectedSegmentsMessage, setSelectedSegmentsMessage] = useState("");
   const [reportMessage, setReportMessage] = useState("");
-  const [finalMessage, setFinalMessage] = useState("");
+  const [tourSegments, setTourSegments] = useState([]);
   const navigate = useNavigate();
 
   const handleSelection = (segment) => {
@@ -64,8 +66,7 @@ const EvidenceConfirmationManager = (props) => {
     let isCorrect = true;
 
     selectedSegments.forEach((segment) => {
-      
-      if (segment.labeled_segment.mountainGroup !== mountainGroup) {
+      if (segment.labeled_segment.mountain_group !== mountainGroup) {
         setSelectedSegmentsMessage(
           "Nie można dodać załącznika dla odcinków z różnych grup górskich!"
         );
@@ -83,13 +84,14 @@ const EvidenceConfirmationManager = (props) => {
   const onClickVerifying = () => {
     setVerifyingIsShown(true);
     setSelectedTableIsShown(false);
+    setSelectedSegmentsMessage("");
   };
 
   const handleSaveDatesClick = () => {
     let isCorrect = true;
     setDateMessage("");
     selectedSegments.forEach((segment) => {
-      if (segment.startDate === undefined || segment.endDate === undefined) {
+      if (segment.startDate === null || segment.endDate === null) {
         setDateMessage("Uzupełnij wszystkie pola!");
         isCorrect = false;
       }
@@ -179,15 +181,16 @@ const EvidenceConfirmationManager = (props) => {
 
       axios
         .post(addEvidenceBaseURL, evidences)
-        .then((response) => setFinalMessage(response.data["message"]))
+        .then((response) => {
+          console.log(response.data);
+          setTourSegments(response.data);
+        })
         .catch((error) => {
           if (
             (error.request && error.response === undefined) ||
             error.response.status === 503
           ) {
             navigate("/503");
-          } else if (error.response.status === 400) {
-            setFinalMessage(error.response.data["message"]);
           } else {
             navigate("/error");
           }
@@ -278,7 +281,16 @@ const EvidenceConfirmationManager = (props) => {
         !verifyingIsShown &&
         !attachmentIsShown &&
         !selectedTableIsShown &&
-        !dateFormIsShown && <p className={styles.info}>{finalMessage}</p>}
+        !dateFormIsShown && (
+          <div>
+
+          <EvidenceConfirmationConfirmedSegmentsList
+            matchedElements={tourSegments}
+            tourName={props.tourName}
+          />
+          <LinkButton path='/'>Zakończ</LinkButton>
+          </div>
+        )}
     </div>
   );
 };
