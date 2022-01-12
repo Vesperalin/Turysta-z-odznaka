@@ -1,5 +1,5 @@
 from app import db
-from backend.models.base import BaseModel
+from models.base import BaseModel
 
 class Mountain_group(db.Model, BaseModel):
     __table_args__ = {'extend_existing': True}
