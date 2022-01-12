@@ -1,5 +1,5 @@
 from app import db
-from backend.models.base import BaseModel
+from models.base import BaseModel
 from models.mountain_group import Mountain_group
 
 class Labeled_segment(db.Model, BaseModel):

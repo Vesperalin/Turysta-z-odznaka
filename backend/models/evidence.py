@@ -1,5 +1,5 @@
 from app import db
-from backend.models.base import BaseModel
+from models.base import BaseModel
 from models.tourist import Tourist
 from models.mountain_group import Mountain_group
 
