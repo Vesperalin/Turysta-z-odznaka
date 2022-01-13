@@ -45,6 +45,27 @@ def test_add_point_with_correct_name_and_no_height(client):
 
 
 # edge case
+# testing /labeled-points POST endpoint for new point with non unique name and invalid height
+# this endpoint should return message with error and status code 400
+def test_add_point_with_incorrect_name_and_incorrect_height(client):
+  new_point_with_incorrect_height = {
+    "name": "weTliNa",  # point with this name exist in DB. Also shows that it is not case sensitive
+    "height": -456
+  }
+
+  response = client.post(
+    "/labeled-points",
+    data=json.dumps(new_point_with_incorrect_height),
+    headers={"Content-Type": "application/json"},
+  )
+
+  error_message = json.loads(response.data.decode('utf-8')).get("message")
+
+  assert response.status_code == 400
+  assert error_message == "Punkt o takiej nazwie już istnieje. Wybierz inną nazwę"
+
+
+# edge case
 # testing /labeled-points POST endpoint for new point with non unique name
 # this endpoint should return message with error and status code 400
 def test_add_point_with_incorrect_name(client):
