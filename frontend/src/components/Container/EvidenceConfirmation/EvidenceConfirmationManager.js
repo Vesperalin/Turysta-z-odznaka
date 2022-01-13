@@ -27,9 +27,8 @@ const EvidenceConfirmationManager = (props) => {
   const [attachmentIsShown, setAttachmentIsShown] = useState(false);
   const [verifyingIsShown, setVerifyingIsShown] = useState(false);
   const [attachment, setAttachment] = useState("");
-  const [attachmentMessage, setAttachmentMessage] = useState("");
   const [guide, setGuide] = useState("");
-  const [verifyingMessage, setVerifyingMessage] = useState("");
+  const [evidenceMessage, setEvidenceMessage] = useState("");
   const [selectedSegmentsMessage, setSelectedSegmentsMessage] = useState("");
   const [reportMessage, setReportMessage] = useState("");
   const [tourSegments, setTourSegments] = useState([]);
@@ -64,7 +63,7 @@ const EvidenceConfirmationManager = (props) => {
   const onClickAttachment = () => {
     const mountainGroup = selectedSegments[0].labeled_segment.mountain_group;
     let isCorrect = true;
-    console.log(mountainGroup);
+    
     selectedSegments.forEach((segment) => {
       if (segment.labeled_segment.mountain_group.id !== mountainGroup.id) {
         console.log(segment.labeled_segment.mountain_group);
@@ -91,6 +90,7 @@ const EvidenceConfirmationManager = (props) => {
   const handleSaveDatesClick = () => {
     let isCorrect = true;
     setDateMessage("");
+
     selectedSegments.forEach((segment) => {
       if (segment.startDate === null || segment.endDate === null) {
         setDateMessage("Uzupełnij wszystkie pola!");
@@ -116,12 +116,16 @@ const EvidenceConfirmationManager = (props) => {
 
   const handleAddAttachmentClick = () => {
     if (attachment.trim() === "") {
-      setAttachmentMessage("Nie dodano załącznika!");
+      setEvidenceMessage("Nie dodano załącznika!");
     } else {
       setAttachmentIsShown(false);
       setAttachments([
         ...attachments,
-        { value: attachment, tour_segments: selectedSegments },
+        {
+          value: attachment,
+          mountainGroup: selectedSegments[0].labeled_segment.mountain_group.id,
+          tourSegments: selectedSegments,
+        },
       ]);
       setSelectedSegments([]);
 
@@ -135,9 +139,9 @@ const EvidenceConfirmationManager = (props) => {
 
   const handleAddVerifyingClick = () => {
     if (guide.trim() === "") {
-      setVerifyingMessage("Nie podano numeru legitymacji przewodnika!");
+      setEvidenceMessage("Nie podano numeru legitymacji przewodnika!");
     } else if (guide.trim().length !== 6) {
-      setVerifyingMessage("Numer legitymacji przewodnika składa się z 6 cyfr!");
+      setEvidenceMessage("Numer legitymacji przewodnika składa się z 6 cyfr!");
     } else {
       axios
         .get(`${checkGuideBaseURL}/${guide.trim()}`)
@@ -145,7 +149,7 @@ const EvidenceConfirmationManager = (props) => {
           setVerifyingIsShown(false);
           setVerifying([
             ...verifying,
-            { id_verifying: guide.trim(), tour_segments: selectedSegments },
+            { idVerifying: guide.trim(), tourSegments: selectedSegments },
           ]);
           setSelectedSegments([]);
 
@@ -153,7 +157,7 @@ const EvidenceConfirmationManager = (props) => {
         })
         .catch((error) => {
           if (error.response.status === 404) {
-            setVerifyingMessage(error.response.data["message"]);
+            setEvidenceMessage(error.response.data["message"]);
           } else if (
             (error.request && error.response === undefined) ||
             error.response.status === 503
@@ -266,7 +270,7 @@ const EvidenceConfirmationManager = (props) => {
         <EvidenceConfirmationEvidenceForm
           title={"Dodaj załącznik"}
           placeholder={"Zdjęcie, wypis GPS etc."}
-          message={attachmentMessage}
+          message={evidenceMessage}
           buttonText={"Dodaj"}
           value={attachment}
           onSubmit={handleAddAttachmentClick}
@@ -277,7 +281,7 @@ const EvidenceConfirmationManager = (props) => {
         <EvidenceConfirmationEvidenceForm
           title={"Wpisz dane przewodnika odbywającego z Tobą trasę"}
           placeholder={"Numer legitymacji"}
-          message={verifyingMessage}
+          message={evidenceMessage}
           buttonText={"Dodaj"}
           value={guide}
           onSubmit={handleAddVerifyingClick}

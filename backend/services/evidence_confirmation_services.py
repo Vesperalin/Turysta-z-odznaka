@@ -32,7 +32,7 @@ def get_tourist_tours():
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
 
-def get_unconfirmed_tour_segments(id):
+def get_unreported_tour_segments(id):
     try:
         segments = Tour_segment.query.filter(and_(Tour_segment.tour_id == id, Tour_segment.evidence_id == None)
                                              ).all()
@@ -79,13 +79,14 @@ def _process_attachments(attachments):
             'isConfirmed': False,
             'isWaiting': True,
             'photo_attachment': attachment['value'],
-            'tourist_username': username
+            'tourist_username': username,
+            'mountain_group_id': attachment['mountainGroup']
         }
         try:
             evidence = evidence_schema.load(evidence_dictionary)
             evidence.save()
 
-            for tour_segment in attachment['tour_segments']:
+            for tour_segment in attachment['tourSegments']:
                 _update_tour_segment_dates(tour_segment, evidence.id)
                 confirmed_tour_segments.append(
                     Tour_segment.query.get(tour_segment['id']))
@@ -101,7 +102,7 @@ def _process_verifying(verifying):
     try:
         for guide_data in verifying:
             guide = Guide.query.filter_by(
-                id_number=guide_data['id_verifying']).first()
+                id_number=guide_data['idVerifying']).first()
             evidence_dictionary = {
                 'attachmentDate': datetime.today().strftime('%Y-%m-%d'),
                 'isConfirmed': False,
@@ -112,7 +113,7 @@ def _process_verifying(verifying):
             evidence = evidence_schema.load(evidence_dictionary)
             evidence.save()
 
-            for tour_segment in guide_data['tour_segments']:
+            for tour_segment in guide_data['tourSegments']:
                 _update_tour_segment_dates(tour_segment, evidence.id)
                 confirmed_tour_segments.append(
                     Tour_segment.query.get(tour_segment['id']))
