@@ -1,10 +1,10 @@
+from app import auto
 from flask import Flask
 from flask.blueprints import Blueprint
 from services.evidence_confirmation_services import get_unreported_tour_segments, add_evidences, get_tourist_tours, check_if_guide_exists
 
 router = Blueprint('evidence-confirmation', __name__)
 
-from app import auto
 
 @router.route('/tours', methods=['GET'])
 @auto.doc(groups=['evidence-confirmation'])
@@ -33,7 +33,28 @@ def get_segments(tour_id):
 @router.route('/evidence', methods=['POST'])
 @auto.doc(groups=['evidence-confirmation'])
 def add_evidence():
-
+    """
+    Adds new evidences to selected tour segments. Updates tour segments with start and end dates.
+    Request body consist of: 
+    Example:
+    {
+        "attachments": [
+            {"value": "dowod.png", "mountainGroup": 2, "tourSegments": [
+                {"id": 27, "startDate": 2020-01-01, "endDate": 2020-01-03}, 
+                {"id": 28, "startDate": 2020-01-05, "endDate": 2020-01-06}
+            ]}
+        ],
+        "verifying": [
+            {"idVerifying": 123456, "tourSegments": [
+                {"id": 29, "startDate": 2020-01-04, "endDate": 2020-01-04}, 
+                {"id": 32, "startDate": 2020-01-05, "endDate": 2020-01-05}
+            ]}
+        ]
+    }
+    Returns data in format: result, status code:
+    - on success: array of reported tour segments (in JSON format) with evidences, 200
+    - when database error occurs: {"message": "Brak połączenia z bazą danych"}, 503
+    """
     return add_evidences()
 
 
@@ -48,3 +69,11 @@ def check_guide(id_guide):
     - when database error occurs: {"message": "Brak połączenia z bazą danych"}, 503
     """
     return check_if_guide_exists(id_guide)
+
+
+@router.route('/API')
+def documentation():
+    return auto.html(groups=['evidence-confirmation'],
+                     template='documentation_template.html',
+                     title='Documentation for evidence confirmation API',
+                     author='Justyna Małuszyńska',)

@@ -123,8 +123,8 @@ const EvidenceConfirmationManager = (props) => {
         ...attachments,
         {
           value: attachment,
-          mountain_group: selectedSegments[0].labeled_segment.mountain_group.id,
-          tour_segments: selectedSegments,
+          mountainGroup: selectedSegments[0].labeled_segment.mountain_group.id,
+          tourSegments: selectedSegments,
         },
       ]);
       setSelectedSegments([]);
@@ -149,7 +149,7 @@ const EvidenceConfirmationManager = (props) => {
           setVerifyingIsShown(false);
           setVerifying([
             ...verifying,
-            { id_verifying: guide.trim(), tour_segments: selectedSegments },
+            { idVerifying: guide.trim(), tourSegments: selectedSegments },
           ]);
           setSelectedSegments([]);
 
