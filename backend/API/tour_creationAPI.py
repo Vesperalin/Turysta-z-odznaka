@@ -83,7 +83,6 @@ def add_tour():
 @router.route('/tour-creation-API')
 def documentation():
     return auto.html(groups=['tour-creation'],
-                    template='documentation_template.html', 
-                    title='Documentation for tour creation API',
-                    author='Klaudia Błażyczek',)
-    
+                     template='documentation_template.html',
+                     title='Documentation for tour creation API',
+                     author='Klaudia Błażyczek',)

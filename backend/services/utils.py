@@ -12,3 +12,4 @@ LATITUDE_NOT_CORRECT = 'Niepoprawne dane. Szerokość geograficzna musi być lic
 HEIGHT_NOT_CORRECT = 'Niepoprawna wartość wysokości'
 NO_DB_CONNECTION = 'Brak połączenia z bazą danych'
 TOUR_WITH_NAME_EXIST = 'Trasa o wybranej nazwie już istnieje. Wybierz inną nazwę'
+INVALID_ID_NUMBER = 'Niepoprawny numer legitymacji przewodnika'

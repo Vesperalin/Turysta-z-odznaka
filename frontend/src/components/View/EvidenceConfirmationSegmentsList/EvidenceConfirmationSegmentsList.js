@@ -38,6 +38,7 @@ const EvidenceConfirmationSegmentsList = (props) => {
           })}
         </tbody>
       </table>
+      <p className={styles.errorInfo}>{props.message}</p>
     </div>
   );
 };

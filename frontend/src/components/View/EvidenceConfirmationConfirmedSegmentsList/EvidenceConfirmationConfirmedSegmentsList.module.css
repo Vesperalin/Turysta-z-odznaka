@@ -29,14 +29,9 @@
   border-bottom: 1px solid rgb(167, 167, 167);
 }
 
-.clickedRow {
-  background-color: rgba(221, 149, 73, 0.25);
-}
-
-.confirmedRow {
-  background-color: rgba(197, 221, 73, 0.25);
-}
-
-.errorInfo {
-  color: red;
+.info {
+  padding: 40px 0 30px 0;
+  font-size: 1.5rem;
+  color: #dd9549;
+  font-weight: 700;
 }

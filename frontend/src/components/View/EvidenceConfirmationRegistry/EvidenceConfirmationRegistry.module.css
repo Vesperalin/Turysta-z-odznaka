@@ -1,7 +1,14 @@
-.registryWrapper{
-    margin: 40px auto;
+.registryWrapper {
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .info {
-    font-size: 1.1rem;
+  font-size: 1.1rem;
+}
+
+.errorInfo {
+  color: red;
 }

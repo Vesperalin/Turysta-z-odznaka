@@ -11,6 +11,7 @@ const EvidenceConfirmationEvidenceForm = props => {
         <input
           id="evidence"
           placeholder={props.placeholder}
+          value={props.value}
           type="text"
           onChange={props.setAttachment}
         />

@@ -5,31 +5,37 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styles from "./EvidenceConfirmationDateForm.module.css";
 
-const Input = ({ onChange, placeholder, value, isSecure, id, onClick }) => (
+const Input = React.forwardRef(({ onChange, placeholder, value, id, onClick }, ref) => (
   <input
     className={styles.input}
+    ref={ref}
     onChange={onChange}
     placeholder={placeholder}
     value={value}
-    isSecure={isSecure}
     id={id}
     onClick={onClick}
     required
   />
-);
+));
 
 const EvidenceConfirmationDateForm = (props) => {
   const [startDate, setStartDate] = useState(props.startDate)
   const [endDate, setEndDate] = useState(props.endDate)
 
   const handleStartDateChange = (date) => {
-    setStartDate(date);
-    props.handleStartDateChange(props.segment, date);
+    if(date !== null)
+    {
+      setStartDate(date);
+      props.handleStartDateChange(props.segment, date);
+    }
   }
 
   const handleEndDateChange = (date) => {
-    setEndDate(date);
-    props.handleEndDateChange(props.segment, date);
+    if(date !== null)
+    {
+      setEndDate(date);
+      props.handleEndDateChange(props.segment, date);
+    }
   }
 
   return (
@@ -44,7 +50,7 @@ const EvidenceConfirmationDateForm = (props) => {
           selected={startDate}
           customInput={<Input />}
           onChange={(date) => handleStartDateChange(date)}
-          maxDate={endDate === undefined ? new Date() : new Date(endDate)}
+          maxDate={endDate === null ? new Date() : endDate}
           excludeDateIntervals={props.excludeDateIntervals}
         />
       </div>
