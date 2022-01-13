@@ -4,7 +4,7 @@ import json
 
 # common case
 # testing /tour-creation/check-name POST endpoint for tour name - tourist doesn't have tour with the name
-# this endpoint should return message and status code 400
+# this endpoint should return message and status code 200
 def test_check_name_that_not_exists(client):
   tour_name = {
     "name": "Bieszczadzka przygoda"
