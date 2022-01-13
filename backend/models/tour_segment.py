@@ -1,5 +1,5 @@
 from app import db
-from backend.models.base import BaseModel
+from models.base import BaseModel
 from models.tour import Tour
 from models.labeled_segment import Labeled_segment
 from models.evidence import Evidence

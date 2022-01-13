@@ -31,6 +31,5 @@ app.register_blueprint(evidence_confirmationAPI.router,
                        url_prefix="/evidence-confirmation")
 
 
-
 if __name__ == "__main__":
     app.run(debug=True)

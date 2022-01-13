@@ -31,4 +31,4 @@ class EvidenceNestedSchema(ma.SQLAlchemyAutoSchema):
 
     id = auto_field()
     photo_attachment = auto_field()
-    verifying = fields.Nested('GuideSchema')
+    verifying = fields.Nested('TouristSchema')

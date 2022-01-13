@@ -64,9 +64,10 @@ const EvidenceConfirmationManager = (props) => {
   const onClickAttachment = () => {
     const mountainGroup = selectedSegments[0].labeled_segment.mountain_group;
     let isCorrect = true;
-
+    console.log(mountainGroup);
     selectedSegments.forEach((segment) => {
-      if (segment.labeled_segment.mountain_group !== mountainGroup) {
+      if (segment.labeled_segment.mountain_group.id !== mountainGroup.id) {
+        console.log(segment.labeled_segment.mountain_group);
         setSelectedSegmentsMessage(
           "Nie można dodać załącznika dla odcinków z różnych grup górskich!"
         );
@@ -130,7 +131,6 @@ const EvidenceConfirmationManager = (props) => {
 
   const handleAttachmentChange = (e) => {
     setAttachment(e.target.value);
-    console.log(attachment);
   };
 
   const handleAddVerifyingClick = () => {
@@ -154,6 +154,13 @@ const EvidenceConfirmationManager = (props) => {
         .catch((error) => {
           if (error.response.status === 404) {
             setVerifyingMessage(error.response.data["message"]);
+          } else if (
+            (error.request && error.response === undefined) ||
+            error.response.status === 503
+          ) {
+            navigate("/503");
+          } else {
+            navigate("/error");
           }
         });
     }
@@ -283,12 +290,11 @@ const EvidenceConfirmationManager = (props) => {
         !selectedTableIsShown &&
         !dateFormIsShown && (
           <div>
-
-          <EvidenceConfirmationConfirmedSegmentsList
-            matchedElements={tourSegments}
-            tourName={props.tourName}
-          />
-          <LinkButton path='/'>Zakończ</LinkButton>
+            <EvidenceConfirmationConfirmedSegmentsList
+              matchedElements={tourSegments}
+              tourName={props.tourName}
+            />
+            <LinkButton path="/">Zakończ</LinkButton>
           </div>
         )}
     </div>

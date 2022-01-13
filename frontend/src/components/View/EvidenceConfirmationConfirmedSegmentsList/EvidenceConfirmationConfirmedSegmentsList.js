@@ -28,8 +28,8 @@ const EvidenceConfirmationConfirmedSegmentsList = (props) => {
                 <td>{element.labeled_segment.mountain_group.name}</td>
                 <td>{element.startDate}</td>
                 <td>{element.endDate}</td>
-                <td>{element.evidence.verifying !== null ? element.evidence.verifying.username : " - "}</td>
-                <td>{element.evidence.photo_attachment}</td>
+                <td>{element.evidence.verifying !== null ? element.evidence.verifying.guide.id_number : " - "}</td>
+                <td>{element.evidence.photo_attachment !== null ? element.evidence.photo_attachment : " - "}</td>
               </tr>
             );
           })}

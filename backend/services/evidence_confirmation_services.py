@@ -50,7 +50,8 @@ def add_evidences():
     confirmed_tour_segments.append(
         _process_verifying(data_dictionary['verifying']))
 
-    flat_list = [item for sublist in confirmed_tour_segments for item in sublist]
+    flat_list = [
+        item for sublist in confirmed_tour_segments for item in sublist]
 
     nested = nested_tour_segment_schema.jsonify(flat_list, many=True)
     print(nested)
@@ -64,7 +65,7 @@ def check_if_guide_exists(guide_id_number):
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
     if not guide:
-        return {'message': 'Niepoprawny numer legitymacji przewodnika'}, 404
+        return {'message': '{}'.format(INVALID_ID_NUMBER)}, 404
 
     return {'message': 'OK'}, 200
 
@@ -85,17 +86,7 @@ def _process_attachments(attachments):
             evidence.save()
 
             for tour_segment in attachment['tour_segments']:
-                tour_segment_dictionary = {
-                    'startDate': tour_segment['startDate'],
-                    'endDate': tour_segment['endDate'],
-                    'evidence_id': evidence.id
-                }
-                existing_tour_segment = Tour_segment.query.get(
-                    tour_segment['id'])
-                updated_tour_segment = tour_segment_schema.load(
-                    tour_segment_dictionary, instance=existing_tour_segment, partial=True)
-                updated_tour_segment.save()
-
+                _update_tour_segment_dates(tour_segment, evidence.id)
                 confirmed_tour_segments.append(
                     Tour_segment.query.get(tour_segment['id']))
         except OperationalError:
@@ -122,25 +113,27 @@ def _process_verifying(verifying):
             evidence.save()
 
             for tour_segment in guide_data['tour_segments']:
-                tour_segment_dictionary = {
-                    'startDate': tour_segment['startDate'],
-                    'endDate': tour_segment['endDate'],
-                    'evidence_id': evidence.id
-                }
-                existing_tour_segment = Tour_segment.query.get(
-                    tour_segment['id'])
-                updated_tour_segment = tour_segment_schema.load(
-                    tour_segment_dictionary, instance=existing_tour_segment, partial=True)
-                updated_tour_segment.save()
-
-                que = Tour_segment.query.get(tour_segment['id'])
-                if not que:
-                    print("nie ma")
-                confirmed_tour_segments.append(que)
-                    
-                print(confirmed_tour_segments)
+                _update_tour_segment_dates(tour_segment, evidence.id)
+                confirmed_tour_segments.append(
+                    Tour_segment.query.get(tour_segment['id']))
 
         return confirmed_tour_segments
 
     except OperationalError:
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
+
+
+def _update_tour_segment_dates(tour_segment, evidence_id):
+    tour_segment_dictionary = {
+        'startDate': tour_segment['startDate'],
+        'endDate': tour_segment['endDate'],
+        'evidence_id': evidence_id
+    }
+    try:
+        existing_tour_segment = Tour_segment.query.get(
+            tour_segment['id'])
+        updated_tour_segment = tour_segment_schema.load(
+            tour_segment_dictionary, instance=existing_tour_segment, partial=True)
+        updated_tour_segment.save()
+    except OperationalError as e:
+        raise e
