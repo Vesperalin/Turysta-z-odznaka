@@ -32,7 +32,7 @@ def get_tourist_tours():
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
 
-def get_unconfirmed_tour_segments(id):
+def get_unreported_tour_segments(id):
     try:
         segments = Tour_segment.query.filter(and_(Tour_segment.tour_id == id, Tour_segment.evidence_id == None)
                                              ).all()
@@ -79,7 +79,8 @@ def _process_attachments(attachments):
             'isConfirmed': False,
             'isWaiting': True,
             'photo_attachment': attachment['value'],
-            'tourist_username': username
+            'tourist_username': username,
+            'mountain_group_id': attachment['mountain_group']
         }
         try:
             evidence = evidence_schema.load(evidence_dictionary)
