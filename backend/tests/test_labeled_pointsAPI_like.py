@@ -3,7 +3,7 @@ import json
 
 
 # common case
-# testing /labeled-points/like/<string:like> endpoint for phrase that matches to one point
+# testing /labeled-points/like/<string:like> GET endpoint for phrase that matches to one point
 # this endpoint should return list of matching points and status code 200
 def test_like_with_matched_to_one_point_string(client):
   ids_of_all_labeled_points = [12]
@@ -18,7 +18,7 @@ def test_like_with_matched_to_one_point_string(client):
 
 
 # common case
-# testing /labeled-points/like/<string:like> endpoint for phrase that matches to few points
+# testing /labeled-points/like/<string:like> GET endpoint for phrase that matches to few points
 # this endpoint should return list of matching points and status code 200
 def test_like_with_matched_to_few_points_string(client):
   ids_of_all_labeled_points = [11, 14]
@@ -33,7 +33,7 @@ def test_like_with_matched_to_few_points_string(client):
 
 
 # common case
-# testing /labeled-points/like/<string:like> endpoint for phrase that matches to many points
+# testing /labeled-points/like/<string:like> GET endpoint for phrase that matches to many points
 # this endpoint should return list of matching points and status code 200
 def test_like_with_matched_to_many_points_string(client):
   ids_of_all_labeled_points = [1, 4, 12, 13, 22, 46, 48, ]
@@ -48,7 +48,7 @@ def test_like_with_matched_to_many_points_string(client):
 
 
 # edge case
-# testing /labeled-points/like/<string:like> endpoint for empty string
+# testing /labeled-points/like/<string:like> GET endpoint for empty string
 # this endpoint should return all labeled points and status code 200
 def test_like_with_empty_string(client):
   ids_of_all_labeled_points = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,42,43,44,45,46,47,48,49,50,51,52,53,54]
@@ -62,7 +62,7 @@ def test_like_with_empty_string(client):
 
 
 # edge case
-# testing /labeled-points/like/<string:like> endpoint for phrase that no labeled point contains
+# testing /labeled-points/like/<string:like> GET endpoint for phrase that no labeled point contains
 # this endpoint should return empty list of points and status code 200
 def test_like_with_unmatched_to_any_points_string(client):
   ids_of_all_labeled_points = []
