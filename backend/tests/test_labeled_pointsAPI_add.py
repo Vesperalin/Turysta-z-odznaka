@@ -49,7 +49,7 @@ def test_add_point_with_correct_name_and_no_height(client):
 # this endpoint should return message with error and status code 400
 def test_add_point_with_incorrect_name(client):
   new_point_with_incorrect_height = {
-    "name": "Wetlina",  # point with this name exist in DB
+    "name": "weTliNa",  # point with this name exist in DB. Also shows that it is not case sensitive
     "height": None
   }
 
