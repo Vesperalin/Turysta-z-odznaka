@@ -119,6 +119,7 @@ const EvidenceConfirmationManager = (props) => {
       setEvidenceMessage("Nie dodano załącznika!");
     } else {
       setAttachmentIsShown(false);
+      setEvidenceMessage("");
       setAttachments([
         ...attachments,
         {
@@ -143,6 +144,7 @@ const EvidenceConfirmationManager = (props) => {
     } else if (guide.trim().length !== 6) {
       setEvidenceMessage("Numer legitymacji przewodnika składa się z 6 cyfr!");
     } else {
+      setEvidenceMessage("");
       axios
         .get(`${checkGuideBaseURL}/${guide.trim()}`)
         .then(() => {

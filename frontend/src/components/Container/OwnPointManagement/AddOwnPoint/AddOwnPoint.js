@@ -20,15 +20,15 @@ const AddOwnPoint = () => {
   const handleNameChange = e => setNewPointName(e.target.value);
 
   const handleLatitudeChange = e => {
-    const regPattern = /[+-]?([0-9]*[.])?[0-9]+/;
-    if (regPattern.test(e.target.value)){
+    const regPattern = /^([1-9][0-9]*[.]?\d{0,4})$/;
+    if (e.target.value === '' || regPattern.test(e.target.value)){
       setNewPointLatitude(e.target.value)
     }
   };
 
   const handleLongitudeChange = e => {
-    const regPattern = /[+-]?([0-9]*[.])?[0-9]+/;
-    if (regPattern.test(e.target.value)){
+    const regPattern = /^([1-9][0-9]*[.]?\d{0,4})$/;
+    if (e.target.value === '' || regPattern.test(e.target.value)){
       setNewPointLongitude(e.target.value)
     }
   };
