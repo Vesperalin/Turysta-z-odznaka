@@ -3,7 +3,7 @@ import json
 
 
 # common case
-# testing /labeled-points POST endpoint for new point with no height
+# testing /labeled-points POST endpoint for new point with height
 # this endpoint should return message and status code 200
 def test_add_point_with_correct_name_and_given_height(client):
   new_point = {
