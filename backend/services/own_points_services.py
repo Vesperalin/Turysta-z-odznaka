@@ -94,7 +94,7 @@ def update_own_point(id):
 
     try:
         own_point.save()
-        return own_point_schema.jsonify(own_point), 200
+        return {'message': '{}'.format(POINT_EDITED)}, 200
     except OperationalError:
         return {'message': '{}'.format(NO_DB_CONNECTION)}, 503
 
@@ -172,7 +172,7 @@ def __verify_new_data(existing_point: Own_point, data):
     is_new_latitude = existing_point.latitude != data['latitude']
     if is_new_latitude:
         if not __is_latitude_correct(data['latitude']):
-            return {'message': '{}'.format(LONGITUDE_NOT_CORRECT)}, 400
+            return {'message': '{}'.format(LATITUDE_NOT_CORRECT)}, 400
 
     is_new_longitude = existing_point.longitude != data['longitude']
     if is_new_longitude:
