@@ -1,0 +1,7 @@
+{
+  "nodeVersion": "bundled",
+  "baseUrl": "http://localhost:3000",
+  "experimentalStudio": true,
+  "viewportWidth": 1280,
+  "viewportHeight": 720
+}
