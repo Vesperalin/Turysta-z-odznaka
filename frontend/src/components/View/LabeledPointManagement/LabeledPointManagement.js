@@ -7,7 +7,7 @@ const LabeledPointManagement = () => {
   return (
     <div className={styles.wrapper}>
       <h2>Wybierz, jaką akcję chciałbyś wykonać</h2>
-      <div>
+      <div id="buttonContainer">
         <LinkButton path='/punkt-opisany/dodaj'>Dodaj punkt opisany</LinkButton>
         <LinkButton path='/punkt-opisany/edytuj'>Edytuj punkt opisany</LinkButton>
         <LinkButton path='/punkt-opisany/usun'>Usuń punkt opisany</LinkButton>
