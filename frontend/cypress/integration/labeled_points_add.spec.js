@@ -3,7 +3,7 @@ describe("labeled points add e2e tests", () => {
     cy.visit("/punkt-opisany");
   });
 
-  it("check if menu renders correctly", () => {
+  it("checks if menu renders correctly", () => {
     cy.get("#buttonContainer").should("exist");
     cy.get(':nth-child(1) > a > .LinkButton_linkText__2AiYn').should('exist');
     cy.get(':nth-child(1) > a > .LinkButton_linkText__2AiYn').should('be.visible');
