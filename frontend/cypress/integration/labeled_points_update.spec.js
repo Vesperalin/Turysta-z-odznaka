@@ -93,6 +93,4 @@ describe("labeled points update e2e tests", () => {
     cy.wait(1000);
     cy.get('.LinkButton_linkText__2AiYn').click();
   });
-
-  
 });
