@@ -91,7 +91,7 @@ def test_add_point_with_incorrect_longitude(client):
 
 
 # edge case
-# testing /own-points POST endpoint for new point with non unique 
+# testing /own-points POST endpoint for new point with non unique coordinates
 # this endpoint should return message with error and status code 400
 def test_add_point_with_non_unique_coordinates(client):
   new_point = {
