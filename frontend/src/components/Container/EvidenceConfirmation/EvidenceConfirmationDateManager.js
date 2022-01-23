@@ -16,9 +16,16 @@ const EvidenceConfirmationDateManager = (props) => {
   const getExcludeDateIntervals = (labeled_segment) => {
     let excludeDateIntervals = labeled_segment.closed_segments.map(
       (closed_segment) => {
+        let end;
+        if(closed_segment.openingDate !== null){
+          end = new Date(closed_segment.openingDate)
+        }
+        else {
+          end = new Date()
+        }
         return {
           start: new Date(closed_segment.closureDate),
-          end: new Date(closed_segment.openingDate),
+          end: end,
         };
       }
     );
@@ -29,7 +36,7 @@ const EvidenceConfirmationDateManager = (props) => {
         end: new Date(),
       });
     }
-
+    console.log(excludeDateIntervals)
     return excludeDateIntervals;
   };
 
