@@ -3,11 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@reach/combobox": "^0.16.5",
+    "@reach/listbox": "^0.16.2",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "axios": "^0.24.0",
+    "match-sorter": "^6.3.1",
     "react": "^17.0.2",
+    "react-date-picker": "^8.3.6",
+    "react-datepicker": "^4.6.0",
     "react-dom": "^17.0.2",
+    "react-router-dom": "^6.1.1",
     "react-scripts": "4.0.3",
     "web-vitals": "^1.1.2"
   },
@@ -15,13 +22,17 @@
     "start": "react-scripts --openssl-legacy-provider start",
     "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cypress": "cypress open"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
     ]
+  },
+  "devDependencies": {
+    "cypress": "^9.3.1"
   },
   "browserslist": {
     "production": [

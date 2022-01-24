@@ -1,0 +1,16 @@
+.homeWrapper {
+  text-align: center;
+}
+
+.homeWrapper h2 {
+  margin: 3% auto 4% auto;
+  font-size: 3rem;
+  color: rgb(65, 65, 65);
+  text-shadow: 1px 1px rgb(168, 168, 168);
+}
+
+.homeWrapper img {
+  width: 40%;
+  height: 40%;
+  display: inline-block;
+}

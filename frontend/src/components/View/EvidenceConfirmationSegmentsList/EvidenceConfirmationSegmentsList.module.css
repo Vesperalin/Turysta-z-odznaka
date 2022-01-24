@@ -1,0 +1,42 @@
+.tableWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.tableTitle {
+  font-size: 1.1rem;
+}
+
+.resultTable {
+  text-align: left;
+  border-spacing: 0;
+  margin: 10px auto;
+}
+
+.resultTable thead {
+  background-color: rgb(224, 224, 224);
+  color: rgb(112, 112, 112);
+}
+
+.resultTable td {
+  min-width: 200px;
+  padding: 10px 25px;
+}
+
+.resultTable tbody td {
+  border-bottom: 1px solid rgb(167, 167, 167);
+}
+
+.clickedRow {
+  background-color: rgba(221, 149, 73, 0.25);
+}
+
+.confirmedRow {
+  background-color: rgba(197, 221, 73, 0.25);
+}
+
+.errorInfo {
+  color: red;
+}

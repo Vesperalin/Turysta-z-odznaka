@@ -1,0 +1,14 @@
+.wrapper {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+.info {
+  padding: 40px 0 0 0;
+  font-size: 1.2rem;
+}
+
+.error {
+  padding: 20px 0 0 0;
+  color: red;
+}

@@ -1,0 +1,26 @@
+.menuWrapper {
+  background-color: #82B479;
+  min-height: 100vh;
+  min-width: 310px;
+}
+
+.menuWrapper h2 {
+  color: white;
+  background-color: #508146;
+  font-weight: 700;
+  font-size: 1.31rem;
+  letter-spacing: 3px;
+  text-align: center;
+  padding-top: 13px;
+  padding-bottom: 13px;
+  min-height: 55px;
+  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+}
+
+@media screen and (max-width: 900px) {
+  .menuWrapper {
+    min-height: auto;
+  }
+}
